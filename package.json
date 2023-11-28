@@ -1,17 +1,24 @@
 {
-  "name": "components-plus",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "name": "x-design",
+  "version": "1.0.0",
+  "description": "",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "docs:dev": "pnpm run -C docs docs:dev"
+    "docs:dev": "pnpm run -C docs docs:dev",
+    "docs:build": "pnpm run -C docs docs:build",
+    "examples:dev": "pnpm run -C examples dev",
+    "examples:build": "pnpm run -C examples build"
+  },
+  "dependencies": {
+    "@x-design/components": "workspace:*",
+    "vue": "^3.3.4"
   },
   "devDependencies": {
     "typescript": "^5.0.2",
-    "vite": "^4.4.5",
-    "vue": "^3.3.4"
-  }
+    "vue-tsc": "^1.8.22"
+  },
+  "keywords": [
+    "vue"
+  ],
+  "author": "xy",
+  "license": "ISC"
 }

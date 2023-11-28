@@ -1,0 +1,6 @@
+{
+  "name": "@x-design/components",
+  "version": "0.0.1",
+  "description": "导出当前的组件",
+  "main": "index.ts"
+}
