@@ -2,10 +2,6 @@
   <XCard />
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { XCard } from "@x-design/components";
 </script>
-
-<style scoped>
-
-</style>

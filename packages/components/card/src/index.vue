@@ -1,9 +1,13 @@
 <template>
-  <div>一个卡片组件1</div>
+  <div class="text-red">一个卡片组件1</div>
 </template>
 
-<script lang="ts">
-export default {
-  name: "XCard", // 必要
-};
+<script setup lang="ts">
+defineOptions({ name: "XCard" })
 </script>
+
+<style scoped>
+.text-red {
+  color: red;
+}
+</style>
