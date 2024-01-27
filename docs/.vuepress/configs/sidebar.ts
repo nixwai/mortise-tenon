@@ -1,26 +1,26 @@
-import { SidebarConfig } from "vuepress";
+import { SidebarConfig } from 'vuepress';
 
 export const sidebar: SidebarConfig = {
-  "/zh/guide/": [
+  '/zh/guide/': [
     {
-      text: "基础",
+      text: '基础',
       children: [
         {
-          text: "安装",
-          link: "install.md",
-        },
-      ],
-    },
+          text: '安装',
+          link: 'install.md'
+        }
+      ]
+    }
   ],
-  "/zh/components/": [
+  '/zh/components/': [
     {
-      text: "基础组件",
+      text: '基础组件',
       children: [
         {
-          text: "卡片",
-          link: "card.md",
-        },
-      ],
-    },
-  ],
+          text: '卡片',
+          link: 'card.md'
+        }
+      ]
+    }
+  ]
 };

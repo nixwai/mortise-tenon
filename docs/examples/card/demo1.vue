@@ -3,5 +3,5 @@
 </template>
 
 <script lang="ts" setup>
-import { XCard } from "@x-design/components";
+import { XCard } from '@x-design/components';
 </script>
