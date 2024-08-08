@@ -4,6 +4,10 @@
 
 <script setup lang="ts">
 defineOptions({ name: 'XCard' });
+
+defineProps<{
+  title?: string;
+}>();
 </script>
 
 <style scoped>
