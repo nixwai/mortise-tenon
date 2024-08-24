@@ -1,0 +1,9 @@
+{
+  "name": "@x-design/build",
+  "version": "0.0.1",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "build": "vite build"
+  }
+}

@@ -2,8 +2,5 @@
   "name": "@x-design/components",
   "version": "0.0.1",
   "description": "组件",
-  "main": "index.ts",
-  "scripts": {
-    "build": "vite build"
-  }
+  "main": "index.ts"
 }
