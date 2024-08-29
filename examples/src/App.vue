@@ -1,7 +1,7 @@
 <template>
-  <XCard />
+  <XButton>测试</XButton>
 </template>
 
 <script setup lang="ts">
-import { XCard } from '@x-design/components';
+import { XButton } from '@x-design/components';
 </script>
