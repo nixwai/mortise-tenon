@@ -3,5 +3,5 @@
 </template>
 
 <script lang="ts" setup>
-import { XCard } from '@mortise-design/components';
+import { XCard } from '@mt-design/components';
 </script>

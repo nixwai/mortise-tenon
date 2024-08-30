@@ -1,8 +1,9 @@
-# mortise-design
+# mt-design
 
 搭建一个组件库
 
 目录结构
+
 - docs # 文档
 - examples # 示例项目
 - packages # 封装的包
