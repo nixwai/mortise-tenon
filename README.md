@@ -1,4 +1,4 @@
-# mt-design
+# mortise-tenon-design
 
 搭建一个组件库
 

@@ -8,7 +8,7 @@ importers:
 
   .:
     dependencies:
-      '@mt-design/components':
+      '@mortise-tenon-design/components':
         specifier: workspace:*
         version: link:packages/components
     devDependencies:
@@ -134,7 +134,7 @@ importers:
 
   packages/core: {}
 
-  packages/mt-design: {}
+  packages/mortise-tenon-design: {}
 
 packages:
 

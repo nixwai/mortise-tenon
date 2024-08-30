@@ -7,7 +7,7 @@ import path from 'path';
 
 export default defineUserConfig({
   lang: 'zh-CN',
-  title: 'MtDesign',
+  title: 'Mortise Tenon Design',
   description: '一个可简单可复杂的组件库',
   base: '/',
   plugins: [demoBlockPlugin({ examplesPath: path.resolve(__dirname, '../examples') }) as Plugin],

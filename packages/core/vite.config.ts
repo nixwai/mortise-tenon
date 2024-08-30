@@ -14,7 +14,7 @@ export default defineConfig({
       entry: {
         index: resolve(__dirname, 'index.ts')
       },
-      name: 'mt-design',
+      name: 'mortise-tenon-design',
       fileName: 'index',
       formats: ['es', 'umd', 'cjs']
     },
@@ -27,14 +27,14 @@ export default defineConfig({
           entryFileNames: '[name].mjs',
           preserveModules: true,
           exports: 'named',
-          dir: '../mt-design/es'
+          dir: '../mortise-tenon-design/es'
         },
         {
           format: 'cjs',
           entryFileNames: '[name].js',
           preserveModules: true,
           exports: 'named',
-          dir: '../mt-design/lib'
+          dir: '../mortise-tenon-design/lib'
         }
       ]
     }
@@ -42,7 +42,7 @@ export default defineConfig({
   plugins: [
     vue(),
     dts({
-      outDir: '../mt-design/type',
+      outDir: '../mortise-tenon-design/type',
       tsconfigPath: '../../tsconfig.json'
     })
   ]
