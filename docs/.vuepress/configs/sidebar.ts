@@ -17,8 +17,8 @@ export const sidebar: SidebarConfig = {
       text: '基础组件',
       children: [
         {
-          text: '卡片',
-          link: 'card.md'
+          text: '按钮',
+          link: 'button.md'
         }
       ]
     }

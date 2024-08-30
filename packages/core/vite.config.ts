@@ -14,7 +14,7 @@ export default defineConfig({
       entry: {
         index: resolve(__dirname, 'index.ts')
       },
-      name: 'x-design',
+      name: 'mortise-design',
       fileName: 'index',
       formats: ['es', 'umd', 'cjs']
     },

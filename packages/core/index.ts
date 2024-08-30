@@ -1,1 +1,1 @@
-export * from '@x-design/components';
+export * from '@mortise-design/components';

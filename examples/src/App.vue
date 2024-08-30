@@ -3,5 +3,5 @@
 </template>
 
 <script setup lang="ts">
-import { XButton } from '@x-design/components';
+import { XButton } from '@mortise-design/components';
 </script>

@@ -1,5 +1,5 @@
 {
-  "name": "x-design",
+  "name": "mortise-design",
   "version": "1.0.0",
   "description": "",
   "scripts": {
@@ -13,7 +13,7 @@
     "lint": "eslint ./ --ext .js,.ts,.jsx,.tsx,.vue && prettier --write --ignore-unknown"
   },
   "dependencies": {
-    "@x-design/components": "workspace:*"
+    "@mortise-design/components": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^22.2.0",

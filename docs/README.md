@@ -10,7 +10,7 @@ actions:
 
   - text: 组件
     icon: tools
-    link: ./zh/components/card
+    link: ./zh/components/button
 ---
 
 <div class="features">
