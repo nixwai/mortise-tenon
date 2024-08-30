@@ -134,7 +134,7 @@ importers:
 
   packages/core: {}
 
-  packages/mortise-design: {}
+  packages/mt-design: {}
 
 packages:
 
