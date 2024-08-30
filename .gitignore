@@ -11,7 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
-packages/mortise-tenon-design
+packages/mortise-tenon-design/*
 
 # Editor directories and files
 .vscode/*
