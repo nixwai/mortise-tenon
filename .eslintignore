@@ -11,3 +11,4 @@ dist
 components.d.ts
 *.yaml
 index.html
+packages/mortise-tenon-design/*

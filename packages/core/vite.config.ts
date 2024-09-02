@@ -5,8 +5,6 @@ import dts from 'vite-plugin-dts';
 
 export default defineConfig({
   build: {
-    //打包文件目录
-    outDir: 'es',
     //压缩
     //minify: false,
     emptyOutDir: true,
@@ -14,13 +12,11 @@ export default defineConfig({
       entry: {
         index: resolve(__dirname, 'index.ts')
       },
-      name: 'mortise-tenon-design',
-      fileName: 'index',
-      formats: ['es', 'umd', 'cjs']
+      name: 'mortise-tenon-design'
     },
     rollupOptions: {
-      //忽略打包vue文件
       external: ['vue'],
+      input: ['index.ts'],
       output: [
         {
           format: 'es',
@@ -42,7 +38,7 @@ export default defineConfig({
   plugins: [
     vue(),
     dts({
-      outDir: '../mortise-tenon-design/type',
+      outDir: ['../mortise-tenon-design/es', '../mortise-tenon-design/lib'],
       tsconfigPath: '../../tsconfig.json'
     })
   ]

@@ -67,4 +67,3 @@ function handleClick(e: MouseEvent) {
   /** 空动画 */
 }
 </style>
-./types
