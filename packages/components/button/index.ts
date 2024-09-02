@@ -7,8 +7,8 @@ Button.install = (app: App): void => {
   }
 };
 
-export const XButton = Button;
+export const MtButton = Button;
 
 export * from './src/types';
 
-export default XButton;
+export default MtButton;

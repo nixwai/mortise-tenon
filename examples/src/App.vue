@@ -1,7 +1,7 @@
 <template>
-  <XButton>测试</XButton>
+  <MtButton>测试</MtButton>
 </template>
 
 <script setup lang="ts">
-import { XButton } from '@mortise-tenon-design/components';
+import { MtButton } from '@mortise-tenon-design/components';
 </script>

@@ -1,7 +1,7 @@
 <template>
-  <XCard />
+  <MtButton />
 </template>
 
 <script lang="ts" setup>
-import { XCard } from '@mortise-tenon-design/components';
+import { MtButton } from '@mortise-tenon-design/components';
 </script>

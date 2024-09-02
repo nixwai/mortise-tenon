@@ -17,7 +17,7 @@
 import { computed, onMounted, ref } from 'vue';
 import { ButtonProps } from './types';
 
-defineOptions({ name: 'XButton' });
+defineOptions({ name: 'MtButton' });
 
 const props = withDefaults(defineProps<ButtonProps>(), { time: '1s' });
 const emit = defineEmits(['click']);
