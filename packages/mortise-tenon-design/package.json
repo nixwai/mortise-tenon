@@ -1,12 +1,13 @@
 {
   "name": "mortise-tenon-design",
-  "version": "0.0.3",
+  "version": "0.0.6",
   "description": "榫卯组件库",
+  "type": "module",
   "author": "nixwai",
   "license": "ISC",
-  "main": "lib/core/index.js",
-  "module": "es/core/index.mjs",
-  "types": "es/core/index.d.ts",
+  "main": "lib/index.js",
+  "module": "es/index.mjs",
+  "types": "es/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/nixwai/mortise-tenon-design"

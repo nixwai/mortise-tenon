@@ -12,11 +12,11 @@ export default defineConfig({
       entry: {
         index: resolve(__dirname, 'index.ts')
       },
-      name: 'mortise-tenon-design'
+      name: 'mortise-tenon-design',
+      fileName: 'mortise-tenon-design'
     },
     rollupOptions: {
       external: ['vue'],
-      input: ['index.ts'],
       output: [
         {
           format: 'es',
@@ -38,6 +38,13 @@ export default defineConfig({
   plugins: [
     vue(),
     dts({
+      include: ['../components'],
+      outDir: ['../mortise-tenon-design/es', '../mortise-tenon-design/lib'],
+      tsconfigPath: '../../tsconfig.json'
+    }),
+    dts({
+      entryRoot: './',
+      include: ['./index.ts'],
       outDir: ['../mortise-tenon-design/es', '../mortise-tenon-design/lib'],
       tsconfigPath: '../../tsconfig.json'
     })
