@@ -15,6 +15,7 @@ export default defineConfig({
       name: 'mortise-tenon-design',
       fileName: 'mortise-tenon-design'
     },
+    sourcemap: true,
     rollupOptions: {
       external: ['vue'],
       output: [
