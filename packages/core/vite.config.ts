@@ -10,7 +10,7 @@ export default defineConfig({
     emptyOutDir: true,
     lib: {
       entry: {
-        index: resolve(__dirname, 'index.ts')
+        index: resolve(__dirname, '../index.ts')
       },
       name: 'mortise-tenon-design',
       fileName: 'mortise-tenon-design'
@@ -38,13 +38,7 @@ export default defineConfig({
   plugins: [
     vue(),
     dts({
-      include: ['../components'],
-      outDir: ['../mortise-tenon-design/es', '../mortise-tenon-design/lib'],
-      tsconfigPath: '../../tsconfig.json'
-    }),
-    dts({
-      entryRoot: './',
-      include: ['./index.ts'],
+      include: ['../components', '../index.ts'],
       outDir: ['../mortise-tenon-design/es', '../mortise-tenon-design/lib'],
       tsconfigPath: '../../tsconfig.json'
     })
