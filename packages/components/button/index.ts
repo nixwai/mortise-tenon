@@ -10,5 +10,3 @@ Button.install = (app: App): void => {
 export const MtButton = Button;
 
 export * from './src/types';
-
-export default MtButton;

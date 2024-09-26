@@ -12,6 +12,9 @@
     "prepare": "husky install",
     "lint": "eslint ./ --ext .js,.ts,.jsx,.tsx,.vue && prettier --write --ignore-unknown"
   },
+  "peerDependencies": {
+    "vue": "^3.3.0"
+  },
   "dependencies": {
     "@mortise-tenon-design/components": "workspace:*"
   },

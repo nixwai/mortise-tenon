@@ -11,5 +11,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/nixwai/mortise-tenon-design"
+  },
+  "peerDependencies": {
+    "vue": "^3.3.0"
   }
 }
