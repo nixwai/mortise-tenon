@@ -1,5 +1,5 @@
 {
-  "name": "test",
+  "name": "examples",
   "private": true,
   "version": "0.0.1",
   "description": "组件示例测试项目",
@@ -8,9 +8,5 @@
     "dev": "vite",
     "build": "vue-tsc && vite build",
     "preview": "vite preview"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-vue": "^4.5.0",
-    "vite": "^5.0.0"
   }
 }
