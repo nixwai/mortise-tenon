@@ -8,5 +8,8 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "devDependencies": {
+    "rollup-plugin-copy": "^3.5.0"
   }
 }

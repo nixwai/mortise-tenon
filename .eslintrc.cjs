@@ -43,7 +43,6 @@ module.exports = {
       }
     ],
     'no-unsafe-optional-chaining': 'off',
-    // import
     'import/first': 'error',
     'import/no-duplicates': 'error',
     'import/order': [
@@ -71,6 +70,19 @@ module.exports = {
     'import/default': 'off',
     'import/no-named-as-default': 'off',
     'import/no-named-as-default-member': 'off',
-    'import/named': 'off'
+    'import/named': 'off',
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      {
+        args: 'all',
+        argsIgnorePattern: '^_',
+        caughtErrors: 'all',
+        caughtErrorsIgnorePattern: '^_',
+        destructuredArrayIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        ignoreRestSiblings: true
+      }
+    ]
   }
 };
