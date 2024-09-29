@@ -1,6 +1,6 @@
-import { SidebarConfig } from 'vuepress';
+import { SidebarOptions } from '@vuepress/theme-default';
 
-export const sidebar: SidebarConfig = {
+export const sidebar: SidebarOptions = {
   '/zh/guide/': [
     {
       text: '基础',
