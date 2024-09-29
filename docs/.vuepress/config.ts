@@ -3,16 +3,17 @@ import type { Plugin } from 'vuepress';
 import { navbar } from './configs/navbar';
 import { sidebar } from './configs/sidebar';
 import { demoBlockPlugin } from '@ddongui/vuepress-plugin-demo-block';
-import path from 'path';
+import { resolve } from 'path';
 
 export default defineUserConfig({
   lang: 'zh-CN',
   title: 'Mortise Tenon Design',
   description: '一个可简单可复杂的组件库',
   base: '/',
-  plugins: [demoBlockPlugin({ examplesPath: path.resolve(__dirname, '../examples') }) as Plugin],
+  plugins: [demoBlockPlugin({ examplesPath: resolve(__dirname, '../examples') }) as Plugin],
   theme: defaultTheme({
     navbar,
-    sidebar
-  })
+    sidebar,
+  }),
+  dest: resolve(__dirname, '../../dist/docs'),
 });
