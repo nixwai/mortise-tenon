@@ -2,7 +2,7 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
-    node: true
+    node: true,
   },
   plugins: ['@typescript-eslint', 'vue'],
   extends: [
@@ -10,23 +10,23 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:vue/vue3-essential',
     'plugin:prettier/recommended',
-    'plugin:import/recommended'
+    'plugin:import/recommended',
   ],
   overrides: [
     {
       env: {
-        node: true
+        node: true,
       },
       files: ['.eslintrc.{js,cjs}'],
       parserOptions: {
-        sourceType: 'script'
-      }
-    }
+        sourceType: 'script',
+      },
+    },
   ],
   parserOptions: {
     ecmaVersion: 'latest',
     parser: '@typescript-eslint/parser',
-    sourceType: 'module'
+    sourceType: 'module',
   },
   rules: {
     eqeqeq: 'error', // 要求使用 `===` 和 `!==`
@@ -39,10 +39,23 @@ module.exports = {
       'error',
       {
         destructuring: 'any',
-        ignoreReadBeforeAssign: false
-      }
+        ignoreReadBeforeAssign: false,
+      },
     ],
     'no-unsafe-optional-chaining': 'off',
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      {
+        args: 'all',
+        argsIgnorePattern: '^_',
+        caughtErrors: 'all',
+        caughtErrorsIgnorePattern: '^_',
+        destructuredArrayIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        ignoreRestSiblings: true,
+      },
+    ],
     'import/first': 'error',
     'import/no-duplicates': 'error',
     'import/order': [
@@ -54,16 +67,16 @@ module.exports = {
           {
             pattern: 'vue',
             group: 'external',
-            position: 'before'
+            position: 'before',
           },
           {
             pattern: '@vue/**',
             group: 'external',
-            position: 'before'
-          }
+            position: 'before',
+          },
         ],
-        pathGroupsExcludedImportTypes: ['type']
-      }
+        pathGroupsExcludedImportTypes: ['type'],
+      },
     ],
     'import/no-unresolved': 'off',
     'import/namespace': 'off',
@@ -71,18 +84,5 @@ module.exports = {
     'import/no-named-as-default': 'off',
     'import/no-named-as-default-member': 'off',
     'import/named': 'off',
-    'no-unused-vars': 'off',
-    '@typescript-eslint/no-unused-vars': [
-      'error',
-      {
-        args: 'all',
-        argsIgnorePattern: '^_',
-        caughtErrors: 'all',
-        caughtErrorsIgnorePattern: '^_',
-        destructuredArrayIgnorePattern: '^_',
-        varsIgnorePattern: '^_',
-        ignoreRestSiblings: true
-      }
-    ]
-  }
+  },
 };

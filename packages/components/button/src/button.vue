@@ -5,7 +5,7 @@
     :class="{ 'ex-button': hasMode }"
     :style="{
       'animation-duration': time,
-      'pointer-events': buttonDisabled ? 'none' : 'all'
+      'pointer-events': buttonDisabled ? 'none' : 'all',
     }"
     @click="handleClick"
   >

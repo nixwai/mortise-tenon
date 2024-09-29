@@ -7,10 +7,10 @@ export const sidebar: SidebarConfig = {
       children: [
         {
           text: '安装',
-          link: 'install.md'
-        }
-      ]
-    }
+          link: 'install.md',
+        },
+      ],
+    },
   ],
   '/zh/components/': [
     {
@@ -18,9 +18,9 @@ export const sidebar: SidebarConfig = {
       children: [
         {
           text: '按钮',
-          link: 'button.md'
-        }
-      ]
-    }
-  ]
+          link: 'button.md',
+        },
+      ],
+    },
+  ],
 };

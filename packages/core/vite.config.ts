@@ -12,7 +12,7 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, '../index.ts'),
       name: 'mortise-tenon-design',
-      fileName: 'mortise-tenon-design'
+      fileName: 'mortise-tenon-design',
     },
     sourcemap: true,
     rollupOptions: {
@@ -23,24 +23,24 @@ export default defineConfig({
           entryFileNames: '[name].mjs',
           preserveModules: true,
           exports: 'named',
-          dir: '../../dist/mortise-tenon-design/es'
+          dir: '../../dist/mortise-tenon-design/es',
         },
         {
           format: 'cjs',
           entryFileNames: '[name].js',
           preserveModules: true,
           exports: 'named',
-          dir: '../../dist/mortise-tenon-design/lib'
-        }
-      ]
-    }
+          dir: '../../dist/mortise-tenon-design/lib',
+        },
+      ],
+    },
   },
   plugins: [
     vue(),
     dts({
       include: ['../components', '../index.ts'],
       outDir: ['../../dist/mortise-tenon-design/es', '../../dist/mortise-tenon-design/lib'],
-      tsconfigPath: '../../tsconfig.json'
+      tsconfigPath: '../../tsconfig.json',
     }),
     copy({
       verbose: true,
@@ -48,13 +48,13 @@ export default defineConfig({
       targets: [
         {
           src: '../mortise-tenon-design/README.md',
-          dest: '../../dist/mortise-tenon-design'
+          dest: '../../dist/mortise-tenon-design',
         },
         {
           src: '../mortise-tenon-design/package.json',
-          dest: '../../dist/mortise-tenon-design'
-        }
-      ]
-    })
-  ]
+          dest: '../../dist/mortise-tenon-design',
+        },
+      ],
+    }),
+  ],
 });

@@ -5,7 +5,7 @@ module.exports = {
     'stylelint-config-standard',
     'stylelint-config-recess-order',
     'stylelint-config-recommended-scss',
-    'stylelint-config-recommended-vue'
+    'stylelint-config-recommended-vue',
   ],
   rules: {
     'function-no-unknown': null, // 禁止未知函数：无
@@ -25,17 +25,17 @@ module.exports = {
           'if',
           'each',
           'include',
-          'mixin'
-        ]
-      }
+          'mixin',
+        ],
+      },
     ],
     'font-family-no-missing-generic-family-keyword': null, // 允许在字体系列名称列表中缺少通用字体族
     'rule-empty-line-before': [
       'always',
       {
-        ignore: ['after-comment', 'first-nested']
-      }
-    ] // 要求或禁止在 at 规则之前使用空行
+        ignore: ['after-comment', 'first-nested'],
+      },
+    ], // 要求或禁止在 at 规则之前使用空行
   },
   ignoreFiles: ['**/*.js', '**/*.jsx', '**/*.tsx', '**/*.ts'],
   overrides: [
@@ -46,20 +46,20 @@ module.exports = {
         'selector-pseudo-class-no-unknown': [
           true,
           {
-            ignorePseudoClasses: ['deep', 'global']
-          }
+            ignorePseudoClasses: ['deep', 'global'],
+          },
         ],
         'selector-pseudo-element-no-unknown': [
           true,
           {
-            ignorePseudoElements: ['v-deep', 'v-global', 'v-slotted']
-          }
-        ]
-      }
+            ignorePseudoElements: ['v-deep', 'v-global', 'v-slotted'],
+          },
+        ],
+      },
     },
     {
       files: ['**/*.(html|vue)'],
-      customSyntax: 'postcss-html'
-    }
-  ]
+      customSyntax: 'postcss-html',
+    },
+  ],
 };
