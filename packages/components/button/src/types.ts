@@ -1,8 +1,8 @@
 export interface ButtonProps {
   /** debounce：防抖；throttle：节流 */
-  mode?: "debounce" | "throttle";
+  mode?: 'debounce' | 'throttle'
   /** 间隔时间 */
-  time?: string;
+  time?: string
   /** 禁用 */
-  disabled?: boolean;
+  disabled?: boolean
 }

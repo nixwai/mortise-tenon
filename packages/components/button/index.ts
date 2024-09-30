@@ -1,5 +1,5 @@
-import type { App } from "vue";
-import Button from "./src/button.vue";
+import type { App } from 'vue';
+import Button from './src/button.vue';
 
 Button.install = (app: App): void => {
   if (Button.name) {
@@ -9,4 +9,4 @@ Button.install = (app: App): void => {
 
 export const MtButton = Button;
 
-export * from "./src/types";
+export * from './src/types';

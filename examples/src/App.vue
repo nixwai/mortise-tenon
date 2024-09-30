@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MtButton } from "@mortise-tenon-design/components";
+import { MtButton } from '@mortise-tenon-design/components';
 </script>
 
 <template>

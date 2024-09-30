@@ -56,8 +56,7 @@
   },
   "lint-staged": {
     "*.{vue,js,ts,tsx,jsx}": [
-      "eslint --fix",
-      "prettier --write --ignore-unknown"
+      "eslint . --fix"
     ]
   }
 }
