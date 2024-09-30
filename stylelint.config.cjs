@@ -32,9 +32,7 @@ module.exports = {
     'font-family-no-missing-generic-family-keyword': null, // 允许在字体系列名称列表中缺少通用字体族
     'rule-empty-line-before': [
       'always',
-      {
-        ignore: ['after-comment', 'first-nested'],
-      },
+      { ignore: ['after-comment', 'first-nested'] },
     ], // 要求或禁止在 at 规则之前使用空行
   },
   ignoreFiles: ['**/*.js', '**/*.jsx', '**/*.tsx', '**/*.ts'],
@@ -45,15 +43,11 @@ module.exports = {
       rules: {
         'selector-pseudo-class-no-unknown': [
           true,
-          {
-            ignorePseudoClasses: ['deep', 'global'],
-          },
+          { ignorePseudoClasses: ['deep', 'global'] },
         ],
         'selector-pseudo-element-no-unknown': [
           true,
-          {
-            ignorePseudoElements: ['v-deep', 'v-global', 'v-slotted'],
-          },
+          { ignorePseudoElements: ['v-deep', 'v-global', 'v-slotted'] },
         ],
       },
     },

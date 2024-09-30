@@ -1,9 +1,9 @@
 {
   "name": "examples",
-  "private": true,
-  "version": "0.0.1",
-  "description": "组件示例测试项目",
   "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "description": "组件示例测试项目",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",
