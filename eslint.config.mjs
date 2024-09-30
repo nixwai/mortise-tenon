@@ -1,18 +1,24 @@
-import path from 'node:path';
 import antfu from '@antfu/eslint-config';
-import { includeIgnoreFile } from '@eslint/compat';
-
-const gitignorePath = path.resolve('.gitignore');
 
 export default antfu(
   {
     formatters: true,
-    unocss: true,
+    // unocss: true,
     typescript: true,
     vue: true,
     ignores: ['.husky'],
   },
-  includeIgnoreFile(gitignorePath),
+  {
+    files: ['**/*.vue'],
+    rules: {
+      'vue/max-attributes-per-line': ['error', { singleline: 5, multiline: { max: 1 } }],
+      'vue/html-self-closing': ['error', {
+        html: { void: 'never', normal: 'always', component: 'always' },
+        svg: 'always',
+        math: 'always',
+      }],
+    },
+  },
   {
     rules: {
       'style/semi': ['error', 'always'], // 末尾带分号

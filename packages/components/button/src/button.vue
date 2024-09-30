@@ -44,10 +44,7 @@ function handleClick(e: MouseEvent) {
     ref="buttonRef"
     :disabled="buttonDisabled"
     :class="{ 'ex-button': hasMode }"
-    :style="{
-      'animation-duration': time,
-      'pointer-events': buttonDisabled ? 'none' : 'all',
-    }"
+    :style="{ 'animation-duration': time, 'pointer-events': buttonDisabled ? 'none' : 'all' }"
     @click="handleClick"
   >
     <slot />
