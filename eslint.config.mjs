@@ -8,13 +8,11 @@ export default antfu(
   {
     formatters: true,
     unocss: true,
+    typescript: true,
     vue: true,
+    ignores: ['.husky'],
   },
   includeIgnoreFile(gitignorePath),
-  {
-    files: ['**/*.vue'],
-    rules: {},
-  },
   {
     rules: {
       'style/semi': ['error', 'always'], // 末尾带分号
