@@ -10,13 +10,14 @@ export default defineConfig({
     // minify: false,
     emptyOutDir: true,
     lib: {
-      entry: resolve(__dirname, '../index.ts'),
+      entry: resolve(__dirname, './index.ts'),
       name: 'mortise-tenon-design',
       fileName: 'mortise-tenon-design',
     },
     sourcemap: true,
     rollupOptions: {
       external: ['vue'],
+      input: { index: './index.ts' },
       output: [
         {
           format: 'es',
@@ -35,19 +36,25 @@ export default defineConfig({
       ],
     },
   },
+  resolve: { alias: { '@mortise-tenon-design/components': resolve(__dirname, '../components') } },
   plugins: [
     vue(),
     dts({
-      include: ['../components', '../index.ts'],
+      include: './index.ts',
       outDir: [
         '../../dist/mortise-tenon-design/es',
         '../../dist/mortise-tenon-design/lib',
       ],
       tsconfigPath: '../../tsconfig.json',
     }),
+    dts({
+      include: '../components',
+      outDir: '../../dist/mortise-tenon-design',
+      tsconfigPath: '../../tsconfig.json',
+    }),
     copy({
       verbose: true,
-      hook: 'closeBundle',
+      hook: 'buildStart',
       targets: [
         {
           src: '../mortise-tenon-design/README.md',
