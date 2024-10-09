@@ -1,7 +1,7 @@
 {
   "name": "mortise-tenon-design",
   "type": "module",
-  "version": "0.0.8",
+  "version": "0.0.11",
   "description": "榫卯组件库",
   "author": "nixwai",
   "license": "ISC",
@@ -11,7 +11,7 @@
   },
   "main": "lib/index.js",
   "module": "es/index.mjs",
-  "types": "es/index.d.ts",
+  "types": "es/core/index.d.ts",
   "peerDependencies": {
     "vue": "^3.4.0"
   }

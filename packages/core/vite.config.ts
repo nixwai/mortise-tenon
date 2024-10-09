@@ -6,18 +6,15 @@ import dts from 'vite-plugin-dts';
 
 export default defineConfig({
   build: {
-    // 压缩
-    // minify: false,
     emptyOutDir: true,
     lib: {
-      entry: resolve(__dirname, './index.ts'),
+      entry: { index: resolve(__dirname, './index.ts') },
       name: 'mortise-tenon-design',
       fileName: 'mortise-tenon-design',
     },
     sourcemap: true,
     rollupOptions: {
       external: ['vue'],
-      input: { index: './index.ts' },
       output: [
         {
           format: 'es',
@@ -40,16 +37,11 @@ export default defineConfig({
   plugins: [
     vue(),
     dts({
-      include: './index.ts',
+      include: ['./index.ts', '../components'],
       outDir: [
         '../../dist/mortise-tenon-design/es',
         '../../dist/mortise-tenon-design/lib',
       ],
-      tsconfigPath: '../../tsconfig.json',
-    }),
-    dts({
-      include: '../components',
-      outDir: '../../dist/mortise-tenon-design',
       tsconfigPath: '../../tsconfig.json',
     }),
     copy({
