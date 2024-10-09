@@ -9,6 +9,9 @@
   "publishConfig": {
     "access": "public"
   },
+  "peerDependencies": {
+    "vue": ">= 3.4.0 < 3.5.0"
+  },
   "devDependencies": {
     "rollup-plugin-copy": "^3.5.0",
     "vite-plugin-dts": "^4.2.3"
