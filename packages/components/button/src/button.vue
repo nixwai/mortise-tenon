@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { ButtonProps } from './types';
 import { computed, onMounted, ref } from 'vue';
+import './button.scss';
 
 defineOptions({ name: 'MtButton' });
 
@@ -50,17 +51,3 @@ function handleClick(e: MouseEvent) {
     <slot />
   </button>
 </template>
-
-<style scoped>
-.ex-button {
-  animation: temp-animation step-end forwards;
-}
-
-.ex-button:active {
-  animation: none;
-}
-
-@keyframes temp-animation {
-  /** 空动画 */
-}
-</style>

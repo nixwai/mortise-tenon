@@ -1,0 +1,11 @@
+.ex-button {
+  animation: temp-animation step-end forwards;
+
+  &:active {
+    animation: none;
+  }
+}
+
+@keyframes temp-animation {
+  /** 空动画 */
+}
