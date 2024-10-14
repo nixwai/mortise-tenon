@@ -3,5 +3,7 @@ import { MtButton } from '@mortise-tenon-design/components';
 </script>
 
 <template>
-  <MtButton>测试</MtButton>
+  <MtButton mode="debounce">
+    测试
+  </MtButton>
 </template>

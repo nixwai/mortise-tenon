@@ -14,12 +14,8 @@
   },
   "devDependencies": {
     "@types/gulp": "^4.0.17",
-    "@types/gulp-autoprefixer": "^0.0.37",
-    "@types/gulp-sass": "^5.0.4",
     "gulp": "^5.0.0",
-    "gulp-autoprefixer": "^8.0.0",
     "gulp-cli": "^3.0.0",
-    "gulp-sass": "^5.1.0",
     "rollup-plugin-copy": "^3.5.0",
     "sucrase": "^3.35.0",
     "vite-plugin-dts": "^4.2.3"

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { ButtonProps } from './types';
 import { computed, onMounted, ref } from 'vue';
-import './button.scss';
 
 defineOptions({ name: 'MtButton' });
 
@@ -18,12 +17,12 @@ const buttonDisabled = computed(() => {
 });
 
 const hasMode = props.mode && ['throttle', 'debounce'].includes(props.mode);
-const buttonRef = ref();
+const buttonRef = ref<Element>();
 
 onMounted(() => {
   if (hasMode) {
     // 监听动画执行结束
-    buttonRef.value.$el.addEventListener('animationend', () => {
+    buttonRef.value?.addEventListener('animationend', () => {
       forbidStatus.value = false;
     });
   }
@@ -44,6 +43,7 @@ function handleClick(e: MouseEvent) {
   <button
     ref="buttonRef"
     :disabled="buttonDisabled"
+    class="mt-button"
     :class="{ 'ex-button': hasMode }"
     :style="{ 'animation-duration': time, 'pointer-events': buttonDisabled ? 'none' : 'all' }"
     @click="handleClick"
@@ -51,3 +51,16 @@ function handleClick(e: MouseEvent) {
     <slot />
   </button>
 </template>
+
+<style scoped lang="scss">
+@import url('./style/index.scss');
+
+.mt-button {
+  display: flex;
+  padding: 4px 8px;
+  cursor: pointer;
+  background-color: #fff;
+  border: #2d2d2d solid 1px;
+  border-radius: 5px;
+}
+</style>

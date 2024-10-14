@@ -1,4 +1,4 @@
-import { resolve } from 'node:path';
+import { dirname, relative, resolve } from 'node:path';
 import vue from '@vitejs/plugin-vue';
 import copy from 'rollup-plugin-copy';
 import { defineConfig } from 'vite';
@@ -10,14 +10,15 @@ const entryIndex = resolve(__dirname, './index.ts');
 export default defineConfig({
   build: {
     emptyOutDir: false,
+    sourcemap: true,
+    cssCodeSplit: true,
     lib: {
       entry: { index: entryIndex },
       name: 'mortise-tenon-design',
       fileName: 'mortise-tenon-design',
     },
-    sourcemap: true,
     rollupOptions: {
-      external: ['vue', /\.scss/],
+      external: ['vue'],
       output: [
         {
           format: 'es',
@@ -39,27 +40,47 @@ export default defineConfig({
   resolve: { alias: { '@mortise-tenon-design/components': compRoot } },
   plugins: [
     vue(),
+    {
+      name: 'style-inject',
+      generateBundle({ format }, bundle) {
+        const cssPath: Record<string, string[]> = {};
+        const vueBundler: Record<string, any> = {};
+        for (const bundler of Object.values(bundle)) {
+          const { fileName } = bundler;
+          const directoryMatch = fileName.split('/').slice(0, 2).join('/');
+          // 收集需要组件的css文件地址
+          if (fileName.includes('.css')) {
+            if (!cssPath[directoryMatch]) {
+              cssPath[directoryMatch] = [];
+            }
+            cssPath[directoryMatch].push(fileName);
+          }
+          // 收集需要插入css的组件入口文件
+          if (directoryMatch && 'code' in bundler && [`${directoryMatch}/index.js`, `${directoryMatch}/index.mjs`].includes(fileName)) {
+            vueBundler[directoryMatch] = bundler;
+          }
+        }
+        for (const key in vueBundler) {
+          const bundler = vueBundler[key];
+          if (!cssPath[key]) {
+            continue;
+          }
+          // 生成引入文件代码
+          const injection = cssPath[key].map((cssFilePath) => {
+            cssFilePath = relative(dirname(bundler.fileName), cssFilePath).replaceAll(/[\\/]+/g, '/');
+            cssFilePath = cssFilePath.startsWith('.') ? cssFilePath : `./${cssFilePath}`;
+            return format === 'es' ? `import '${cssFilePath}';\n` : `require('${cssFilePath}');\n`;
+          }).join('');
+            // 插入代码
+          bundler.code = bundler.code.concat(injection);
+        }
+      },
+    },
     dts({
       include: compRoot,
       outDir: [mtEsOutput, mtLibOutput],
       tsconfigPath: resolve(projRoot, 'tsconfig.json'),
     }),
-    {
-      name: 'style',
-      generateBundle(_config, bundle) {
-        for (const key in bundle) {
-          const bundler = bundle[key];
-          if ('code' in bundler && bundler.code.includes('.scss')) {
-            // 替换scss为css，覆盖原文件
-            this.emitFile({
-              type: 'asset',
-              fileName: key, // 文件名名不变
-              source: bundler.code.replace(/\.scss/g, '.css'),
-            });
-          }
-        }
-      },
-    },
     copy({
       verbose: true,
       hook: 'buildStart',
