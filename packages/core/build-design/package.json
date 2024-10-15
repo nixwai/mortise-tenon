@@ -13,10 +13,6 @@
   "module": "es/index.mjs",
   "types": "es/components/index.d.ts",
   "files": ["es", "lib"],
-  "scripts": {
-    "build": "vite build",
-    "release": "release-it"
-  },
   "peerDependencies": {
     "vue": "^3.4.0"
   }

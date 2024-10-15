@@ -4,7 +4,8 @@
   "version": "0.0.1",
   "description": "",
   "scripts": {
-    "design:build": "gulp -f build-design/gulp-build.ts"
+    "design:build": "gulp -f build-design/gulp-build.ts",
+    "design:publish": "gulp -f build-design/gulp-publish.ts"
   },
   "publishConfig": {
     "access": "public"

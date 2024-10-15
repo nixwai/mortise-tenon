@@ -13,7 +13,7 @@
     "examples:dev": "pnpm run -C examples dev",
     "examples:build": "pnpm run -C examples build",
     "design:build": "pnpm run -C packages/core design:build",
-    "design:publish": "pnpm run -C dist/mortise-tenon-design release",
+    "design:publish": "pnpm run -C packages/core design:publish",
     "lint:style": "stylelint \"./**/*.{css,less,vue,html}\" --fix",
     "prepare": "husky install",
     "lint": "eslint .",
