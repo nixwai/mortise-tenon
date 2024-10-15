@@ -3,7 +3,7 @@ import vue from '@vitejs/plugin-vue';
 import copy from 'rollup-plugin-copy';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
-import { compRoot, mtEsOutput, mtLibOutput, mtOutput, projRoot } from '../paths';
+import { compRoot, designEsOutput, designLibOutput, designOutput, projRoot } from '../paths';
 
 const entryIndex = resolve(__dirname, './index.ts');
 
@@ -25,14 +25,14 @@ export default defineConfig({
           entryFileNames: '[name].mjs',
           preserveModules: true,
           exports: 'named',
-          dir: mtEsOutput,
+          dir: designEsOutput,
         },
         {
           format: 'cjs',
           entryFileNames: '[name].js',
           preserveModules: true,
           exports: 'named',
-          dir: mtLibOutput,
+          dir: designLibOutput,
         },
       ],
     },
@@ -78,7 +78,7 @@ export default defineConfig({
     },
     dts({
       include: compRoot,
-      outDir: [mtEsOutput, mtLibOutput],
+      outDir: [designEsOutput, designLibOutput],
       tsconfigPath: resolve(projRoot, 'tsconfig.json'),
     }),
     copy({
@@ -87,11 +87,11 @@ export default defineConfig({
       targets: [
         {
           src: 'README.md',
-          dest: mtOutput,
+          dest: designOutput,
         },
         {
           src: 'package.json',
-          dest: mtOutput,
+          dest: designOutput,
         },
       ],
     }),

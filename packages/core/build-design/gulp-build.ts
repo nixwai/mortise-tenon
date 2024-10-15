@@ -1,9 +1,9 @@
 import { parallel, series } from 'gulp';
-import { mtOutput } from '../paths';
+import { designOutput } from '../paths';
 import { delPath, run } from '../tasks';
 
 export default series(
-  () => delPath(mtOutput),
+  () => delPath(designOutput),
   parallel(
     () => run('vite build', '.'),
   ),
