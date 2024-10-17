@@ -18,7 +18,7 @@ export default defineConfig({
       fileName: 'mortise-tenon-design',
     },
     rollupOptions: {
-      external: ['vue'],
+      external: ['vue', 'lodash-es'],
       output: [
         {
           format: 'es',
