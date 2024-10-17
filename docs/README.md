@@ -10,7 +10,7 @@ actions:
 
   - text: 组件
     icon: tools
-    link: ./zh/components/button
+    link: ./zh/components/expand-box
 ---
 
 <div class="features">
