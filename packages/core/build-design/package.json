@@ -15,5 +15,8 @@
   "files": ["es", "lib"],
   "peerDependencies": {
     "vue": "^3.4.0"
+  },
+  "dependencies": {
+    "lodash-es": "^4.17.21"
   }
 }

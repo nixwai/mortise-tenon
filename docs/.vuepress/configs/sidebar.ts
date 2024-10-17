@@ -20,6 +20,10 @@ export const sidebar: SidebarOptions = {
           text: '按钮',
           link: 'button.md',
         },
+        {
+          text: '折叠面板',
+          link: 'expand-box.md',
+        },
       ],
     },
   ],
