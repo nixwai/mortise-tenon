@@ -1,9 +1,19 @@
 <script setup lang="ts">
-import { MtButton } from '@mortise-tenon-design/components';
+import { MtExpandBox } from '@mortise-tenon-design/components';
+import { ref } from 'vue';
+
+const open = ref(true);
+
+function toggle() {
+  open.value = !open.value;
+}
 </script>
 
 <template>
-  <MtButton mode="debounce">
-    测试
-  </MtButton>
+  <button @click="toggle">
+    点击
+  </button>
+  <MtExpandBox :open="open">
+    展开后内容
+  </MtExpandBox>
 </template>

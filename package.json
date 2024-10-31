@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@mortise-tenon-design/components": "workspace:*",
+    "@vueuse/core": "^11.1.0",
     "lodash-es": "^4.17.21"
   },
   "devDependencies": {

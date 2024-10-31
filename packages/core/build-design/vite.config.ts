@@ -8,6 +8,7 @@ import { compRoot, designEsOutput, designLibOutput, designOutput, projRoot } fro
 const entryIndex = resolve(__dirname, './index.ts');
 
 export default defineConfig({
+  css: { preprocessorOptions: { scss: { api: 'modern-compiler' } } },
   build: {
     emptyOutDir: false,
     sourcemap: true,
@@ -18,7 +19,7 @@ export default defineConfig({
       fileName: 'mortise-tenon-design',
     },
     rollupOptions: {
-      external: ['vue', 'lodash-es'],
+      external: ['vue', 'lodash-es', '@vueuse/core'],
       output: [
         {
           format: 'es',
