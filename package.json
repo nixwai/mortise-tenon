@@ -16,6 +16,7 @@
     "examples:build": "pnpm run -C examples build",
     "design:build": "pnpm run -C packages/core design:build",
     "design:publish": "pnpm run -C packages/core design:publish",
+    "use:build": "pnpm run -C packages/core use:build",
     "lint:style": "stylelint \"./**/*.{css,less,vue,html}\" --fix",
     "prepare": "husky install",
     "lint": "eslint .",
