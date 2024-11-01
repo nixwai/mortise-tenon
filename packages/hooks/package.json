@@ -1,0 +1,6 @@
+{
+  "name": "@mortise-tenon-design/hooks",
+  "version": "0.0.1",
+  "description": "use hooks",
+  "main": "index.ts"
+}

@@ -11,6 +11,9 @@ importers:
       '@mortise-tenon-design/components':
         specifier: workspace:*
         version: link:packages/components
+      '@mortise-tenon-design/hooks':
+        specifier: workspace:*
+        version: link:packages/hooks
       '@vueuse/core':
         specifier: ^11.1.0
         version: 11.1.0(vue@3.5.12(typescript@5.6.3))
@@ -155,6 +158,8 @@ importers:
       vite-plugin-dts:
         specifier: ^4.2.3
         version: 4.2.4(@types/node@22.7.5)(rollup@4.24.0)(typescript@5.6.3)(vite@5.4.8(@types/node@22.7.5)(less@4.2.0)(sass@1.79.5))
+
+  packages/hooks: {}
 
 packages:
 
