@@ -1,13 +1,11 @@
 import { onBeforeUnmount, ref } from 'vue';
 
-type AnyFn = (...args: any[]) => any;
-
 /**
  * 节流控制
  * @param ms 节流时间(ms)
  * @param fn 节流函数
  */
-export function useThrottleControl<Fn extends AnyFn>(ms: number = 200, fn?: Fn) {
+export function useThrottleControl<A extends any[], R>(ms: number = 200, fn?: (...args: A) => R) {
   /** 节流状态 */
   const throttleOpen = ref(false);
   /** 当前执行的定时器 */
@@ -36,14 +34,14 @@ export function useThrottleControl<Fn extends AnyFn>(ms: number = 200, fn?: Fn) 
   }
 
   /** 节流控制方法 */
-  const throttleFn = ((...args: any[]) => {
+  function throttleFn(...args: A) {
     // 节流状态开启中，不可重复执行
     if (throttleOpen.value) {
       return;
     }
     openThrottle();
     return fn?.(...args);
-  }) as Fn;
+  };
 
   /** 移除时销毁定时器 */
   onBeforeUnmount(() => {
