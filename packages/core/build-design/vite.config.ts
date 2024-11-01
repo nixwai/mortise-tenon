@@ -38,7 +38,7 @@ export default defineConfig({
       ],
     },
   },
-  resolve: { alias: { '@mortise-tenon-design/components': compRoot } },
+  resolve: { alias: { '@mortise-tenon/components': compRoot } },
   plugins: [
     vue(),
     {

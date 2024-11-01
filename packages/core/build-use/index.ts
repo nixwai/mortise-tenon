@@ -1,1 +1,1 @@
-export * from '@mortise-tenon-design/hooks';
+export * from '@mortise-tenon/hooks';

@@ -1,5 +1,5 @@
 {
-  "name": "@mortise-tenon-design/components",
+  "name": "@mortise-tenon/components",
   "version": "0.0.1",
   "description": "组件",
   "main": "index.ts"

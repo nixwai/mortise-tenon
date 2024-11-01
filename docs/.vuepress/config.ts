@@ -11,7 +11,7 @@ export default defineUserConfig({
   lang: 'zh-CN',
   title: 'Mortise Tenon Design',
   description: '一个可简单可复杂的组件库',
-  base: '/mortise-tenon-design/',
+  base: '/mortise-tenon/',
   plugins: [
     demoBlockPlugin({ examplesPath: resolve(__dirname, '../examples') }) as Plugin,
   ],

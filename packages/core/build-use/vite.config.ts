@@ -35,7 +35,7 @@ export default defineConfig({
       ],
     },
   },
-  resolve: { alias: { '@mortise-tenon-design/hooks': hookRoot } },
+  resolve: { alias: { '@mortise-tenon/hooks': hookRoot } },
   plugins: [
     dts({
       entryRoot: hookRoot,

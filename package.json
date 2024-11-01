@@ -1,5 +1,5 @@
 {
-  "name": "mortise-tenon-design",
+  "name": "mortise-tenon",
   "version": "1.0.0",
   "description": "",
   "author": "xy",
@@ -26,8 +26,8 @@
     "vue": "^3.4.0"
   },
   "dependencies": {
-    "@mortise-tenon-design/components": "workspace:*",
-    "@mortise-tenon-design/hooks": "workspace:*",
+    "@mortise-tenon/components": "workspace:*",
+    "@mortise-tenon/hooks": "workspace:*",
     "@vueuse/core": "^11.1.0",
     "lodash-es": "^4.17.21"
   },
