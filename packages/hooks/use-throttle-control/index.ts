@@ -1,4 +1,5 @@
-import { onBeforeUnmount, ref } from 'vue';
+import { tryOnScopeDispose } from '@vueuse/core';
+import { readonly, ref } from 'vue-demi';
 
 /**
  * 节流控制
@@ -44,12 +45,10 @@ export function useThrottleControl<A extends any[], R>(ms: number = 200, fn?: (.
   };
 
   /** 移除时销毁定时器 */
-  onBeforeUnmount(() => {
-    closeThrottle();
-  });
+  tryOnScopeDispose(closeThrottle);
 
   return {
-    throttleOpen,
+    throttleOpen: readonly(throttleOpen),
     throttleFn,
     openThrottle,
     closeThrottle,

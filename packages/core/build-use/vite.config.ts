@@ -8,7 +8,7 @@ const entryIndex = resolve(__dirname, './index.ts');
 
 export default defineConfig({
   build: {
-    emptyOutDir: true,
+    emptyOutDir: false,
     sourcemap: true,
     lib: {
       entry: { index: entryIndex },
@@ -16,7 +16,7 @@ export default defineConfig({
       fileName: 'mortise-tenon-use',
     },
     rollupOptions: {
-      external: ['vue'],
+      external: ['vue-demi', '@vueuse/core'],
       output: [
         {
           format: 'es',
