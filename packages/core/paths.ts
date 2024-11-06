@@ -8,6 +8,8 @@ export const pkgRoot = resolve(projRoot, 'packages');
 export const compRoot = resolve(pkgRoot, 'components');
 /** hook根目录 */
 export const hookRoot = resolve(pkgRoot, 'hooks');
+/** 工具库目录 */
+export const utilRoot = resolve(pkgRoot, 'utils');
 
 /** `/dist` */
 export const buildOutput = resolve(projRoot, 'dist');
@@ -15,3 +17,5 @@ export const buildOutput = resolve(projRoot, 'dist');
 export const designOutput = resolve(buildOutput, 'mortise-tenon-design');
 /** `/dist/mortise-tenon-use` */
 export const useOutput = resolve(buildOutput, 'mortise-tenon-use');
+/** `/dist/mortise-tenon-tool` */
+export const toolOutput = resolve(buildOutput, 'mortise-tenon-tool');
