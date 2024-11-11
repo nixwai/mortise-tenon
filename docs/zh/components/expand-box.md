@@ -1,5 +1,5 @@
 # ExpandBox
 
 ::: demo
-expand-box/demo1
+components/expand-box/demo1
 :::

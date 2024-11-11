@@ -9,11 +9,7 @@ type TObject = Record<string, any>;
  * @param defaultValue 如果解析 value 是 undefined 会以 defaultValue 取代
  * @returns 新对象
  */
-export function objectFormatKey<R extends TObject, T extends TObject>(
-  obj: T,
-  paths: ([string, string] | [string])[],
-  defaultValue?: any,
-) {
+export function objectFormatKey<R extends TObject, T extends TObject>(obj: T, paths: string[][], defaultValue?: any) {
   const newObj = cloneDeep(obj) as TObject;
   paths.forEach(([oldPath, newPath]) => {
     if (newPath) {

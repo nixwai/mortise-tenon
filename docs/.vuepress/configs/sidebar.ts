@@ -23,4 +23,24 @@ export const sidebar: SidebarOptions = {
       ],
     },
   ],
+  '/zh/utils/': [
+    {
+      text: '开发指南',
+      children: [
+        {
+          text: '安装',
+          link: 'install.md',
+        },
+      ],
+    },
+    {
+      text: '对象',
+      children: [
+        {
+          text: 'objectFormatKey',
+          link: 'object-format-key.md',
+        },
+      ],
+    },
+  ],
 };
