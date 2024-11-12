@@ -80,6 +80,7 @@ export default defineConfig({
     dts({
       entryRoot: compRoot,
       include: compRoot,
+      exclude: [resolve(compRoot, '**/__test__')],
       outDir: resolve(designOutput, 'types'),
       tsconfigPath: resolve(projRoot, 'tsconfig.json'),
     }),

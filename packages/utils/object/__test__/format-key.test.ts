@@ -20,7 +20,7 @@ describe('test objectFormatKey', () => {
       ['c1', 'cAry[0]'],
       ['c2', 'cAry[1]'],
       ['option.child[0]', 'option.a'],
-      ['option.child[1]', 'option.b'],
+      [['option', 'child', '1'], ['option', 'b']],
       ['option.child'],
     ];
 

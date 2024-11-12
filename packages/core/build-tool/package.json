@@ -1,7 +1,7 @@
 {
   "name": "mortise-tenon-tool",
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "榫卯工具函数库",
   "author": "nixwai",
   "license": "ISC",

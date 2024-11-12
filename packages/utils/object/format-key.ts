@@ -1,7 +1,5 @@
 import { cloneDeep, get, set, unset } from 'lodash-es';
 
-type TObject = Record<string, any>;
-
 /**
  * 将目标对象的key进行修改，返回自定义的key的新对象
  * @param obj 要修改的对象
@@ -9,8 +7,8 @@ type TObject = Record<string, any>;
  * @param defaultValue 如果解析 value 是 undefined 会以 defaultValue 取代
  * @returns 新对象
  */
-export function objectFormatKey<R extends TObject, T extends TObject>(obj: T, paths: string[][], defaultValue?: any) {
-  const newObj = cloneDeep(obj) as TObject;
+export function objectFormatKey<R extends object, T extends object>(obj: T, paths: (string | string[])[][], defaultValue?: any) {
+  const newObj = cloneDeep(obj) as object;
   paths.forEach(([oldPath, newPath]) => {
     if (newPath) {
       const value = get(newObj, oldPath, defaultValue);

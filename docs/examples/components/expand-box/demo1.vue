@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { MtExpandBox } from '@mortise-tenon/components';
+import { MtExpandBox } from 'mortise-tenon-design';
 import { ref } from 'vue';
 
 const open = ref(false);

@@ -9,8 +9,8 @@ import { sidebar } from './configs/sidebar';
 
 export default defineUserConfig({
   lang: 'zh-CN',
-  title: 'Mortise Tenon Design',
-  description: '一个可简单可复杂的组件库',
+  title: 'Mortise Tenon',
+  description: '榫卯是极为精巧的设计结构',
   base: '/mortise-tenon/',
   plugins: [
     demoBlockPlugin({ examplesPath: resolve(__dirname, '../examples') }) as Plugin,

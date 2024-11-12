@@ -6,6 +6,11 @@
     "docs:dev": "vuepress dev",
     "docs:build": "vuepress build"
   },
+  "dependencies": {
+    "mortise-tenon-design": "npm:mortise-tenon-design@latest",
+    "mortise-tenon-tool": "npm:mortise-tenon-tool@latest",
+    "mortise-tenon-use": "npm:mortise-tenon-use@latest"
+  },
   "devDependencies": {
     "@ddongui/vuepress-plugin-demo-block": "2.0.0-beta.51.2",
     "@vuepress/bundler-vite": "2.0.0-rc.18",

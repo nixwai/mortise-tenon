@@ -1,9 +1,9 @@
 import type { SidebarOptions } from '@vuepress/theme-default';
 
 export const sidebar: SidebarOptions = {
-  '/zh/guide/': [
+  '/zh/components/': [
     {
-      text: '基础',
+      text: '开发指南',
       children: [
         {
           text: '安装',
@@ -11,8 +11,6 @@ export const sidebar: SidebarOptions = {
         },
       ],
     },
-  ],
-  '/zh/components/': [
     {
       text: '基础组件',
       children: [

@@ -1,4 +1,4 @@
-import { objectFormatKey } from '@mortise-tenon/utils';
+import { objectFormatKey } from 'mortise-tenon-tool';
 
 const obj = {
   count: 3,
@@ -17,7 +17,7 @@ objectFormatKey(obj, [
   ['c1', 'cAry[0]'], // 支持转为数组类型
   ['c2', 'cAry[1]'],
   ['option.child[0]', 'option.a'],
-  ['option.child[1]', 'option.b'],
+  [['option', 'child', '1'], ['option', 'b']], // 支持多级路径
   ['option.child'],
 ]);
 /**

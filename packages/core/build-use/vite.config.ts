@@ -40,6 +40,7 @@ export default defineConfig({
     dts({
       entryRoot: hookRoot,
       include: hookRoot,
+      exclude: [resolve(hookRoot, '**/__test__')],
       outDir: resolve(useOutput, 'types'),
       tsconfigPath: resolve(projRoot, 'tsconfig.json'),
     }),

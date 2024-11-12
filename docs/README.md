@@ -1,22 +1,20 @@
 ---
 home: true
 actionText: 开始 →
-actionLink: /guide/install.html
 actions:
-  - text: 安装
-    icon: lightbulb
-    link: ./zh/guide/install
-    type: secondary
-
-  - text: 组件
+  - text: 组件库
     icon: tools
-    link: ./zh/components/expand-box
+    link: ./zh/components/install
+
+  - text: 工具函数
+    icon: tools
+    link: ./zh/utils/install
 ---
 
 <div class="features">
   <div class="feature">
     <h2>便捷</h2>
-    <p>开箱即用，所有组件支持全量引入和按需引入。</p>
+    <p>开箱即用，支持按需引入。</p>
   </div>
   <div class="feature">
     <h2>扩展</h2>
