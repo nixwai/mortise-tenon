@@ -4,6 +4,8 @@ import { useResizeObserver } from '@vueuse/core';
 import { debounce } from 'lodash-es';
 import { computed, onMounted, ref } from 'vue';
 
+defineOptions({ name: 'MtExpandBox' });
+
 const props = withDefaults(defineProps<ExpandBoxProps>(), {
   open: false,
   targetRange: 0,
