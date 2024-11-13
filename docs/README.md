@@ -6,6 +6,10 @@ actions:
     icon: tools
     link: ./zh/components/install
 
+  - text: 组合式函数
+    icon: tools
+    link: ./zh/hooks/install
+
   - text: 工具函数
     icon: tools
     link: ./zh/utils/install
