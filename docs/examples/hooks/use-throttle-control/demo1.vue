@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useThrottleControl } from 'mortise-tenon-use';
+import { useThrottleControl } from '@mortise-tenon/hooks';
 import { ref } from 'vue';
 
 const num = ref(0);
