@@ -12,3 +12,12 @@ const { throttleFn: handleClick } = useThrottleControl(1000, () => num.value++);
     {{ num }}
   </button>
 </template>
+
+<style scoped>
+button {
+  padding: 5px 15px;
+  cursor: pointer;
+  background-color: #fff;
+  border-radius: 4px;
+}
+</style>
