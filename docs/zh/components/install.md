@@ -28,7 +28,7 @@ pnpm add mortise-tenon-design
 
 ```vue
 <script setup lang="ts">
-import { MtExpandBox } from 'mortise-tenon-design';
+import { MtExpand } from 'mortise-tenon-design';
 import { ref } from 'vue';
 
 const open = ref(true);
@@ -42,8 +42,8 @@ function toggle() {
   <button @click="toggle">
     点击
   </button>
-  <MtExpandBox :open="open">
+  <MtExpand :open="open">
     展开后内容
-  </MtExpandBox>
+  </MtExpand>
 </template>
 ```

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MtExpandBox } from '@mortise-tenon/components';
+import { MtExpand } from '@mortise-tenon/components';
 import { useThrottleControl } from '@mortise-tenon/hooks';
 import { ref } from 'vue';
 
@@ -16,7 +16,7 @@ const { throttleFn } = useThrottleControl(2000, toggle);
   <button @click="throttleFn">
     点击
   </button>
-  <MtExpandBox :open="open">
+  <MtExpand :open="open">
     展开后内容
-  </MtExpandBox>
+  </MtExpand>
 </template>

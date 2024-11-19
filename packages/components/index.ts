@@ -1,1 +1,1 @@
-export * from './expand-box';
+export * from './expand';

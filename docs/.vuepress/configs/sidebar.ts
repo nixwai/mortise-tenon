@@ -16,7 +16,7 @@ export const sidebar: SidebarOptions = {
       children: [
         {
           text: '折叠面板',
-          link: 'expand-box.md',
+          link: 'expand.md',
         },
       ],
     },
