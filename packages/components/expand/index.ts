@@ -8,3 +8,5 @@ Expand.install = (app: App): void => {
 };
 
 export const MtExpand = Expand;
+
+export * from './src/expand';
