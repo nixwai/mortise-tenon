@@ -1,1 +1,0 @@
-import{g as s,i as a,j as c}from"./app-D8cmsOkW.js";function h(i=200,n){const e=s(!1);let t;function u(){return o(),e.value=!0,t=setTimeout(()=>{o()},i),t}function o(r){(!r||r===t)&&(e.value=!1,t&&(clearTimeout(t),t=void 0))}function l(...r){if(!e.value)return u(),n==null?void 0:n(...r)}return c(o),{throttling:a(e),throttleFn:l,openThrottle:u,closeThrottle:o}}export{h as u};
