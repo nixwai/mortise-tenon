@@ -1,1 +1,0 @@
-import{g as s,q as a,v as c}from"./app-B-cGsxFT.js";function h(l=200,n){const e=s(!1);let t;function u(){return o(),e.value=!0,t=setTimeout(()=>{o()},l),t}function o(r){(!r||r===t)&&(e.value=!1,t&&(clearTimeout(t),t=void 0))}function i(...r){if(!e.value)return u(),n==null?void 0:n(...r)}return c(o),{throttling:a(e),throttleFn:i,openThrottle:u,closeThrottle:o}}export{h as u};
