@@ -20,144 +20,129 @@ const dataConfig = computed(() => {
 });
 
 /** 最大列数 */
-const maxColspan = computed(() => {
-  const handReduce = headConfig.value.map(item => item.columns.reduce((pre, cur) => pre + (cur.head?.colspan || 1), 0));
-  const cellReduce = dataConfig.value.map(item => item.columns.reduce((pre, cur) => pre + (cur.cell?.colspan || 1), 0));
+const maxColSpan = computed(() => {
+  const handReduce = headConfig.value.map(item => item.columns.reduce((pre, cur) => pre + (cur.head?.colSpan || 1), 0));
+  const cellReduce = dataConfig.value.map(item => item.columns.reduce((pre, cur) => pre + (cur.cell?.colSpan || 1), 0));
   return Math.max(...handReduce, ...cellReduce);
 });
 
 /** 表头列合并 */
-const headColspan = computed(() => {
-  const colspanList = headConfig.value.map(item => item.columns.map(column => column.head?.colspan || 0));
-  return getColspanData(colspanList);
+const headColSpan = computed(() => {
+  const colSpanList = headConfig.value.map(item => item.columns.map(column => column.head?.colSpan || 0));
+  return getColSpanData(colSpanList);
 });
 
 /** 数据列合并 */
-const dataColspan = computed(() => {
-  const colspanList = dataConfig.value.map(item => item.columns.map(column => column.cell?.colspan || 0));
-  return getColspanData(colspanList);
+const dataColSpan = computed(() => {
+  const colSpanList = dataConfig.value.map(item => item.columns.map(column => column.cell?.colSpan || 0));
+  return getColSpanData(colSpanList);
 });
 
 /** 获取合并列数组 */
-function getColspanData(colspanList: number[][]) {
-  return colspanList.map((columns) => {
-    const colspanColumns = columns.filter(Boolean); // 已分配colspan的列
-    const beenColspan = colspanColumns.reduce((pur, cur) => pur + cur, 0); // 总colspan
-    let remainCount = columns.length - colspanColumns.length; // 剩余未配置colspan的列数
-    let remainColspan = maxColspan.value - beenColspan; // 剩余可分配的colspan
-    return columns.map((colspan) => {
-      if (!colspan && remainColspan > 0) {
-        colspan = Math.ceil(remainColspan / remainCount); // 每列平均分配colspan
+function getColSpanData(colSpanList: number[][]) {
+  return colSpanList.map((columns) => {
+    const colSpanColumns = columns.filter(Boolean); // 已分配colSpan的列
+    const beenColSpan = colSpanColumns.reduce((pur, cur) => pur + cur, 0); // 总colSpan
+    let remainCount = columns.length - colSpanColumns.length; // 剩余未配置colSpan的列数
+    let remainColSpan = maxColSpan.value - beenColSpan; // 剩余可分配的colSpan
+    return columns.map((colSpan) => {
+      if (!colSpan && remainColSpan > 0) {
+        colSpan = Math.ceil(remainColSpan / remainCount); // 每列平均分配colSpan
         remainCount--;
-        remainColspan -= colspan;
+        remainColSpan -= colSpan;
       }
-      return colspan;
+      return colSpan;
     });
   });
 }
 </script>
 
 <template>
-  <div class="mt-table">
-    <table>
-      <!-- 表头 -->
-      <thead>
+  <table class="mt-table">
+    <!-- 表头 -->
+    <thead>
+      <tr
+        v-for="(row, rowIndex) in headConfig"
+        :key="rowIndex"
+        :style="row.headStyle"
+      >
+        <template v-for="(column, columnIndex) in row.columns" :key="`${column.title}-${columnIndex}`">
+          <th
+            :colspan="headColSpan[rowIndex][columnIndex]"
+            :rowspan="column.head?.rowSpan"
+            :style="column.head?.style"
+          >
+            <slot
+              :column="column"
+              :column-index="columnIndex"
+              :row="row"
+              :row-index="rowIndex"
+              name="header"
+            >
+              {{ column.title }}
+            </slot>
+          </th>
+        </template>
+      </tr>
+    </thead>
+    <!-- 表体 -->
+    <tbody>
+      <template
+        v-for="(record, dataIndex) in data"
+        :key="dataIndex"
+      >
         <tr
-          v-for="(row, rowIndex) in headConfig"
+          v-for="(row, rowIndex) in dataConfig"
           :key="rowIndex"
-          :style="row.headStyle"
+          :style="row.rowStyle"
         >
-          <template v-for="(column, columnIndex) in row.columns" :key="`${column.title}-${columnIndex}`">
-            <th
-              :colspan="headColspan[rowIndex][columnIndex]"
-              :style="column.head?.style"
+          <template v-for="(column, columnIndex) in row.columns" :key="`${column.dataKey}-${columnIndex}`">
+            <td
+              :colspan="dataColSpan[rowIndex][columnIndex]"
+              :rowspan="column.cell?.rowSpan"
+              :style="column.cell?.style"
             >
               <slot
                 :column="column"
                 :column-index="columnIndex"
+                :data-index="dataIndex"
+                name="cell"
+                :record="record"
                 :row="row"
                 :row-index="rowIndex"
-                name="header"
               >
-                {{ column.title }}
+                {{ record[column.dataKey!] }}
               </slot>
-            </th>
+            </td>
           </template>
         </tr>
-      </thead>
-      <!-- 表体 -->
-      <tbody>
-        <template
-          v-for="(record, dataIndex) in data"
-          :key="dataIndex"
-        >
-          <tr
-            v-for="(row, rowIndex) in dataConfig"
-            :key="rowIndex"
-            :style="row.rowStyle"
-          >
-            <template v-for="(column, columnIndex) in row.columns" :key="`${column.dataKey}-${columnIndex}`">
-              <td
-                :colspan="dataColspan[rowIndex][columnIndex]"
-                :style="column.cell?.style"
-              >
-                <slot
-                  :column="column"
-                  :column-index="columnIndex"
-                  :data-index="dataIndex"
-                  name="cell"
-                  :record="record"
-                  :row="row"
-                  :row-index="rowIndex"
-                >
-                  {{ record[column.dataKey!] }}
-                </slot>
-              </td>
-            </template>
-          </tr>
-        </template>
-      </tbody>
-    </table>
-  </div>
+      </template>
+    </tbody>
+  </table>
 </template>
 
 <style lang="scss" scoped>
 .mt-table {
-  position: relative;
-
-  table {
-    width: 100%;
-    max-width: 100%;
-  }
+  width: 100%;
+  max-width: 100%;
+  border-spacing: 0;
+  border-collapse: collapse;
 
   thead {
-    position: sticky;
-    top: 0;
-
-    th {
-      position: relative;
-      padding: 8px 16px;
-      text-align: left;
-
-      &:not(:last-child)::before {
-        position: absolute;
-        inset-inline-end: 0;
-        top: 50%;
-        width: 1px;
-        height: 1.6em;
-        content: '';
-        background-color: #f0f0f0;
-        transform: translateY(-50%);
+    tr {
+      th {
+        padding: 8px 16px;
+        border: 1px #f0f0f0 solid;
       }
     }
   }
 
   tbody {
-    td {
-      padding: 16px;
-      vertical-align: top;
-      border-collapse: collapse;
-      border: 1px solid #f0f0f0;
+    tr {
+      td {
+        padding: 16px;
+        border: 1px #f0f0f0 solid;
+      }
     }
   }
 }

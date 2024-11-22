@@ -15,12 +15,16 @@ export const sidebar: SidebarOptions = {
       text: '基础组件',
       children: [
         {
-          text: '折叠',
+          text: 'expand 折叠',
           link: 'expand.md',
         },
         {
-          text: '排序',
+          text: 'sort 排序',
           link: 'sort.md',
+        },
+        {
+          text: 'table 表格',
+          link: 'table.md',
         },
       ],
     },

@@ -18,7 +18,7 @@ export default defineUserConfig({
   bundler: viteBundler(),
   dest: resolve(__dirname, '../../dist/docs'),
   theme: defaultTheme({
-    sidebarDepth: 1,
+    sidebarDepth: 0,
     navbar,
     sidebar,
   }),

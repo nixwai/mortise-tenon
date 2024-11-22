@@ -11,7 +11,7 @@ export interface TableProps {
 export interface TableConfig {
   /** 行体样式 */
   rowStyle?: CSSProperties
-  /** 有渲染表头时的样式 */
+  /** 表头样式 */
   headStyle?: CSSProperties
   /** 列配置 */
   columns: Column[]
@@ -19,9 +19,11 @@ export interface TableConfig {
 
 /** 标体列 */
 export interface Column {
-  /** 列对应的唯一key */
+  /** 唯一标识key */
+  key?: string
+  /** 单元格数据字段（配置了才会显示对应数据列） */
   dataKey?: string
-  /** 表头名称 */
+  /** 表头名称（配置了才会显示对应列表头） */
   title?: string
   /** 表头格配置 */
   head?: CellProps
@@ -34,7 +36,7 @@ export interface CellProps {
   /** 样式 */
   style?: CSSProperties
   /** 占用列数 */
-  colspan?: number
+  colSpan?: number
   /** 占用行数 */
-  rowspan?: number
+  rowSpan?: number
 }
