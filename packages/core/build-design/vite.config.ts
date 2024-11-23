@@ -1,6 +1,7 @@
 import { dirname, relative, resolve } from 'node:path';
 import vue from '@vitejs/plugin-vue';
 import copy from 'rollup-plugin-copy';
+import UnoCSS from 'unocss/vite';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 import { compRoot, designOutput, projRoot } from '../paths';
@@ -41,6 +42,7 @@ export default defineConfig({
   resolve: { alias: { '@mortise-tenon/components': compRoot } },
   plugins: [
     vue(),
+    UnoCSS({ mode: 'vue-scoped' }),
     {
       name: 'style-inject',
       generateBundle({ format }, bundle) {

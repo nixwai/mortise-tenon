@@ -3,6 +3,7 @@ import { resolve } from 'node:path';
 import { demoBlockPlugin } from '@ddongui/vuepress-plugin-demo-block';
 import { viteBundler } from '@vuepress/bundler-vite';
 import { defaultTheme } from '@vuepress/theme-default';
+import UnoCSS from 'unocss/vite';
 import { defineUserConfig } from 'vuepress';
 import { navbar } from './configs/navbar';
 import { sidebar } from './configs/sidebar';
@@ -15,7 +16,7 @@ export default defineUserConfig({
   plugins: [
     demoBlockPlugin({ examplesPath: resolve(__dirname, '../examples') }) as Plugin,
   ],
-  bundler: viteBundler(),
+  bundler: viteBundler({ viteOptions: { plugins: [UnoCSS({ mode: 'per-module' })] } }),
   dest: resolve(__dirname, '../../dist/docs'),
   theme: defaultTheme({
     sidebarDepth: 0,
