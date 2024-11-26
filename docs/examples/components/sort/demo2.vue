@@ -6,7 +6,7 @@ const list = ref([2, 7, 9, 6, 4, 3, 1]);
 </script>
 
 <template>
-  序号5、8不在排序修改范围中
+  修改顺序为[2, 7, 9, 6, 4, 3, 1]，序号5、8不参与排序修改，隐藏序号7。
   <h6>使用v-if隐藏元素</h6>
   <MtSort :sort-list="list">
     <div>
