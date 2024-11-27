@@ -4,8 +4,8 @@
 
 ## 基础用法
 
-::: demo
-components/expand/demo1
+::: raw
+<demo vue="components/expand/demo1.vue"/>
 :::
 
 ## 属性

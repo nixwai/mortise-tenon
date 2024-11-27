@@ -1,20 +1,23 @@
 {
-  "name": "docs",
+  "name": "docs2",
   "version": "1.0.0",
-  "description": "组件库的说明文档",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
+  "main": "index.js",
   "scripts": {
-    "docs:dev": "vuepress dev",
-    "docs:build": "vuepress build"
+    "docs:dev": "vitepress dev",
+    "docs:build": "vitepress build",
+    "docs:preview": "vitepress preview"
   },
   "dependencies": {
-    "mortise-tenon-design": "npm:mortise-tenon-design@latest",
-    "mortise-tenon-tool": "npm:mortise-tenon-tool@latest",
-    "mortise-tenon-use": "npm:mortise-tenon-use@latest"
+    "mortise-tenon-design": "^0.2.0",
+    "mortise-tenon-tool": "^0.1.1",
+    "mortise-tenon-use": "^0.1.0"
   },
   "devDependencies": {
-    "@ddongui/vuepress-plugin-demo-block": "2.0.0-beta.51.2",
-    "@vuepress/bundler-vite": "2.0.0-rc.18",
-    "@vuepress/theme-default": "2.0.0-rc.60",
-    "vuepress": "2.0.0-rc.18"
+    "vitepress": "^1.5.0",
+    "vitepress-demo-plugin": "^1.1.3"
   }
 }

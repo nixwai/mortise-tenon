@@ -27,6 +27,8 @@ dist-ssr
 # docs
 .temp
 .cache
+temp
+cache
 
 # ts
 *.tsbuildinfo

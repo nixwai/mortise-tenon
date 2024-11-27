@@ -4,7 +4,9 @@
 
 ## 用法
 
-@[code ts](../../examples/utils/object-format-key/demo1.ts)
+<!-- @[code ts](../../examples/utils/object-format-key/demo1.ts) -->
+
+<<< @/examples/utils/object-format-key/demo1.ts
 
 ## 源码
 

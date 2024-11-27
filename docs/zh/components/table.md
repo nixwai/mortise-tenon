@@ -4,9 +4,7 @@
 
 ## 基础用法
 
-::: demo
-components/table/demo1
-:::
+<demo vue="components/table/demo1.vue" />
 
 ## 属性
 

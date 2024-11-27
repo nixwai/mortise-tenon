@@ -1,30 +1,30 @@
-import type { SidebarOptions } from '@vuepress/theme-default';
+import type { DefaultTheme } from 'vitepress';
 
-export const sidebar: SidebarOptions = {
+export const sidebar: DefaultTheme.Sidebar = {
   '/zh/components/': [
     {
       text: '开发指南',
-      children: [
+      items: [
         {
           text: '安装',
-          link: 'install.md',
+          link: '/zh/components/install.md',
         },
       ],
     },
     {
       text: '基础组件',
-      children: [
+      items: [
         {
           text: 'expand 折叠',
-          link: 'expand.md',
+          link: '/zh/components/expand.md',
         },
         {
           text: 'sort 排序',
-          link: 'sort.md',
+          link: '/zh/components/sort.md',
         },
         {
           text: 'table 表格',
-          link: 'table.md',
+          link: '/zh/components/table.md',
         },
       ],
     },
@@ -32,19 +32,19 @@ export const sidebar: SidebarOptions = {
   '/zh/hooks/': [
     {
       text: '开发指南',
-      children: [
+      items: [
         {
           text: '安装',
-          link: 'install.md',
+          link: '/zh/hooks/install.md',
         },
       ],
     },
     {
       text: '对象',
-      children: [
+      items: [
         {
           text: 'useThrottleControl',
-          link: 'use-throttle-control.md',
+          link: '/zh/hooks/use-throttle-control.md',
         },
       ],
     },
@@ -52,19 +52,19 @@ export const sidebar: SidebarOptions = {
   '/zh/utils/': [
     {
       text: '开发指南',
-      children: [
+      items: [
         {
           text: '安装',
-          link: 'install.md',
+          link: '/zh/utils/install.md',
         },
       ],
     },
     {
       text: '对象',
-      children: [
+      items: [
         {
           text: 'objectFormatKey',
-          link: 'object-format-key.md',
+          link: '/zh/utils/object-format-key.md',
         },
       ],
     },

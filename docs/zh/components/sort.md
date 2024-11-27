@@ -4,18 +4,14 @@
 
 ## 基础用法
 
-::: demo
-components/sort/demo1
-:::
+<demo vue="components/sort/demo1.vue" />
 
 ## v-if与v-show差异
 
 使用 v-if 会导致元素在 DOM 中被删除，而 v-show 则不会，因此使用 v-show 时会在保留位置基础上进行换位。
 当存在有元素不参与排序时，便会存在一定的差异。
 
-::: demo
-components/sort/demo2
-:::
+<demo vue="components/sort/demo2.vue" />
 
 ## 属性
 
