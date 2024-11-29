@@ -4,11 +4,11 @@ import { ref } from 'vue';
 
 const num = ref(0);
 
-const { throttleFn: handleClick } = useThrottleControl(1000, () => num.value++);
+const { throttling, throttleFn: handleClick } = useThrottleControl(1000, () => num.value++);
 </script>
 
 <template>
-  <button @click="handleClick">
+  <button :style="{ color: throttling ? 'red' : 'green' }" @click="handleClick">
     {{ num }}
   </button>
 </template>

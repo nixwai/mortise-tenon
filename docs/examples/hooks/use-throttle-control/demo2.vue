@@ -8,19 +8,25 @@ const {
   throttling,
   openThrottle,
   closeThrottle,
-} = useThrottleControl(1000);
+} = useThrottleControl(3000);
 
-/** 模拟远程请求，等待0~2秒 */
-function addNum() {
+/** 当请求等待超过3s或者请求结束时会结束节流 */
+function handleClick() {
   if (throttling.value) {
     return;
   }
   const timer = openThrottle();
+  addNum().finally(() => {
+    closeThrottle(timer); // 请求结束时关闭节流
+  });
+}
+
+/** 模拟远程请求 */
+function addNum() {
   return new Promise<void>((resolve) => {
-    const sm = Math.random() * 2000; // 随机0~2000
+    const sm = num.value * 1000;
     setTimeout(() => {
       num.value++;
-      closeThrottle(timer); // 结束时可提前关闭节流
       resolve();
     }, sm);
   });
@@ -28,7 +34,8 @@ function addNum() {
 </script>
 
 <template>
-  <button :style="{ color: throttling ? 'red' : 'green' }" @click="addNum()">
+  <div>当前请求所需时间：{{ num }}秒</div>
+  <button :style="{ color: throttling ? 'red' : 'green' }" @click="handleClick()">
     {{ num }}
   </button>
 </template>

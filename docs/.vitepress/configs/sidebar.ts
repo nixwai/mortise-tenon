@@ -40,7 +40,7 @@ export const sidebar: DefaultTheme.Sidebar = {
       ],
     },
     {
-      text: '对象',
+      text: '实用工具',
       items: [
         {
           text: 'useThrottleControl',
