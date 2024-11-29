@@ -1,4 +1,5 @@
-import type { DynamicShortcut, PresetUnoTheme, Rule, StaticShortcut } from 'unocss';
+import type { Theme } from '@unocss/preset-mini';
+import type { DynamicShortcut, Rule, StaticShortcut } from 'unocss';
 
-export type CustomRule = Rule<PresetUnoTheme>;
-export type CustomShortcut = StaticShortcut | DynamicShortcut<PresetUnoTheme>;
+export type CustomRule = Rule<Theme>;
+export type CustomShortcut = StaticShortcut | DynamicShortcut<Theme>;

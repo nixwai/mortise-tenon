@@ -16,25 +16,19 @@ export default defineConfig({
     },
     rollupOptions: {
       external: ['unocss'],
-      output: [
-        {
-          format: 'es',
-          entryFileNames: 'index.mjs',
-          dir: resolve(presetOutput, 'es'),
-        },
-        {
-          format: 'cjs',
-          entryFileNames: 'index.js',
-          dir: resolve(presetOutput, 'lib'),
-        },
-      ],
+      output: [{
+        format: 'esm',
+        entryFileNames: 'index.js',
+        exports: 'named',
+        dir: resolve(presetOutput, 'dist'),
+      }],
     },
   },
   resolve: { alias: { '@mortise-tenon/presets': presetRoot } },
   plugins: [
     dts({
       entryRoot: presetRoot,
-      include: presetRoot,
+      include: resolve(presetRoot, 'index.ts'),
       outDir: resolve(presetOutput, 'types'),
       tsconfigPath: resolve(projRoot, 'tsconfig.json'),
     }),
