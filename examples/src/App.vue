@@ -13,7 +13,7 @@ const { throttleFn } = useThrottleControl(2000, toggle);
 </script>
 
 <template>
-  <button @click="throttleFn">
+  <button class="btn" @click="throttleFn">
     点击
   </button>
   <MtExpand :open="open">

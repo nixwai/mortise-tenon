@@ -8,16 +8,11 @@ const { throttling, throttleFn: handleClick } = useThrottleControl(1000, () => n
 </script>
 
 <template>
-  <button :style="{ color: throttling ? 'red' : 'green' }" @click="handleClick">
+  <button
+    :style="{ color: throttling ? 'red' : 'green' }"
+    class="btn"
+    @click="handleClick"
+  >
     {{ num }}
   </button>
 </template>
-
-<style scoped>
-button {
-  padding: 5px 15px;
-  cursor: pointer;
-  background-color: #fff;
-  border-radius: 4px;
-}
-</style>

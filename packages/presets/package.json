@@ -1,0 +1,6 @@
+{
+  "name": "@mortise-tenon/presets",
+  "version": "0.0.1",
+  "description": "unocss preset",
+  "main": "index.ts"
+}

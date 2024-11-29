@@ -1,3 +1,3 @@
-import { defineConfig, presetUno } from 'unocss';
+import { defineConfig } from 'unocss';
 
-export default defineConfig({ presets: [presetUno({ preflight: false })] });
+export default defineConfig({});

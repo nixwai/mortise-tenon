@@ -18,6 +18,7 @@
     "design:publish": "pnpm run -C packages/core design:publish",
     "use:build": "pnpm run -C packages/core use:build",
     "tool:build": "pnpm run -C packages/core tool:build",
+    "preset:build": "pnpm run -C packages/core preset:build",
     "lint:style": "stylelint \"./**/*.{css,less,vue,html}\" --fix",
     "prepare": "husky install",
     "lint": "eslint .",
@@ -29,6 +30,7 @@
   "dependencies": {
     "@mortise-tenon/components": "workspace:*",
     "@mortise-tenon/hooks": "workspace:*",
+    "@mortise-tenon/presets": "workspace:",
     "@mortise-tenon/utils": "workspace:*",
     "@vueuse/core": "^11.2.0",
     "lodash-es": "^4.17.21"

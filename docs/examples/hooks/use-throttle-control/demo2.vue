@@ -35,16 +35,11 @@ function addNum() {
 
 <template>
   <div>当前请求所需时间：{{ num }}秒</div>
-  <button :style="{ color: throttling ? 'red' : 'green' }" @click="handleClick()">
+  <button
+    :style="{ color: throttling ? 'red' : 'green' }"
+    class="btn"
+    @click="handleClick()"
+  >
     {{ num }}
   </button>
 </template>
-
-<style scoped>
-button {
-  padding: 5px 15px;
-  cursor: pointer;
-  background-color: #fff;
-  border-radius: 4px;
-}
-</style>

@@ -14,6 +14,9 @@ importers:
       '@mortise-tenon/hooks':
         specifier: workspace:*
         version: link:packages/hooks
+      '@mortise-tenon/presets':
+        specifier: 'workspace:'
+        version: link:packages/presets
       '@mortise-tenon/utils':
         specifier: workspace:*
         version: link:packages/utils
@@ -130,6 +133,9 @@ importers:
         specifier: ^0.1.0
         version: 0.1.0
     devDependencies:
+      mortise-tenon-preset:
+        specifier: ^0.1.1
+        version: 0.1.1(postcss@8.4.49)(rollup@4.27.3)(vite@5.4.11(@types/node@22.9.0)(less@4.2.0)(sass@1.81.0))(vue@3.5.13(typescript@5.6.3))
       vitepress:
         specifier: ^1.5.0
         version: 1.5.0(@algolia/client-search@5.15.0)(@types/node@22.9.0)(async-validator@4.2.5)(less@4.2.0)(postcss@8.4.49)(sass@1.81.0)(search-insights@2.17.3)(typescript@5.6.3)
@@ -171,6 +177,8 @@ importers:
       vue-demi:
         specifier: ^0.14.10
         version: 0.14.10(vue@3.5.13(typescript@5.6.3))
+
+  packages/presets: {}
 
   packages/utils: {}
 
@@ -3523,6 +3531,9 @@ packages:
     resolution: {integrity: sha512-m+VDezT+Sg5KgRrmh8MXzA/zGAMNnYRywEeE1WV1FAAHSA3HHnjtUVYBGFmQdQ47FjEB8bf4HHpw7JNbzufW6A==}
     peerDependencies:
       vue: ^3.4.0
+
+  mortise-tenon-preset@0.1.1:
+    resolution: {integrity: sha512-dbGCPRAsVqMUYVXBdUpB6EQMhF5ceYRtitvwP/jOBZkKx+AM+ZaaX2ear0WkySoaXzdVvQaGTqXAvDi0eEAxNw==, tarball: https://registry.npmjs.org/mortise-tenon-preset/-/mortise-tenon-preset-0.1.1.tgz}
 
   mortise-tenon-tool@0.1.1:
     resolution: {integrity: sha512-nYKB2xpvNpSHHwfe8xntNjkpIpJMZd2kEIGcm3xJi+bfhwl46tNqr8+2pY0mcU0bfpwpnYYZkCpxzFUt+/QRiQ==}
@@ -8625,6 +8636,17 @@ snapshots:
       vue: 3.5.13(typescript@5.6.3)
     transitivePeerDependencies:
       - '@vue/composition-api'
+
+  mortise-tenon-preset@0.1.1(postcss@8.4.49)(rollup@4.27.3)(vite@5.4.11(@types/node@22.9.0)(less@4.2.0)(sass@1.81.0))(vue@3.5.13(typescript@5.6.3)):
+    dependencies:
+      unocss: 0.64.1(postcss@8.4.49)(rollup@4.27.3)(vite@5.4.11(@types/node@22.9.0)(less@4.2.0)(sass@1.81.0))(vue@3.5.13(typescript@5.6.3))
+    transitivePeerDependencies:
+      - '@unocss/webpack'
+      - postcss
+      - rollup
+      - supports-color
+      - vite
+      - vue
 
   mortise-tenon-tool@0.1.1:
     dependencies:

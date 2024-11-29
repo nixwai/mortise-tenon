@@ -1,0 +1,19 @@
+{
+  "name": "mortise-tenon-preset",
+  "type": "module",
+  "version": "0.1.1",
+  "description": "榫卯UI预设库",
+  "author": "nixwai",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nixwai/mortise-tenon"
+  },
+  "main": "lib/index.js",
+  "module": "es/index.mjs",
+  "types": "types/index.d.ts",
+  "files": ["es", "lib", "types"],
+  "dependencies": {
+    "unocss": "^0.64.1"
+  }
+}
