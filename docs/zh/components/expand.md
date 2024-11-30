@@ -4,9 +4,7 @@
 
 ## 基础用法
 
-::: raw
 <demo vue="components/expand/demo1.vue"/>
-:::
 
 ## 属性
 

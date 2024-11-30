@@ -12,6 +12,10 @@ hero:
       link: /zh/components/install
 
     - theme: brand
+      text: 预设UI
+      link: /zh/presets/install
+
+    - theme: brand
       text: 组合式函数
       link: /zh/hooks/install
 

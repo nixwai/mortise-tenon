@@ -29,6 +29,26 @@ export const sidebar: DefaultTheme.Sidebar = {
       ],
     },
   ],
+  '/zh/presets/': [
+    {
+      text: '开发指南',
+      items: [
+        {
+          text: '安装',
+          link: '/zh/presets/install.md',
+        },
+      ],
+    },
+    {
+      text: '基础',
+      items: [
+        {
+          text: '按钮',
+          link: '/zh/presets/button.md',
+        },
+      ],
+    },
+  ],
   '/zh/hooks/': [
     {
       text: '开发指南',
