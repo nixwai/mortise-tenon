@@ -17,7 +17,7 @@ export default defineConfig({
     rollupOptions: {
       external: ['unocss'],
       output: [{
-        format: 'esm',
+        format: 'es',
         entryFileNames: 'index.js',
         exports: 'named',
         dir: resolve(presetOutput, 'dist'),
