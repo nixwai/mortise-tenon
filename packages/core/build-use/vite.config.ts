@@ -1,8 +1,7 @@
 import { resolve } from 'node:path';
-import copy from 'rollup-plugin-copy';
 import { defineConfig } from 'vite';
-import dts from 'vite-plugin-dts';
-import { hookRoot, projRoot, useOutput } from '../paths';
+import { hookRoot, useOutput } from '../paths';
+import { copyPlugin, dtsPlugin } from '../vite-configs';
 
 const entryIndex = resolve(__dirname, './index.ts');
 
@@ -37,26 +36,7 @@ export default defineConfig({
   },
   resolve: { alias: { '@mortise-tenon/hooks': hookRoot } },
   plugins: [
-    dts({
-      entryRoot: hookRoot,
-      include: hookRoot,
-      exclude: [resolve(hookRoot, '**/__test__')],
-      outDir: resolve(useOutput, 'types'),
-      tsconfigPath: resolve(projRoot, 'tsconfig.json'),
-    }),
-    copy({
-      verbose: true,
-      hook: 'buildStart',
-      targets: [
-        {
-          src: 'README.md',
-          dest: useOutput,
-        },
-        {
-          src: 'package.json',
-          dest: useOutput,
-        },
-      ],
-    }),
+    dtsPlugin(hookRoot, useOutput),
+    copyPlugin(useOutput),
   ],
 });

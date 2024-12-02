@@ -1,8 +1,8 @@
 import { resolve } from 'node:path';
-import copy from 'rollup-plugin-copy';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 import { presetOutput, presetRoot, projRoot } from '../paths';
+import { copyPlugin } from '../vite-configs';
 
 const entryIndex = resolve(__dirname, './index.ts');
 
@@ -32,19 +32,6 @@ export default defineConfig({
       outDir: resolve(presetOutput, 'types'),
       tsconfigPath: resolve(projRoot, 'tsconfig.json'),
     }),
-    copy({
-      verbose: true,
-      hook: 'buildStart',
-      targets: [
-        {
-          src: 'README.md',
-          dest: presetOutput,
-        },
-        {
-          src: 'package.json',
-          dest: presetOutput,
-        },
-      ],
-    }),
+    copyPlugin(presetOutput),
   ],
 });
