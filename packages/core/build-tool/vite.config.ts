@@ -15,7 +15,7 @@ export default defineConfig({
       fileName: 'mortise-tenon-tool',
     },
     rollupOptions: {
-      external: ['lodash-es'],
+      external: ['lodash-es', 'date-fns'],
       output: [
         {
           format: 'es',

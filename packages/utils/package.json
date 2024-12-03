@@ -2,5 +2,8 @@
   "name": "@mortise-tenon/utils",
   "version": "0.0.1",
   "description": "tool fn",
-  "main": "index.ts"
+  "main": "index.ts",
+  "dependencies": {
+    "date-fns": "^4.1.0"
+  }
 }

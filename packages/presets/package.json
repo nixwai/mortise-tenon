@@ -2,5 +2,8 @@
   "name": "@mortise-tenon/presets",
   "version": "0.0.1",
   "description": "unocss preset",
-  "main": "index.ts"
+  "main": "index.ts",
+  "devDependencies": {
+    "magic-color": "^2.0.0"
+  }
 }
