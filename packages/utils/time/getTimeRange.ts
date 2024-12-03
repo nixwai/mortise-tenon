@@ -6,7 +6,7 @@ type TimeDate = Date | string | number | null | undefined;
 /**
  * 获取对应时间从00:00:00开始到23:59:59结束的范围
  * @param times 时间
- * @param formatValue 时间格式，默认为时间戳，注意大小写(https://date-fns.org/v2.29.3/docs/format)
+ * @param formatValue 时间格式，默认为时间戳，注意大小写(https://date-fns.org/v4.1.0/docs/format)
  * @param options 时间格式选项(https://github.com/date-fns/date-fns/blob/main/docs/unicodeTokens.md)
  * @returns [开始时间, 结束时间]
  */
