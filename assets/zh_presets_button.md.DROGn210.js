@@ -1,0 +1,7 @@
+import{_ as p,o,c as i,j as e,F as m,a as r,G as s,w as n,k as l,B as u}from"./chunks/framework.D6w4zQ8K.js";import{R as b}from"./chunks/index.CP7nzNwI.js";const f=`<template>\r
+  <button class="btn c-primary">\r
+    按钮\r
+  </button>\r
+  <span class="c-primary">123</span>\r
+</template>\r
+`,v={};function _(c,a){return o(),i(m,null,[a[0]||(a[0]=e("button",{class:"btn c-primary"}," 按钮 ",-1)),a[1]||(a[1]=e("span",{class:"c-primary"},"123",-1))],64)}const h=p(v,[["render",_]]),B=JSON.parse('{"title":"按钮","description":"","frontmatter":{},"headers":[],"relativePath":"zh/presets/button.md","filePath":"zh/presets/button.md"}'),C={name:"zh/presets/button.md"},k=Object.assign(C,{setup(c){return(a,t)=>{const d=u("ClientOnly");return o(),i("div",null,[t[0]||(t[0]=e("h1",{id:"按钮",tabindex:"-1"},[r("按钮 "),e("a",{class:"header-anchor",href:"#按钮","aria-label":'Permalink to "按钮"'},"​")],-1)),t[1]||(t[1]=e("p",null,"按钮UI",-1)),t[2]||(t[2]=e("h2",{id:"用法",tabindex:"-1"},[r("用法 "),e("a",{class:"header-anchor",href:"#用法","aria-label":'Permalink to "用法"'},"​")],-1)),s(d,null,{default:n(()=>[s(l(b),{title:"",description:"",select:"vue",order:"vue,react,html",github:"",gitlab:"",stackblitz:"%7B%22show%22%3Afalse%7D",codesandbox:"%7B%22show%22%3Afalse%7D",codeplayer:"%7B%22show%22%3Afalse%7D",files:"%7B%22vue%22%3A%7B%7D%2C%22react%22%3A%7B%7D%2C%22html%22%3A%7B%7D%7D",scope:"",visible:!0,vueCode:l(f)},{vue:n(()=>[s(h)]),_:1},8,["vueCode"])]),_:1})])}}});export{B as __pageData,k as default};
