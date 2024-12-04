@@ -1,6 +1,8 @@
-import type { CustomShortcut } from '../types';
+import type { CustomShortcut, PresetMtOptions } from '../types';
 import { button } from './button';
 
-export const shortcuts: CustomShortcut[] = [
-  button,
-].flat();
+export function getShortcuts(options?: PresetMtOptions): CustomShortcut[] {
+  return [
+    button(options),
+  ].flat();
+}

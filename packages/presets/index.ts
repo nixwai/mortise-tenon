@@ -1,14 +1,21 @@
 import type { PresetMiniTheme } from 'unocss';
-import { definePreset } from 'unocss';
-import { shortcuts } from './shortcuts';
+import type { PresetMtOptions } from './types';
+import { definePreset, presetAttributify } from 'unocss';
+import { getShortcuts } from './shortcuts';
+import { theme } from './theme';
 
-export interface PresetMtOptions {}
-
-export const presetMortiseTenon = definePreset<PresetMtOptions, PresetMiniTheme>(() => {
+export const presetMortiseTenon = definePreset<PresetMtOptions, PresetMiniTheme>((options) => {
   return {
     name: 'mortise-tenon-preset',
-    shortcuts,
+    shortcuts: getShortcuts(options),
+    theme,
+    presets: [
+      presetAttributify(),
+    ],
   };
 });
 
 export default presetMortiseTenon;
+
+export { themeColors } from './theme';
+export * from './types';

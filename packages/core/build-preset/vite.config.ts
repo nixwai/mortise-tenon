@@ -15,7 +15,7 @@ export default defineConfig({
       fileName: 'mortise-tenon-preset',
     },
     rollupOptions: {
-      external: ['unocss'],
+      external: ['unocss', 'magic-color'],
       output: [{
         format: 'es',
         entryFileNames: 'index.js',
@@ -28,7 +28,7 @@ export default defineConfig({
   plugins: [
     dts({
       entryRoot: presetRoot,
-      include: resolve(presetRoot, 'index.ts'),
+      include: presetRoot,
       outDir: resolve(presetOutput, 'types'),
       tsconfigPath: resolve(projRoot, 'tsconfig.json'),
     }),
