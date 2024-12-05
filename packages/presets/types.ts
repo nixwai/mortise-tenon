@@ -6,6 +6,8 @@ export type CustomShortcut = StaticShortcut | DynamicShortcut<PresetMiniTheme>;
 
 /** 预设配置项 */
 export interface PresetMtOptions {
-  /** 样式名称前缀 */
+  /**
+   * 类名前缀
+   */
   prefix?: string
 }

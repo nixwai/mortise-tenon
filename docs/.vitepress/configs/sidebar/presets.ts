@@ -8,6 +8,14 @@ export const presetsSidebar: DefaultTheme.SidebarItem[] = [
         text: '安装',
         link: '/zh/presets/install.md',
       },
+      {
+        text: '主题颜色',
+        link: '/zh/presets/theme-color.md',
+      },
+      {
+        text: '可配置项',
+        link: '/zh/presets/config-option.md',
+      },
     ],
   },
   {
