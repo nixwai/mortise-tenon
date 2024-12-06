@@ -1,6 +1,6 @@
 import type { Preflight } from 'unocss';
 import { mc } from 'magic-color';
-import { colorName, rgbValue } from '../utils';
+import { rgbValue, rootColor } from '../utils';
 
 /**
  * 定义全局颜色配置
@@ -14,6 +14,6 @@ export function preflightColors(options: Record<string, string>): Preflight {
 function toRootColors(name: string, color: string) {
   const theme = mc.theme(color, { type: 'rgb' });
   // 转化格式： { 50: 'rgb(255, 255, 255)', 100: 'rgb(244, 244, 245)', ... } ==> ['--mt-${name}-50: 255, 255, 255', ...]
-  const colors = Object.entries(theme).map(([k, v]) => `${colorName(name, k)}: ${rgbValue(v)};`);
+  const colors = Object.entries(theme).map(([k, v]) => `${rootColor(name, k)}: ${rgbValue(v)};`);
   return `:root {${colors.join('\n ')}}`;
 }
