@@ -2,7 +2,7 @@ import type { PresetMiniTheme } from 'unocss';
 import { mc } from 'magic-color';
 import { rgbValue, rootColor } from '../utils';
 
-export const theme: PresetMiniTheme = { colors: { ...themeColors({ primary: '#164e63' }) } };
+export const theme: PresetMiniTheme = { colors: { ...themeColors({ primary: '#3451b2' }) } };
 
 type Colors = PresetMiniTheme['colors'];
 
@@ -16,7 +16,7 @@ export function themeColors(options: Record<string, string>): Colors {
   for (const name in options) {
     const mcColor = mc.theme(options[name], { type: 'rgb' });
     // 颜色值优先使用自定义属性名，让其具备动态颜色生成，未定义时再使用mc.theme获取的颜色值
-    colors[name] = { DEFAULT: `rgb(var(${rootColor(name, 500)}, ${rgbValue(mcColor[500])}))` };
+    colors[name] = { DEFAULT: `rgb(var(${rootColor(name, 'color')}, ${mc(options[name]).toRgb().values.join(' ')}))` };
     Object.entries(mcColor).forEach(([k, v]) => {
       colors[name][k] = `rgb(var(${rootColor(name, k)}, ${rgbValue(v)}))`;
     });
