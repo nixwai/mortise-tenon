@@ -1,4 +1,4 @@
-import { getRgbColors } from './preflights';
+import { getRgbColors } from './utils';
 
 /**
  * 修改颜色变量值
