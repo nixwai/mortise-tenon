@@ -14,7 +14,7 @@ export interface PresetMtOptions {
 类名前缀，为mortise-tenon-preset配置前缀，可以让你在项目中同时使用多种预设或快捷方式时避免类名冲突，导致样式覆盖。
 
 ```ts
-import { presetMortiseTenon, themeColors } from 'mortise-tenon-preset';
+import { presetMortiseTenon } from 'mortise-tenon-preset';
 import { defineConfig, presetUno } from 'unocss';
 
 export default defineConfig({

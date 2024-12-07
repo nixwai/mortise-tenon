@@ -48,7 +48,7 @@ export default defineConfig({
 
 预设中提供了默认的主题颜色primary，同时也为主题颜色添加配置了对应的全局颜色变量，变量值为rgb值，可在style中使用。
 
-```style
+```txt
 /** 颜色是根据primary生成的rgb值 */
 :root {
   --mt-primary-color: 52 81 178;
@@ -78,7 +78,7 @@ export default defineConfig({
 :::
 
 ```ts
-import { preflightColors, presetMortiseTenon, themeColors } from '@mortise-tenon/presets';
+import { preflightColors, presetMortiseTenon, themeColors } from 'mortise-tenon-preset';
 import { defineConfig, presetUno } from 'unocss';
 
 export default defineConfig({
@@ -88,7 +88,7 @@ export default defineConfig({
 });
 ```
 
-```style
+```txt
 /** 根据名称与颜色生成的rgb值 */
 :root {
   --mt-warning-color: 255 179 0;
@@ -105,3 +105,11 @@ export default defineConfig({
   --mt-warning-950: 72 30 0;
 }
 ```
+
+## 动态主题颜色
+
+通过上面的功能可知，该预设会在CSS中定义颜色变量，因此只要通过修改这个颜色变量，就可以更新对应的颜色。在mortise-tenon-preset中提供了`updateColorValue`方法，可以更加方便去覆盖theme、preflights中配置的颜色。
+
+通过方法的第三个参数来指定覆盖的范围，传入`document.documentElement`时即可覆盖整个页面的颜色。
+
+<demo vue="presets/theme-color/demo2.vue"/>

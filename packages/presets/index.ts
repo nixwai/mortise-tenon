@@ -14,8 +14,8 @@ export const presetMortiseTenon = definePreset<PresetMtOptions, PresetMiniTheme>
   };
 });
 
-export default presetMortiseTenon;
-
 export { preflightColors } from './preflights';
+
 export { themeColors } from './theme';
+
 export * from './types';

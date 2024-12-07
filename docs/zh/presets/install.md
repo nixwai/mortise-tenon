@@ -29,7 +29,7 @@ pnpm add mortise-tenon-tool -D
 在`uno.config.ts`文件中，添加预设：
 
 ```ts
-import presetMortiseTenon from 'mortise-tenon-preset';
+import { presetMortiseTenon } from 'mortise-tenon-preset';
 import { defineConfig, presetUno } from 'unocss';
 
 export default defineConfig({ presets: [presetUno(), presetMortiseTenon()] });
