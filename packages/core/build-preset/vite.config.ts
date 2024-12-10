@@ -15,7 +15,7 @@ export default defineConfig({
       fileName: 'mortise-tenon-preset',
     },
     rollupOptions: {
-      external: ['unocss', 'magic-color'],
+      external: ['unocss', 'magic-color', '@unocss/preset-mini'],
       output: [{
         format: 'es',
         entryFileNames: '[name].js',

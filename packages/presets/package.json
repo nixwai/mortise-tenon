@@ -4,6 +4,7 @@
   "description": "unocss preset",
   "main": "index.ts",
   "devDependencies": {
+    "@unocss/preset-mini": "^0.65.1",
     "magic-color": "^2.0.0"
   }
 }

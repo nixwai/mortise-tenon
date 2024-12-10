@@ -1,8 +1,9 @@
-import type { DynamicShortcut, PresetMiniTheme, Rule, StaticShortcut } from 'unocss';
+import type { Theme } from '@unocss/preset-mini';
+import type { DynamicShortcut, Rule, StaticShortcut } from 'unocss';
 
-export type CustomRule = Rule<PresetMiniTheme>;
+export type CustomRule = Rule<Theme>;
 
-export type CustomShortcut = StaticShortcut | DynamicShortcut<PresetMiniTheme>;
+export type CustomShortcut = StaticShortcut | DynamicShortcut<Theme>;
 
 /** 预设的UI大小 */
 export type SizeType = 'xs' | 'sm' | 'md' | 'lg';

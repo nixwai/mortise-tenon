@@ -180,6 +180,9 @@ importers:
 
   packages/presets:
     devDependencies:
+      '@unocss/preset-mini':
+        specifier: ^0.65.1
+        version: 0.65.1
       magic-color:
         specifier: ^2.0.0
         version: 2.0.0

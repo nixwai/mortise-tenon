@@ -24,6 +24,7 @@
   "types": "types/index.d.ts",
   "files": ["dist", "types"],
   "devDependencies": {
+    "@unocss/preset-mini": "^0.65.1",
     "magic-color": "^2.0.0",
     "unocss": "^0.64.1"
   }

@@ -1,7 +1,6 @@
 import type { CSSValue } from 'unocss';
 import type { CustomShortcut, PresetMtOptions } from '../types.ts';
-import { getRgbColors } from '../utils';
-// import { parseColor } from 'unocss';
+import { resolvePrimaryColor } from '../utils';
 
 export function button(options?: PresetMtOptions): CustomShortcut[] {
   const buttonClasses: Record<string, string> = Object.assign({
@@ -24,14 +23,17 @@ export function button(options?: PresetMtOptions): CustomShortcut[] {
     ],
     [
       new RegExp(`^${p}btn-(.+)$`),
-      ([, s]) => {
+      ([, s], { theme }) => {
         const values: (CSSValue | string)[] = [];
         if (s in buttonClasses) {
           values.push(buttonClasses[s]);
         }
         else {
-          const colors = getRgbColors('primary', s);
-          values.push(Object.fromEntries(colors));
+          const colors = resolvePrimaryColor(s, theme);
+          if (colors) {
+            values.push(colors);
+          }
+          // values.push({ '--mt-primary-500': 'var(--mt-primary-500, 0 0 0)' });
         }
         return values;
       },

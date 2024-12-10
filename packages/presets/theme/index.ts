@@ -1,10 +1,10 @@
-import type { PresetMiniTheme } from 'unocss';
+import type { Theme } from '@unocss/preset-mini';
 import { mc } from 'magic-color';
 import { colorName, rgbValue } from '../utils';
 
-type Colors = PresetMiniTheme['colors'];
+type Colors = Theme['colors'];
 
-export const theme: PresetMiniTheme = { colors: themeColors({ primary: '#3451b2' }) };
+export const theme: Theme = { colors: themeColors({ primary: '#3451b2' }) };
 
 /**
  * 自定义颜色
