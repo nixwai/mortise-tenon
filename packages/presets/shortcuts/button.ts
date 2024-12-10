@@ -33,7 +33,6 @@ export function button(options?: PresetMtOptions): CustomShortcut[] {
           if (colors) {
             values.push(colors);
           }
-          // values.push({ '--mt-primary-500': 'var(--mt-primary-500, 0 0 0)' });
         }
         return values;
       },

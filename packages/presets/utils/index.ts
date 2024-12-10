@@ -39,7 +39,7 @@ export function resolvePrimaryColor(str: string, theme: Theme) {
   if (parsedColor) {
     const { color, name } = parsedColor;
     if (color && color.includes('var(--mt-')) {
-      const keys = ['', '-50', '-100', '-200', '-300', '-400', '-500', '-600', '-700', '-800', '-900'];
+      const keys = ['', '-50', '-100', '-200', '-300', '-400', '-500', '-600', '-700', '-800', '-900', '-950'];
 
       return Object.fromEntries(keys.map((key) => {
         const colorName = `${name}${key}`;
