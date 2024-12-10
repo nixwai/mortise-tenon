@@ -27,14 +27,21 @@ export function button(options?: PresetMtOptions): CustomShortcut[] {
       new RegExp(`^${p}btn-pale[-]*(.*)$`),
       ([, s]) => {
         s = s || 'primary';
-        return `c-gray-500 b-gray-400 bg-transparent hover:(c-${s}-500 b-${s}-400 bg-${s}-400/8)`;
+        return `c-gray-500 b-gray-400 bg-transparent hover:(c-${s}-500 b-${s}-400 bg-${s}-400/10)`;
+      },
+    ],
+    [
+      new RegExp(`^${p}btn-medium[-]*(.*)$`),
+      ([, s]) => {
+        s = s || 'primary';
+        return `c-${s}-500 b-${s}-400 bg-transparent hover:(c-${s}-500/80 b-${s}-400/80 bg-${s}-400/10)`;
       },
     ],
     [
       new RegExp(`^${p}btn-bright[-]*(.*)$`),
       ([, s]) => {
         s = s || 'primary';
-        return `c-${s}-500 b-${s}-400 bg-${s}-400/8 hover:(c-white b-${s}-400 bg-${s}-400)`;
+        return `c-${s}-500 b-${s}-400 bg-${s}-400/10 hover:(c-white b-${s}-400 bg-${s}-400)`;
       },
     ],
     [

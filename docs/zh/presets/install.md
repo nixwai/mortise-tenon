@@ -46,7 +46,7 @@ export default defineConfig({ presets: [presetAttributify(), presetUno(), preset
 
 ```vue
 <template>
-  <button class="btn btn-primary btn-sm">
+  <button class="btn btn-sm btn-primary">
     未属性化的CSS
   </button>
   <button btn="~ primary sm">
