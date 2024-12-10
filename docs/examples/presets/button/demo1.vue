@@ -1,17 +1,17 @@
 <template>
   <button class="btn">
-    button
+    default
   </button>
-  <button class="btn btn-pale">
-    button
+  <button class="btn btn-pale btn-red">
+    pale
   </button>
   <button class="btn btn-medium">
-    button
+    medium
   </button>
   <button class="btn btn-bright">
-    button
+    bright
   </button>
   <button class="btn btn-deep">
-    button
+    deep
   </button>
 </template>

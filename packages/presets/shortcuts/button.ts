@@ -1,8 +1,15 @@
-import type { CustomShortcut, PresetMtOptions, SizeType } from '../types.ts';
+import type { CSSValue } from 'unocss';
+import type { CustomShortcut, PresetMtOptions } from '../types.ts';
+import { getRgbColors } from '../utils';
 // import { parseColor } from 'unocss';
 
 export function button(options?: PresetMtOptions): CustomShortcut[] {
-  const buttonSize: Record<SizeType, string> = Object.assign({
+  const buttonClasses: Record<string, string> = Object.assign({
+    default: 'c-gray-500 b-gray-400 bg-transparent b-1 b-solid cursor-pointer hover:(c-primary-500 b-primary-500)',
+    pale: 'c-gray-500 b-gray-400 bg-transparent hover:(c-primary-500 b-primary-500 bg-primary-500/10)',
+    medium: 'c-primary-500 b-primary-400 bg-transparent hover:(c-primary-400 b-primary-400 bg-primary-500/10)',
+    bright: 'c-primary-500 b-primary-400 bg-primary-500/10 hover:(c-white b-primary-500 bg-primary-500)',
+    deep: 'c-white b-primary-500 bg-primary-500 hover:(c-white b-primary-500/80 bg-primary-500/80)',
     xs: 'px-1.5 py-0.5 text-xs rounded-0.75',
     sm: 'px-2 py-1 text-sm font-400 rounded-1',
     md: 'px-2.5 py-1.5 text-sm font-500 rounded-1.25',
@@ -13,42 +20,20 @@ export function button(options?: PresetMtOptions): CustomShortcut[] {
   return [
     [
       `${p}btn`,
-      `${p}btn-md c-gray-500 b-1 b-solid b-gray-400 bg-transparent cursor-pointer hover:(c-primary-500 b-primary-500)`,
+      `${buttonClasses.md} ${buttonClasses.default}`,
     ],
     [
       new RegExp(`^${p}btn-(.+)$`),
       ([, s]) => {
-        if (s in buttonSize)
-          return buttonSize[s as SizeType];
-        return `hover:(c-${s}-500 b-${s}-500)`;
-      },
-    ],
-    [
-      new RegExp(`^${p}btn-pale[-]*(.*)$`),
-      ([, s]) => {
-        s = s || 'primary';
-        return `c-gray-500 b-gray-400 bg-transparent hover:(c-${s}-500 b-${s}-400 bg-${s}-400/10)`;
-      },
-    ],
-    [
-      new RegExp(`^${p}btn-medium[-]*(.*)$`),
-      ([, s]) => {
-        s = s || 'primary';
-        return `c-${s}-500 b-${s}-400 bg-transparent hover:(c-${s}-500/80 b-${s}-400/80 bg-${s}-400/10)`;
-      },
-    ],
-    [
-      new RegExp(`^${p}btn-bright[-]*(.*)$`),
-      ([, s]) => {
-        s = s || 'primary';
-        return `c-${s}-500 b-${s}-400 bg-${s}-400/10 hover:(c-white b-${s}-400 bg-${s}-400)`;
-      },
-    ],
-    [
-      new RegExp(`^${p}btn-deep[-]*(.*)$`),
-      ([, s]) => {
-        s = s || 'primary';
-        return `c-white b-${s}-400 bg-${s}-400 hover:(c-white b-${s}-400/80 bg-${s}-400/80)`;
+        const values: (CSSValue | string)[] = [];
+        if (s in buttonClasses) {
+          values.push(buttonClasses[s]);
+        }
+        else {
+          const colors = getRgbColors('primary', s);
+          values.push(Object.fromEntries(colors));
+        }
+        return values;
       },
     ],
   ];

@@ -1,6 +1,9 @@
 import { mc } from 'magic-color';
 
-/** 颜色变量名 */
+/**
+ * 颜色变量名
+ * @returns --mt-${name}-${key}
+ */
 export const colorName = (name: string, key: string | number) => `--mt-${name}-${key}`;
 
 /** 获取RGB颜色值 */
@@ -14,7 +17,7 @@ export const rgbValue = (color?: string) => color?.match(/\d+\s[\d\s]+/)?.[0] ||
  *
  * @example
  * ```ts
- * getRgbColors('primary', '#3451b2') =>  [[ '--mt-primary-color', '52 81 178' ],[ '--mt-primary-50', '241 246 253' ],...]
+ * getRgbColors('primary', '#405FC4') =>  [[ '--mt-primary-color', '52 81 178' ],[ '--mt-primary-50', '241 246 253' ],...]
  * ```
  */
 export function getRgbColors(name: string, color: string) {
