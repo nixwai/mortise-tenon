@@ -6,19 +6,19 @@ export const preflights: Preflight[] = [{
     ${toRootColors('primary', `rgb(${rgbValue(theme.colors?.primary?.DEFAULT)})`)}
 
     :root {
-      --mt-primary-DEFAULT: var(--mt-primary-500);
+      --mt-primary-color: var(--mt-primary-500);
       --mt-primary-text: var(--mt-primary-100);
       --mt-primary-text-invert: var(--mt-primary-950);
     }
 
     .dark {
-      --mt-primary-DEFAULT: var(--mt-primary-600);
+      --mt-primary-color: var(--mt-primary-600);
       --mt-primary-text: var(--mt-primary-950);
       --mt-primary-text-invert: var(--mt-primary-100);
     }
 
     ::selection {
-      color: rgb(var(--mt-primary-DEFAULT));
+      color: rgb(var(--mt-primary-color));
       background-color: rgb(var(--mt-primary-text));
     }
   `,

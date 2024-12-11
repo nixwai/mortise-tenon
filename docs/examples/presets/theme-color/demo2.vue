@@ -10,7 +10,7 @@ function setTheme(color: string) {
 
 <template>
   <div class="flex">
-    <div>点击主题颜色：</div>
+    <div>点击切换：</div>
     <button class="mx-1 c-blue" @click="setTheme('blue')">
       蓝色
     </button>
@@ -18,7 +18,7 @@ function setTheme(color: string) {
       绿色
     </button>
   </div>
-  <div ref="demo" class="c-primary">
+  <button ref="demo" class="btn btn-deep">
     主题颜色
-  </div>
+  </button>
 </template>

@@ -8,5 +8,8 @@
     "dev": "vite",
     "build": "vue-tsc && vite build",
     "preview": "vite preview"
+  },
+  "dependencies": {
+    "@unocss/reset": "^0.65.1"
   }
 }

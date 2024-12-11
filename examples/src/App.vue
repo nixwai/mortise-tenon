@@ -1,22 +1,21 @@
-<script setup lang="ts">
-import { MtExpand } from '@mortise-tenon/components';
-import { useThrottleControl } from '@mortise-tenon/hooks';
-import { ref } from 'vue';
-
-const open = ref(true);
-
-function toggle() {
-  open.value = !open.value;
-}
-
-const { throttleFn } = useThrottleControl(2000, toggle);
-</script>
-
 <template>
-  <button class="btn" @click="throttleFn">
-    点击
-  </button>
-  <MtExpand :open="open">
-    展开后内容
-  </MtExpand>
+  <div class="flex w-screen h-screen justify-center items-center">
+    <div>
+      <button btn>
+        default
+      </button>
+      <button btn="~ xs pale red">
+        pale
+      </button>
+      <button btn="~ sm medium #182211">
+        medium
+      </button>
+      <button btn="~ md bright warning">
+        bright
+      </button>
+      <button btn="~ lg deep [rgb(255,0,0)]" c-primary>
+        deep
+      </button>
+    </div>
+  </div>
 </template>

@@ -2,7 +2,7 @@
   <button class="btn">
     default
   </button>
-  <button class="btn btn-pale btn-red">
+  <button class="btn btn-pale">
     pale
   </button>
   <button class="btn btn-medium">
