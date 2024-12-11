@@ -1,4 +1,4 @@
-import { getRgbColors } from './utils';
+import { getHslColors } from './utils';
 
 /**
  * 修改颜色变量值
@@ -11,7 +11,7 @@ export function updateColorValue(name: string, color: string, dom?: HTMLElement)
     return;
   }
 
-  const colors = getRgbColors(name, color);
+  const colors = getHslColors(name, color);
 
   colors.forEach(([name, color]) => {
     dom.style.setProperty(name, color);

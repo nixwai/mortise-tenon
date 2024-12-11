@@ -8,25 +8,25 @@ import { mc } from 'magic-color';
  */
 export const colorName = (name: string, key: string | number) => `--mt-${name}-${key}`;
 
-/** 获取RGB颜色值 */
-export const rgbValue = (color?: string) => color?.match(/\d+\s[\d\s]+/)?.[0] || '';
+/** 获取hsl颜色值 */
+export const hslValue = (color?: string) => color?.match(/\d+\s[\d\s]+/)?.[0] || '';
 
 /**
- * 获取rgb颜色值
+ * 获取hsl颜色值
  * @param name 颜色名称
  * @param color 颜色值
- * @return 返回rgb颜色值组合
+ * @return 返回hsl颜色值组合
  *
  * @example
  * ```ts
- * getRgbColors('primary', '#405FC4') =>  [[ '--mt-primary-DEFAULT', '52 81 178' ],[ '--mt-primary-50', '241 246 253' ],...]
+ * getHslColors('primary', '#405FC4') =>  [[ '--mt-primary-DEFAULT', '52 81 178' ],[ '--mt-primary-50', '241 246 253' ],...]
  * ```
  */
-export function getRgbColors(name: string, color: string) {
-  const theme = mc.theme(color, { type: 'rgb' });
-  // 转化格式： { 50: 'rgb(255, 255, 255)', 100: 'rgb(244, 244, 245)', ... } ==> [[`--mt-${name}-50`: '255 255 255'], ...]
-  const colors = Object.entries(theme).map(([k, v]) => [colorName(name, k), rgbValue(v)]);
-  colors.unshift([colorName(name, 'DEFAULT'), mc(color).toRgb().values.join(' ')]);
+export function getHslColors(name: string, color: string) {
+  const theme = mc.theme(color, { type: 'hsl' });
+  // 转化格式： { 50: 'hsl(215 75 97)', 100: 'hsl(216 68 93)', ... } ==> [[`--mt-${name}-50`: '215 75 97'], ...]
+  const colors = Object.entries(theme).map(([k, v]) => [colorName(name, k), hslValue(v)]);
+  colors.unshift([colorName(name, 'DEFAULT'), mc(color).hsl().join(' ')]);
   return colors;
 }
 
@@ -48,7 +48,7 @@ export function resolveContextColor(str: string, theme: Theme) {
       }));
     }
     if (color && mc.valid(color)) {
-      const colors = getRgbColors('context', color);
+      const colors = getHslColors('context', color);
       return Object.fromEntries(colors);
     }
   }

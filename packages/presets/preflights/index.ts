@@ -1,9 +1,9 @@
 import type { Preflight } from 'unocss';
-import { getRgbColors, rgbValue } from '../utils';
+import { getHslColors, hslValue } from '../utils';
 
 export const preflights: Preflight[] = [{
   getCSS: ({ theme }: Record<string, any>) => `
-    ${toRootColors('primary', `rgb(${rgbValue(theme.colors?.primary?.DEFAULT)})`)}
+    ${toRootColors('primary', `hsl(${hslValue(theme.colors?.primary?.DEFAULT)})`)}
 
     :root {
       --mt-primary-color: var(--mt-primary-500);
@@ -18,8 +18,8 @@ export const preflights: Preflight[] = [{
     }
 
     ::selection {
-      color: rgb(var(--mt-primary-color));
-      background-color: rgb(var(--mt-primary-text));
+      color: hsl(var(--mt-primary-color));
+      background-color: hsl(var(--mt-primary-text));
     }
   `,
 }];
@@ -34,7 +34,7 @@ export function preflightColors(options: Record<string, string>): Preflight {
 }
 
 function toRootColors(name: string, color: string) {
-  const colors = getRgbColors(name, color);
+  const colors = getHslColors(name, color);
   return `:root {
   ${colors.map(([name, color]) => `${name}: ${color};`).join('\n ')}
   }`;
