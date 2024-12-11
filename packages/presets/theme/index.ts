@@ -1,20 +1,17 @@
 import type { Theme } from '@unocss/preset-mini';
 import { mc } from 'magic-color';
 import { colorName, hslValue } from '../utils';
+import { initContextColor } from '../utils/context';
 
 type Colors = Theme['colors'];
 
 /** 主题颜色 */
-const primaryColor = themeColors({ primary: '#3451b2' })!.primary;
-/** 用于UI的颜色控制，默认跟主题颜色一致 */
-const contextColor = Object.fromEntries(Object.entries(primaryColor).map(([k]) =>
-  [k, `hsl(var(${colorName('context', k)}, var(${colorName('primary', k)})))`],
-));
+const primaryColors = themeColors({ primary: '#3451b2' });
 
 export const theme: Theme = {
   colors: {
-    primary: primaryColor,
-    context: contextColor,
+    context: initContextColor(primaryColors),
+    ...primaryColors,
   },
 };
 

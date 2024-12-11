@@ -1,5 +1,3 @@
-import type { Theme } from '@unocss/preset-mini';
-import { parseColor } from '@unocss/preset-mini';
 import { mc } from 'magic-color';
 
 /**
@@ -28,29 +26,4 @@ export function getHslColors(name: string, color: string) {
   const colors = Object.entries(theme).map(([k, v]) => [colorName(name, k), hslValue(v)]);
   colors.unshift([colorName(name, 'DEFAULT'), mc(color).hsl().join(' ')]);
   return colors;
-}
-
-/** 解析字符串对应的颜色 */
-export function resolveContextColor(str: string, theme: Theme) {
-  if (str.includes('context')) {
-    return undefined;
-  }
-  const parsedColor = parseColor(str, theme);
-  if (parsedColor) {
-    const { color, name } = parsedColor;
-    if (color && color.includes('var(--mt-')) {
-      const keys = ['-DEFAULT', '-50', '-100', '-200', '-300', '-400', '-500', '-600', '-700', '-800', '-900', '-950'];
-
-      return Object.fromEntries(keys.map((key) => {
-        const colorName = `${name}${key}`;
-        const colorValue = parseColor(colorName, theme)?.cssColor?.components?.[0] || undefined;
-        return [`--mt-context${key}`, colorValue];
-      }));
-    }
-    if (color && mc.valid(color)) {
-      const colors = getHslColors('context', color);
-      return Object.fromEntries(colors);
-    }
-  }
-  return undefined;
 }

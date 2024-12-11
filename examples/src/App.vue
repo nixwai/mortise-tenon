@@ -7,13 +7,13 @@
       <button btn="~ xs pale red">
         pale
       </button>
-      <button btn="~ sm medium #182211">
+      <button btn="~ sm medium warning">
         medium
       </button>
-      <button btn="~ md bright warning">
+      <button btn="~ md bright #699864">
         bright
       </button>
-      <button btn="~ lg deep [rgb(255,0,0)]" c-primary>
+      <button btn="~ lg deep danger-600">
         deep
       </button>
     </div>
