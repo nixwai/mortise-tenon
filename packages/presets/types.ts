@@ -1,5 +1,6 @@
 import type { Theme } from '@unocss/preset-mini';
-import type { DynamicShortcut, Rule, StaticShortcut } from 'unocss';
+import type { DynamicShortcut, Rule, ShortcutValue, StaticShortcut } from 'unocss';
+import type { ButtonPreset } from './shortcuts/button';
 
 export type CustomRule = Rule<Theme>;
 
@@ -18,6 +19,6 @@ export interface PresetMtOptions {
    * 自定义预设
    */
   custom?: {
-    button?: Record<SizeType, string>
+    button?: Record<ButtonPreset, ShortcutValue>
   }
 }

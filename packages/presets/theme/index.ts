@@ -1,19 +1,14 @@
 import type { Theme } from '@unocss/preset-mini';
 import { mc } from 'magic-color';
 import { colorName, hslValue } from '../utils';
-import { initContextColor } from '../utils/context';
+import { getContextColor } from '../utils/context';
 
 type Colors = Theme['colors'];
 
 /** 主题颜色 */
 const primaryColors = themeColors({ primary: '#3451b2' });
 
-export const theme: Theme = {
-  colors: {
-    context: initContextColor(primaryColors),
-    ...primaryColors,
-  },
-};
+export const theme: Theme = { colors: primaryColors };
 
 /**
  * 自定义颜色
@@ -29,6 +24,11 @@ export function themeColors(options: Record<string, string>): Colors {
     Object.entries(mcColor).forEach(([k, v]) => {
       colors[name][k] = `hsl(var(${colorName(name, k)}, ${hslValue(v)}))`;
     });
+    // 修改主题色时，设置context颜色
+    if (name === 'primary') {
+      const contextColor = getContextColor(colors[name]);
+      colors.context = contextColor;
+    }
   }
   return colors;
 }
