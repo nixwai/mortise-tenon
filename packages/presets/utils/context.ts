@@ -16,7 +16,7 @@ const colorDiff: Record<string, number> = {
   700: 200,
   800: 300,
   900: 400,
-  950: 1000,
+  950: 500,
 };
 
 /**
@@ -103,7 +103,7 @@ export function resolveContextColor(str: string, theme: Theme, lightness: string
         return [h, s, l].join(' ');
       }
       const diff = colorDiff[key] / 10;
-      let value = diff + l;
+      let value = l - diff;
       value = value < 5 ? 5 : value;
       value = value > 95 ? 95 : value;
       return [h, s, value].join(' ');

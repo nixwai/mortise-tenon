@@ -12,7 +12,7 @@ const buttonPreset = {
   /** 空背景色（default） */
   empty: `
   c-gray-600 b-gray-500 bg-transparent
-  hover:(c-context-500 b-context-300)
+  hover:(c-context-500 b-context-400)
   active:(b-context-600)
   `,
   /** 交互时颜色 */
