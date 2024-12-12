@@ -1,12 +1,15 @@
 <template>
   <button class="btn">
-    default
+    empty
   </button>
   <button class="btn btn-pale">
     pale
   </button>
   <button class="btn btn-medium">
     medium
+  </button>
+  <button class="btn btn-soft">
+    soft
   </button>
   <button class="btn btn-bright">
     bright

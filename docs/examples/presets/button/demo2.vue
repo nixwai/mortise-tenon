@@ -1,14 +1,14 @@
 <template>
   <button class="btn btn-xs">
-    button
+    xs
   </button>
   <button class="btn btn-sm">
-    button
+    sm
   </button>
-  <button class="btn btn-md">
-    button
+  <button class="btn">
+    md
   </button>
   <button class="btn btn-lg">
-    button
+    lg
   </button>
 </template>
