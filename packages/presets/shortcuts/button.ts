@@ -15,13 +15,14 @@ const buttonPreset = {
   hover:(c-context-500 b-context-300)
   active:(b-context-600)
   `,
-  /** 淡色按钮 */
-  pale: `
-  hover:(bg-context-500/20)
-  active:(bg-context-500/30)
-  `,
-  /** 中等颜色 */
+  /** 交互时颜色 */
   medium: `
+  c-gray-600 b-gray-500 bg-transparent
+  hover:(c-context-400 b-context-400 bg-context-500/20)
+  active:(c-context-500 bg-context-500/30)
+  `,
+  /** 淡色 */
+  pale: `
   c-context-500 b-context-400 bg-transparent
   hover:(c-context-400 b-context-400 bg-context-500/20)
   active:(c-context-500 bg-context-500/30)
@@ -29,8 +30,8 @@ const buttonPreset = {
   /** 柔和背景 */
   soft: `
   c-context-500 b-context-400 bg-context-500/20
-  hover:(c-context-400 b-context-400 bg-context-500/30)
-  active:(c-context-500 bg-context-500/40)
+  hover:(c-context-400 b-context-500/30 bg-context-500/30)
+  active:(c-context-500 b-context-500/30 bg-context-500/40)
   `,
   /** 亮色背景 */
   bright: `

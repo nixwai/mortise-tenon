@@ -4,7 +4,7 @@
 
 ## 基础用法
 
-<demo vue="components/expand/demo1.vue"/>
+<demo vue="components/expand/base.vue"/>
 
 ## 属性
 

@@ -42,7 +42,7 @@ export default defineConfig({
 });
 ```
 
-<demo vue="presets/theme-color/demo1.vue"/>
+<demo vue="presets/theme-color/more-scene.vue"/>
 
 ## 全局颜色变量
 
@@ -112,4 +112,4 @@ export default defineConfig({
 
 通过方法的第三个参数来指定覆盖的范围，传入`document.documentElement`时即可覆盖整个页面的颜色。
 
-<demo vue="presets/theme-color/demo2.vue"/>
+<demo vue="presets/theme-color/dynamic-theme.vue"/>

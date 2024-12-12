@@ -4,11 +4,11 @@
 
 ## 通过节流函数控制
 
-<demo vue="hooks/use-throttle-control/demo1.vue" />
+<demo vue="hooks/use-throttle-control/use-fn.vue" />
 
 ## 通过节流状态控制
 
-<demo vue="hooks/use-throttle-control/demo2.vue" />
+<demo vue="hooks/use-throttle-control/use-status.vue" />
 
 ## 源码
 

@@ -4,10 +4,10 @@
 
 ## 用法
 
-<demo vue="presets/button/demo1.vue"/>
+<demo vue="presets/button/types.vue"/>
 
-<demo vue="presets/button/demo2.vue"/>
+<demo vue="presets/button/size.vue"/>
 
-<demo vue="presets/button/demo3.vue"/>
+<demo vue="presets/button/color.vue"/>
 
-<demo vue="presets/button/demo4.vue"/>
+<demo vue="presets/button/border.vue"/>

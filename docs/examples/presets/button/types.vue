@@ -2,11 +2,11 @@
   <button class="btn">
     empty
   </button>
-  <button class="btn btn-pale">
-    pale
-  </button>
   <button class="btn btn-medium">
     medium
+  </button>
+  <button class="btn btn-pale">
+    pale
   </button>
   <button class="btn btn-soft">
     soft
