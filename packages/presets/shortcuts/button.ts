@@ -3,7 +3,7 @@ import { resolveCustomShortcut } from './helper.ts';
 
 const buttonPreset = {
   /** 默认样式 */
-  default: 'btn-common btn-gap btn-transition btn-empty btn-md btn-primary',
+  default: 'btn-common btn-gap btn-transition btn-empty btn-md dark:reserve-light',
   /** 通用 */
   common: 'b-1 b-solid cursor-pointer',
   /** 间距 */

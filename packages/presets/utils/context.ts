@@ -30,7 +30,7 @@ export function getContextColor(primaryColors: Record<string, string>) {
   if (colorValue) {
     return Object.fromEntries(
       Object.values(colorValue).map((value, index) =>
-        [keys[index], `hsl(var(${colorName('context', keys[index])}, ${value}))`],
+        [keys[index], `hsl(var(${colorName('reserve', keys[index])}, var(${colorName('context', keys[index])}, ${value})))`],
       ),
     );
   }
@@ -59,7 +59,6 @@ export function getContextLightness(preset: Record<string, ShortcutValue>) {
  * @param str 颜色值，可以是theme中设置的颜色，css中颜色值
  * @param theme 预设主题
  * @param lightness 需要生成的明亮度
- * @param isReverse 是否反转明亮度
  * @returns context颜色对应的各个明亮度颜色值
  *
  * @example
@@ -72,7 +71,7 @@ export function getContextLightness(preset: Record<string, ShortcutValue>) {
  * }
  * ```
  */
-export function resolveContextColor(str: string, theme: Theme, lightness: string[], isReverse?: boolean) {
+export function resolveContextColor(str: string, theme: Theme, lightness: string[]) {
   if (str.includes('context')) {
     return '';
   }
@@ -99,7 +98,7 @@ export function resolveContextColor(str: string, theme: Theme, lightness: string
           return Number(no);
         }
         const diff = colorDiff[key];
-        let value = l + (diff * (isReverse ? -1 : 1));
+        let value = l + diff;
         value = value < 50 ? 50 : value;
         value = value > 950 ? 950 : value;
         return value;
@@ -120,7 +119,7 @@ export function resolveContextColor(str: string, theme: Theme, lightness: string
         return [h, s, l].join(' ');
       }
       const diff = colorDiff[key] / 10;
-      let value = l - (diff * (isReverse ? -1 : 1));
+      let value = l - diff;
       value = value < 5 ? 5 : value;
       value = value > 95 ? 95 : value;
       return [h, s, value].join(' ');
