@@ -18,7 +18,9 @@ export interface PresetMtOptions {
   /**
    * 自定义预设
    */
-  custom?: {
-    button?: Record<ButtonPreset, ShortcutValue>
-  }
+  custom?: OptionsCustom
+}
+
+export interface OptionsCustom {
+  btn?: Record<ButtonPreset, ShortcutValue>
 }
