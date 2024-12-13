@@ -3,9 +3,11 @@ import type { CustomShortcut, PresetMtOptions } from '../types.ts';
 import { getContextLightness, resolveContextColor } from '../utils/context.ts';
 
 const buttonPreset = {
-  /** 默认（default） */
-  default: 'b-1 b-solid cursor-pointer',
-  /** 间距（default） */
+  /** 默认样式 */
+  default: 'common gap transition empty md',
+  /** 通用 */
+  common: 'b-1 b-solid cursor-pointer',
+  /** 间距 */
   gap: '[&+button]:(ml-3)',
   /** 过渡动画（default） */
   transition: 'transition-all duration-200',
@@ -42,17 +44,17 @@ const buttonPreset = {
   /** 深色背景 */
   deep: `
   c-white b-context-500 bg-context-500
-  hover:(c-white b-context-500/80 bg-context-500/80)
-  active:( b-context-700 bg-context-700)
+  hover:(c-white b-context-400 bg-context-400)
+  active:(b-context-700 bg-context-700)
   `,
   /** 小小按钮 */
-  xs: 'px-1.5 py-0.5 text-xs rounded-0.75',
+  xs: 'min-w-6 px-1.5 py-0.5 text-xs rounded-0.75',
   /** 小按钮 */
-  sm: 'px-2 py-1 text-sm font-400 rounded-1',
+  sm: 'min-w-7.5 px-2 py-1 text-sm font-400 rounded-1',
   /** 中等按钮（default） */
-  md: 'px-2.5 py-1.5 text-sm font-400 rounded-1.25',
+  md: 'min-w-8.5 px-2.5 py-1.5 text-sm font-400 rounded-1.25',
   /** 大按钮 */
-  lg: 'px-3 py-2 text-base font-500 rounded-1.5',
+  lg: 'min-w-10.5 px-3 py-2 text-base font-500 rounded-1.5',
 };
 
 export type ButtonPreset = keyof typeof buttonPreset;
@@ -64,11 +66,18 @@ export function button(options?: PresetMtOptions): CustomShortcut[] {
 
   return [
     [
-      `${p}btn`,
-      [buttonClasses.md, buttonClasses.default, buttonClasses.gap, buttonClasses.transition, buttonPreset.empty],
+      new RegExp(`^${p}btn$`),
+      () => {
+        if (typeof buttonClasses.default !== 'string') {
+          return [buttonClasses.default];
+        }
+        const data = buttonClasses.default.split(' ');
+        const value = data.map(s => s in buttonClasses ? `${p}btn-${s}` : s);
+        return value.join(' ');
+      },
     ],
     [
-      new RegExp(`^${p}btn-?(.+)$`),
+      new RegExp(`^${p}btn-(.+)$`),
       ([, s], { theme }) => {
         if (s in buttonClasses) {
           return [buttonClasses[s as ButtonPreset]];

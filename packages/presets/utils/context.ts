@@ -54,8 +54,25 @@ export function getContextLightness(preset: Record<string, ShortcutValue>) {
   return Array.from(new Set(lightness));
 }
 
-/** 解析字符串对应的颜色 */
-export function resolveContextColor(str: string, theme: Theme, lightness: string[]) {
+/**
+ * 指定context的颜色以及所对应的颜色明亮度
+ * @param str 颜色值，可以是theme中设置的颜色，css中颜色值
+ * @param theme 预设主题
+ * @param lightness 需要生成的明亮度
+ * @param isReverse 是否反转明亮度
+ * @returns context颜色对应的各个明亮度颜色值
+ *
+ * @example
+ * ```ts
+ * resolveContextColor(danger-500, theme, [500,400,600])
+ * => {
+ * '--mt-context-500': 'var(--mt-danger-600, 1 77 55)',
+ * '--mt-context-400': 'var(--mt-danger-500, 1 90 60)',
+ * '--mt-context-600': 'var(--mt-danger-700, 1 78 42)',
+ * }
+ * ```
+ */
+export function resolveContextColor(str: string, theme: Theme, lightness: string[], isReverse?: boolean) {
   if (str.includes('context')) {
     return '';
   }
@@ -82,7 +99,7 @@ export function resolveContextColor(str: string, theme: Theme, lightness: string
           return Number(no);
         }
         const diff = colorDiff[key];
-        let value = diff + l;
+        let value = l + (diff * (isReverse ? -1 : 1));
         value = value < 50 ? 50 : value;
         value = value > 950 ? 950 : value;
         return value;
@@ -103,7 +120,7 @@ export function resolveContextColor(str: string, theme: Theme, lightness: string
         return [h, s, l].join(' ');
       }
       const diff = colorDiff[key] / 10;
-      let value = l - diff;
+      let value = l - (diff * (isReverse ? -1 : 1));
       value = value < 5 ? 5 : value;
       value = value > 95 ? 95 : value;
       return [h, s, value].join(' ');
