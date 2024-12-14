@@ -3,7 +3,7 @@ import { resolveCustomShortcut } from './helper.ts';
 
 const buttonPreset = {
   /** 默认样式 */
-  default: 'btn-common btn-gap btn-transition btn-empty btn-md dark:reserve-light',
+  default: 'btn-common btn-gap btn-transition btn-empty btn-md btn-primary dark:reserve-light',
   /** 通用 */
   common: 'b-1 b-solid cursor-pointer',
   /** 间距 */
@@ -27,7 +27,7 @@ const buttonPreset = {
   /** 中等效果 */
   medium: `
   c-gray-600 b-gray-500 bg-transparent
-  hover:(c-context-400 b-context-400 bg-context-500/20)
+  hover:(c-context b-context-400 bg-context-500/20)
   active:(c-context-500 bg-context-500/30)
   `,
   /** 淡色 */

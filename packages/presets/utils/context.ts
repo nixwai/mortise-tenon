@@ -1,5 +1,5 @@
 import type { Theme } from '@unocss/preset-mini';
-import type { ShortcutValue } from 'unocss';
+import type { CSSValue, ShortcutValue } from 'unocss';
 import { parseColor } from '@unocss/preset-mini';
 import { mc } from 'magic-color';
 import { colorName, hslValue } from '.';
@@ -19,25 +19,53 @@ const colorDiff: Record<string, number> = {
   950: 500,
 };
 
+const colorKeys = Object.keys(colorDiff);
+
 /**
- * 初始化context颜色的颜色为主题颜色
- * @param primaryColors 预设主题颜色
+ * 初始化context颜色的配置
  * @returns 预设context颜色
+ *
+ * @example
+ * ```ts
+ * getContextColor() =>
+ * {
+ *   'DEFAULT': 'hsl(var(--mt-reserve-DEFAULT, var(--mt-context-DEFAULT)))',
+ *   '50': 'var(var(--mt-reserve-50, var(--mt-context-50)))',
+ *   '100': 'var(var(--mt-reserve-100, var(--mt-context-100)))',
+ *   ...
+ * }
+ * ```
  */
-export function getContextColor(primaryColors: Record<string, string>) {
-  const keys = Object.keys(colorDiff).concat('DEFAULT');
-  const colorValue = resolveContextColor('primary', { colors: { primary: primaryColors } }, keys);
-  if (colorValue) {
-    return Object.fromEntries(
-      Object.values(colorValue).map((value, index) =>
-        [keys[index], `hsl(var(${colorName('reserve', keys[index])}, var(${colorName('context', keys[index])}, ${value})))`],
-      ),
-    );
-  }
-  return {};
+export function getContextColor() {
+  const keys = colorKeys.concat('DEFAULT');
+  return Object.fromEntries(keys.map((k) => {
+    const reserveValue = colorName('reserve', k); // context的反转的明亮度
+    const contextValue = colorName('context', k); // context的正常的明亮度
+    return [k, `hsl(var(${reserveValue}, var(${contextValue})))`];
+  }));
 }
 
-/** 获取预设中的颜色明亮度 */
+/**
+ * 设置的context反转明亮度
+ * @returns
+ * ```ts
+ * {
+ *    --mt-reserve-50: var(--mt-context-950);
+ *    --mt-reserve-100: var(--mt-context-900);
+ *    --mt-reserve-200: var(--mt-context-800);
+ *    ...
+ * }
+  ```
+ */
+export function reserveContextColor(): CSSValue {
+  const cssValue: CSSValue = {};
+  for (let i = 0, j = colorKeys.length - 1; i < colorKeys.length; i++, j--) {
+    cssValue[`${colorName('reserve', colorKeys[i])}`] = `var(${colorName('context', colorKeys[j])})`;
+  }
+  return cssValue;
+}
+
+/** 提取预设中的颜色明亮度 */
 export function getContextLightness(preset: Record<string, ShortcutValue>) {
   const lightness: string[] = [];
   Object.values(preset).forEach((str) => {
@@ -104,9 +132,9 @@ export function resolveContextColor(str: string, theme: Theme, lightness: string
         return value;
       });
       return Object.fromEntries(lightness.map((key, index) => {
-        const colorName = `${name}-${newLightness[index]}`;
-        const colorValue = parseColor(colorName, theme)?.cssColor?.components?.[0] || undefined;
-        return [`--mt-context-${key || 'DEFAULT'}`, colorValue];
+        const cName = `${name}-${newLightness[index]}`;
+        const cValue = parseColor(cName, theme)?.cssColor?.components?.[0] || undefined;
+        return [`--mt-context-${key || 'DEFAULT'}`, cValue];
       }));
     }
     return '';

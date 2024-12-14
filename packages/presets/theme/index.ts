@@ -8,12 +8,17 @@ type Colors = Theme['colors'];
 /** 主题颜色 */
 const primaryColors = themeColors({ primary: '#3451b2' });
 
-export const theme: Theme = { colors: primaryColors };
+export const theme: Theme = {
+  colors: {
+    ...primaryColors,
+    context: getContextColor(),
+  },
+};
 
 /**
  * 自定义颜色
  * @param options 名称与颜色映射配置
- * @returns 返回对应的可多调色的颜色配置
+ * @returns 返回对应的多明亮度的颜色
  */
 export function themeColors(options: Record<string, string>): Colors {
   const colors: Record<string, Record<string, string>> = {};
@@ -24,11 +29,6 @@ export function themeColors(options: Record<string, string>): Colors {
     Object.entries(mcColor).forEach(([k, v]) => {
       colors[name][k] = `hsl(var(${colorName(name, k)}, ${hslValue(v)}))`;
     });
-    // 修改主题色时，设置context颜色
-    if (name === 'primary') {
-      const contextColor = getContextColor(colors[name]);
-      colors.context = contextColor;
-    }
   }
   return colors;
 }

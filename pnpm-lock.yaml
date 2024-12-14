@@ -134,8 +134,8 @@ importers:
         version: 0.1.1(vue@3.5.13(typescript@5.7.2))
     devDependencies:
       mortise-tenon-preset:
-        specifier: ^0.1.8
-        version: 0.1.8
+        specifier: ^0.1.9
+        version: 0.1.9
       vitepress:
         specifier: ^1.5.0
         version: 1.5.0(@algolia/client-search@5.15.0)(@types/node@22.10.1)(postcss@8.4.49)(sass@1.82.0)(search-insights@2.17.3)(typescript@5.7.2)
@@ -3635,8 +3635,8 @@ packages:
     peerDependencies:
       vue: ^3.4.0
 
-  mortise-tenon-preset@0.1.8:
-    resolution: {integrity: sha512-AzBQh9ioax6HC4sazIJ7oyL1xldwYA2m+SW4Enr2YSQWohKqLENbdwbc6T6lo7OmfrZHAMnXb8xzSxQfXd92pA==}
+  mortise-tenon-preset@0.1.9:
+    resolution: {integrity: sha512-wM/iyI0c5ZBR7/WgtT3nFfuQoqVGztmWowa3Dc3SluzXNC/FxEA/BLvrUxF7TzPOd42rtYrb0fLdun9htSatkQ==}
 
   mortise-tenon-tool@0.2.0:
     resolution: {integrity: sha512-Y62qVx+IvdlxIKhxWPOSb1hlZyvGXdqYRgoFn3AWMqRbJC+OKKvjotlrxLkiGZlTtBTS8zrL3OYhWVDviHdJFA==}
@@ -8821,7 +8821,7 @@ snapshots:
     transitivePeerDependencies:
       - '@vue/composition-api'
 
-  mortise-tenon-preset@0.1.8: {}
+  mortise-tenon-preset@0.1.9: {}
 
   mortise-tenon-tool@0.2.0:
     dependencies:
