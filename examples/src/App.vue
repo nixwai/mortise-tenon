@@ -1,5 +1,5 @@
 <template>
-  <div class="flex w-screen h-screen justify-center items-center">
+  <div class="flex items-center w-screen h-screen justify-center">
     <div>
       <button btn>
         default

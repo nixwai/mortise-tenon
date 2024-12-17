@@ -4,7 +4,7 @@ import { ref } from 'vue';
 
 const demo = ref<HTMLElement>();
 function setTheme(color: string) {
-  updateColorValue('primary', color, demo.value);
+  updateColorValue({ name: 'primary', color, type: ['theme', 'preflight'], dom: demo.value });
 }
 </script>
 
@@ -18,7 +18,13 @@ function setTheme(color: string) {
       绿色
     </button>
   </div>
-  <button ref="demo" class="btn btn-deep">
-    主题颜色
-  </button>
+  <div ref="demo" class="flex items-center">
+    <button class="btn btn-deep mr-2">
+      按钮
+    </button>
+
+    <div style="color: hsl(var(--mt-primary-500));">
+      文本
+    </div>
+  </div>
 </template>
