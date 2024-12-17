@@ -1,4 +1,4 @@
-import{b as p}from"./chunks/index.Bb2XV9Ne.js";import{d as b,o as r,b as y,w as l,c as i,t as u,e as f,k as n,j as e,a as s,G as a,a0 as C,B as x}from"./chunks/framework.D6w4zQ8K.js";import{R as X}from"./chunks/index.CP7nzNwI.js";import"./chunks/index.5EWLbd1v.js";const g=`<script setup lang="ts">\r
+import{b as p}from"./chunks/index.Bb2XV9Ne.js";import{d as b,o as r,b as y,w as l,c as i,t as u,e as f,k as n,j as e,a as s,G as a,a0 as C,B as x}from"./chunks/framework.D6w4zQ8K.js";import{R as X}from"./chunks/index.CKpBI40n.js";import"./chunks/index.5EWLbd1v.js";const g=`<script setup lang="ts">\r
 import type { TableConfig } from '@mortise-tenon/components';\r
 import { MtTable } from '@mortise-tenon/components';\r
 \r

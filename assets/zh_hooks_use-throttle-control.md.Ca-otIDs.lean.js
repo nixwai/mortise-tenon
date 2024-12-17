@@ -1,4 +1,4 @@
-import{a as y}from"./chunks/index.5EWLbd1v.js";import{p as f,S as _,d as k,o as v,c as b,j as r,t as p,N as g,k as s,F as B,a as d,G as a,w as h,B as D}from"./chunks/framework.D6w4zQ8K.js";import{R as C}from"./chunks/index.CP7nzNwI.js";const x=`<script setup lang="ts">\r
+import{a as y}from"./chunks/index.5EWLbd1v.js";import{p as f,S as _,d as k,o as v,c as b,j as r,t as p,N as g,k as s,F as B,a as d,G as a,w as h,B as D}from"./chunks/framework.D6w4zQ8K.js";import{R as C}from"./chunks/index.CKpBI40n.js";const x=`<script setup lang="ts">\r
 import { useThrottleControl } from '@mortise-tenon/hooks';\r
 import { ref } from 'vue';\r
 \r
