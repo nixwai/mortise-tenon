@@ -1,3 +1,4 @@
+import type { PluginOption } from 'vite';
 import { resolve } from 'node:path';
 import dts from 'vite-plugin-dts';
 import { projRoot } from '../paths';
@@ -10,5 +11,5 @@ export function dtsPlugin(rootPath: string, outputPath: string) {
     exclude: [resolve(rootPath, '**/__test__')],
     outDir: resolve(outputPath, 'types'),
     tsconfigPath: resolve(projRoot, 'tsconfig.json'),
-  });
+  }) as PluginOption;
 }
