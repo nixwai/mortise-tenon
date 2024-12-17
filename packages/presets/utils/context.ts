@@ -2,7 +2,7 @@ import type { Theme } from '@unocss/preset-mini';
 import type { CSSValue, ShortcutValue } from 'unocss';
 import { parseColor } from '@unocss/preset-mini';
 import { mc } from 'magic-color';
-import { colorName, hslValue } from '.';
+import { colorName } from '.';
 
 /** 颜色的明亮度差值 */
 const colorDiff: Record<string, number> = {
@@ -109,47 +109,31 @@ export function resolveContextColor(str: string, theme: Theme, lightness: string
     return '';
   }
 
-  let { color, name, no, cssColor } = parsedColor;
+  const { color, cssColor } = parsedColor;
   // 颜色是theme中配置的预设颜色
-  if (color && color.includes('var(--mt-')) {
-    if (no === 'DEFAULT') {
-      const colorValue = hslValue(color);
-      no = Object.keys(colorDiff).find(k => hslValue(parseColor(`${name}-${k}`, theme)?.color) === colorValue) || '';
-    }
-    if (no) {
-      // 直接用50跟950计算时，会有150，850这类不存在的明亮度，要转下
-      let l = Number(no);
-      l = l < 100 ? 0 : l;
-      l = l > 900 ? 1000 : l;
-      const newLightness = lightness.map((key) => {
-        if (!key || key === 'DEFAULT') {
-          return Number(no);
-        }
-        const diff = colorDiff[key];
-        let value = l + diff;
-        value = value < 50 ? 50 : value;
-        value = value > 950 ? 950 : value;
-        return value;
-      });
-      return Object.fromEntries(lightness.map((key, index) => {
-        const cName = `${name}-${newLightness[index]}`;
-        const cValue = parseColor(cName, theme)?.cssColor?.components?.[0] || undefined;
-        return [`--mt-context-${key || 'DEFAULT'}`, cValue];
-      }));
-    }
-    return '';
+  if (color && cssColor && color.includes('var(--mt-')) {
+    const [h, s, l] = cssColor.components;
+    const colorValues = lightness.map((key) => {
+      if (!key || key === 'DEFAULT') {
+        return [h, s, l].join(' ');
+      }
+      const diff = colorDiff[key] / 10;
+      const value = `calc(${l} - ${diff})`;
+      return [h, s, value].join(' ');
+    });
+    return Object.fromEntries(lightness.map((key, index) => {
+      return [`--mt-context-${key || 'DEFAULT'}`, colorValues[index]];
+    }));
   }
-
-  if (color && mc.valid(color) && cssColor) {
+  // 非此库中预设的颜色
+  if (color && cssColor && mc.valid(color)) {
     const [h, s, l] = mc(color).hsl();
     const colorValues = lightness.map((key) => {
       if (!key || key === 'DEFAULT') {
         return [h, s, l].join(' ');
       }
       const diff = colorDiff[key] / 10;
-      let value = l - diff;
-      value = value < 5 ? 5 : value;
-      value = value > 95 ? 95 : value;
+      const value = l - diff;
       return [h, s, value].join(' ');
     });
     return Object.fromEntries(lightness.map((key, index) => {
