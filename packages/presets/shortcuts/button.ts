@@ -21,36 +21,36 @@ const buttonPreset = {
   /** 空背景色 */
   empty: `
   c-gray-600 b-gray-500 bg-transparent
-  hover:(c-context-500 b-context-400)
+  hover:(c-context b-context-400)
   active:(b-context-600)
   `,
   /** 中等效果 */
   medium: `
   c-gray-600 b-gray-500 bg-transparent
-  hover:(c-context-400 b-context-400 bg-context-500/20)
-  active:(c-context-500 bg-context-500/30)
+  hover:(c-context b-context-400 bg-context/20)
+  active:(c-context b-context-600 bg-context/30)
   `,
   /** 淡色 */
   pale: `
-  c-context-500 b-context-400 bg-transparent
-  hover:(c-context-400 b-context-400 bg-context-500/20)
-  active:(c-context-500 bg-context-500/30)
+  c-context b-context-400 bg-transparent
+  hover:(c-context b-context-400 bg-context/20)
+  active:(c-context bg-context/30)
   `,
   /** 柔和背景 */
   soft: `
-  c-context-500 b-context-400 bg-context-500/20
-  hover:(c-context-400 b-context-500/30 bg-context-500/30)
-  active:(c-context-500 b-context-500/30 bg-context-500/40)
+  c-context b-context-400 bg-context/20
+  hover:(c-context b-context-200 bg-context-200)
+  active:(c-context b-context-300 bg-context-300)
   `,
   /** 亮色背景 */
   bright: `
-  c-context-500 b-context-400 bg-context-500/20
-  hover:(c-white b-context-500 bg-context-500)
+  c-context b-context-400 bg-context/20
+  hover:(c-white b-context bg-context)
   active:(b-context-600 bg-context-600)
   `,
   /** 深色背景 */
   deep: `
-  c-white b-context-500 bg-context-500
+  c-white b-context bg-context
   hover:(c-white b-context-400 bg-context-400)
   active:(b-context-600 bg-context-600)
   `,

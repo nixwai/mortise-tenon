@@ -6,7 +6,7 @@ import { colorName } from '.';
 
 /** 颜色的明亮度差值 */
 const colorDiff: Record<string, number> = {
-  50: -500,
+  50: -450,
   100: -400,
   200: -300,
   300: -200,
@@ -16,7 +16,7 @@ const colorDiff: Record<string, number> = {
   700: 200,
   800: 300,
   900: 400,
-  950: 500,
+  950: 450,
 };
 
 const colorKeys = Object.keys(colorDiff);
@@ -29,7 +29,7 @@ const colorKeys = Object.keys(colorDiff);
  * ```ts
  * getContextColor() =>
  * {
- *   'DEFAULT': 'hsl(var(--mt-reserve-DEFAULT, var(--mt-context-DEFAULT)))',
+ *   'DEFAULT': 'hsl(var(--mt-context-500))',
  *   '50': 'var(var(--mt-reserve-50, var(--mt-context-50)))',
  *   '100': 'var(var(--mt-reserve-100, var(--mt-context-100)))',
  *   ...
@@ -37,12 +37,13 @@ const colorKeys = Object.keys(colorDiff);
  * ```
  */
 export function getContextColor() {
-  const keys = colorKeys.concat('DEFAULT');
-  return Object.fromEntries(keys.map((k) => {
+  const themeColors = Object.fromEntries(colorKeys.map((k) => {
     const reserveValue = colorName('reserve', k); // context的反转的明亮度
     const contextValue = colorName('context', k); // context的正常的明亮度
     return [k, `hsl(var(${reserveValue}, var(${contextValue})))`];
   }));
+  themeColors.DEFAULT = 'hsl(var(--mt-context-500))';
+  return themeColors;
 }
 
 /**
@@ -59,9 +60,9 @@ export function getContextColor() {
  */
 export function reserveContextColor(): CSSValue {
   const cssValue: CSSValue = {};
-  for (let i = 0, j = colorKeys.length - 1; i < colorKeys.length; i++, j--) {
-    cssValue[`${colorName('reserve', colorKeys[i])}`] = `var(${colorName('context', colorKeys[j])})`;
-  }
+  colorKeys.forEach((k) => {
+    cssValue[`${colorName('reserve', k)}`] = `var(${colorName('context', 500 - colorDiff[k])})`;
+  });
   return cssValue;
 }
 
@@ -93,53 +94,59 @@ export function getContextLightness(preset: Record<string, ShortcutValue>) {
  * ```ts
  * resolveContextColor(danger-500, theme, [500,400,600])
  * => {
- * '--mt-context-500': 'var(--mt-danger-600, 1 77 55)',
- * '--mt-context-400': 'var(--mt-danger-500, 1 90 60)',
- * '--mt-context-600': 'var(--mt-danger-700, 1 78 42)',
+ * '--mt-context-500': 'var(--mt-danger-500-h, 1) var(--mt-danger-500-s, 90) calc(var(--mt-danger-500-l, 60) - -10)',
+ * '--mt-context-400': 'var(--mt-danger-500-h, 1) var(--mt-danger-500-s, 90) calc(var(--mt-danger-500-l, 60) - 0)',
+ * '--mt-context-600': 'var(--mt-danger-500-h, 1) var(--mt-danger-500-s, 90) calc(var(--mt-danger-500-l, 60) - 10)',
  * }
  * ```
  */
-export function resolveContextColor(str: string, theme: Theme, lightness: string[]) {
+export function resolveContextColor(str: string, theme: Theme, lightness = colorKeys) {
   if (str.includes('context')) {
     return '';
   }
 
   const parsedColor = parseColor(str, theme);
-  if (!parsedColor) {
+  if (!parsedColor || !parsedColor.color || !parsedColor.cssColor) {
     return '';
   }
 
-  const { color, cssColor } = parsedColor;
+  let hslValue: undefined | (string | number)[];
   // 颜色是theme中配置的预设颜色
-  if (color && cssColor && color.includes('var(--mt-')) {
-    const [h, s, l] = cssColor.components;
-    const colorValues = lightness.map((key) => {
-      if (!key || key === 'DEFAULT') {
-        return [h, s, l].join(' ');
-      }
-      const diff = colorDiff[key] / 10;
-      const value = `calc(${l} - ${diff})`;
-      return [h, s, value].join(' ');
-    });
-    return Object.fromEntries(lightness.map((key, index) => {
-      return [`--mt-context-${key || 'DEFAULT'}`, colorValues[index]];
-    }));
+  if (parsedColor.color.includes('var(--mt-')) {
+    hslValue = parsedColor.cssColor.components;
   }
-  // 非此库中预设的颜色
-  if (color && cssColor && mc.valid(color)) {
-    const [h, s, l] = mc(color).hsl();
-    const colorValues = lightness.map((key) => {
-      if (!key || key === 'DEFAULT') {
-        return [h, s, l].join(' ');
-      }
-      const diff = colorDiff[key] / 10;
-      const value = l - diff;
-      return [h, s, value].join(' ');
-    });
-    return Object.fromEntries(lightness.map((key, index) => {
-      return [`--mt-context-${key || 'DEFAULT'}`, colorValues[index]];
-    }));
+  // 颜色是css中颜色值
+  if (mc.valid(parsedColor.color)) {
+    hslValue = mc(parsedColor.color).hsl();
   }
 
+  if (hslValue && hslValue.length >= 3) {
+    const [h, s, l] = hslValue;
+    let colorLightness: string[] = [];
+    // 过滤可用的颜色明亮度和反转的明亮度
+    lightness.forEach((key) => {
+      if (!key) {
+        colorLightness.push('500');
+      }
+      if (colorKeys.includes(key)) {
+        colorLightness.push(key);
+        colorLightness.push(String(500 - colorDiff[key]));
+      }
+    });
+    // 去重颜色的明亮度
+    colorLightness = Array.from(new Set(colorLightness));
+    // 生成color对应的css变量
+    const colorValues = colorLightness.map((key) => {
+      let lValue = l;
+      const diff = colorDiff[key] / 10;
+      if (diff) {
+        lValue = Number.isNaN(Number(l)) ? `calc(${l} - ${diff})` : Number(l) - diff;
+      }
+      return [h, s, lValue].join(' ');
+    });
+    return Object.fromEntries(colorLightness.map((key, index) => {
+      return [`--mt-context-${key}`, colorValues[index]];
+    }));
+  }
   return '';
 }

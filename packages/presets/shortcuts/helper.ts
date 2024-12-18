@@ -1,18 +1,22 @@
 import type { ShortcutValue } from 'unocss';
 import type { CustomShortcut, OptionsCustom, PresetMtOptions } from '../types';
-import { getContextLightness, resolveContextColor } from '../utils/context';
+import { getContextLightness } from '../utils/context';
 
 export function resolveCustomShortcut(
   name: keyof OptionsCustom,
   presetShortcuts: Record<string, ShortcutValue>,
   options?: PresetMtOptions,
 ): CustomShortcut[] {
-  const pName = (options?.prefix || '') + name;
+  const p = options?.prefix || '';
+  const pName = p + name;
 
   let buttonClasses: Record<string, ShortcutValue> = Object.assign(presetShortcuts, options?.custom?.[name]);
   buttonClasses = Object.fromEntries(Object.entries(buttonClasses).map(([k, v]) => {
-    const value = typeof v === 'string' ? v.replaceAll(new RegExp(`${name}-`, 'g'), `${pName}-`) : v;
-    return [k, value];
+    if (typeof v === 'string') {
+      v = v.replaceAll(new RegExp(`${name}-`, 'g'), `${pName}-`);
+      v = v.replaceAll(/reserve-light/g, `${p}reserve-light`);
+    }
+    return [k, v];
   }));
 
   const contextLightness = getContextLightness(buttonClasses);
@@ -24,14 +28,13 @@ export function resolveCustomShortcut(
     ],
     [
       new RegExp(`^${pName}-(.+)$`),
-      ([, s], { theme }) => {
+      ([, s]) => {
         if (s in buttonClasses) {
           return [buttonClasses[s]];
         }
-        // 设置颜色以及各明亮度
-        const colors = resolveContextColor(s, theme, contextLightness);
-        if (colors) {
-          return [colors];
+        if (contextLightness.length) {
+          const contextColor = `${p}context-${s}:${contextLightness.join('-')}`;
+          return [contextColor];
         }
       },
     ],

@@ -10,15 +10,15 @@ export const preflights: Preflight[] = [{
       ${toRootColors('primary', `hsl(${colorValue})`)}
 
       :root {
-      --mt-primary-color: var(--mt-primary-500);
-      --mt-primary-text: var(--mt-primary-100);
-      --mt-primary-text-invert: var(--mt-primary-950);
+        --mt-primary-color: var(--mt-primary-500);
+        --mt-primary-text: var(--mt-primary-100);
+        --mt-primary-text-invert: var(--mt-primary-950);
       }
 
       .dark {
-      --mt-primary-color: var(--mt-primary-600);
-      --mt-primary-text: var(--mt-primary-950);
-      --mt-primary-text-invert: var(--mt-primary-100);
+        --mt-primary-color: var(--mt-primary-600);
+        --mt-primary-text: var(--mt-primary-950);
+        --mt-primary-text-invert: var(--mt-primary-100);
       }
 
       ::selection {
