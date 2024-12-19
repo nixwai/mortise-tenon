@@ -5,7 +5,7 @@ export function context(options?: PresetMtOptions): CustomRule[] {
   const p = options?.prefix || '';
   return [
     [
-      new RegExp(`^${p}context-(.+)$`),
+      new RegExp(`^${p}ctx-(.+)$`),
       ([,s], { theme }) => {
         const [color, lightness] = s.split(':');
         // 设置颜色以及各明亮度
@@ -16,7 +16,7 @@ export function context(options?: PresetMtOptions): CustomRule[] {
       },
     ],
     [
-      new RegExp(`^${p}reverse-light$`),
+      new RegExp(`^${p}reverse-ctx$`),
       () => [reverseContextColor()],
     ],
   ];

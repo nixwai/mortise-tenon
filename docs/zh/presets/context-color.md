@@ -18,6 +18,6 @@
 
 ## 反转明亮度
 
-预设中提供了 `reverse-light` ，可以用来反转context的颜色的明亮，这个在一些暗色主题下比较有用。
+预设中提供了 `reverse-ctx` ，可以用来反转context的颜色的明亮，这个在一些暗色主题下比较有用。
 
 <demo vue="presets/context-color/reverse.vue"/>

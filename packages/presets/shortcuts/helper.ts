@@ -14,7 +14,7 @@ export function resolveCustomShortcut(
   buttonClasses = Object.fromEntries(Object.entries(buttonClasses).map(([k, v]) => {
     if (typeof v === 'string') {
       v = v.replaceAll(new RegExp(`\s${name}-`, 'g'), `\s${pName}-`);
-      v = v.replaceAll(/reverse-light/g, `${p}reverse-light`);
+      v = v.replaceAll(/reverse-ctx/g, `${p}reverse-ctx`);
     }
     return [k, v];
   }));
@@ -33,7 +33,7 @@ export function resolveCustomShortcut(
           return [buttonClasses[s]];
         }
         if (contextLightness.length) {
-          const contextColor = `[&.${pName}]:(${p}context-${s}:${contextLightness.join('-')})`;
+          const contextColor = `[&.${pName}]:(${p}ctxs-${s}:${contextLightness.join('-')})`;
           return [contextColor];
         }
       },
