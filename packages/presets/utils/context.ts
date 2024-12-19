@@ -111,17 +111,16 @@ export function resolveContextColor(str: string, theme: Theme, lightness = color
   }
 
   let hslValue: undefined | (string | number)[];
-  // 颜色是theme中配置的预设颜色
-  if (parsedColor.color.includes('var(--mt-')) {
+  // 如果是hsl类型直接赋值
+  if (parsedColor.cssColor.type === 'hsl') {
     hslValue = parsedColor.cssColor.components;
   }
-  // 颜色是css中颜色值
-  if (mc.valid(parsedColor.color)) {
+  // 否则使用magic-color转化为hsl
+  if (!hslValue && mc.valid(parsedColor.color)) {
     hslValue = mc(parsedColor.color).hsl();
   }
 
   if (hslValue && hslValue.length >= 3) {
-    const [h, s, l] = hslValue;
     let colorLightness: string[] = [];
     // 过滤可用的颜色明亮度和反转的明亮度
     lightness.forEach((key) => {
@@ -136,13 +135,15 @@ export function resolveContextColor(str: string, theme: Theme, lightness = color
     // 去重颜色的明亮度
     colorLightness = Array.from(new Set(colorLightness));
     // 生成color对应的css变量
+    const [h, s, l] = hslValue;
+    const lValue = Number.isNaN(Number(l)) ? String(l).replace('%', '') : Number(l);
     const colorValues = colorLightness.map((key) => {
-      let lValue = l;
+      let countValue = lValue;
       const diff = colorDiff[key] / 10;
       if (diff) {
-        lValue = Number.isNaN(Number(l)) ? `calc(${l} - ${diff})` : Number(l) - diff;
+        countValue = typeof lValue === 'number' ? lValue - diff : `calc(${lValue} - ${diff})`;
       }
-      return [h, s, lValue].join(' ');
+      return [h, s, countValue].join(' ');
     });
     return Object.fromEntries(colorLightness.map((key, index) => {
       return [`--mt-context-${key}`, colorValues[index]];

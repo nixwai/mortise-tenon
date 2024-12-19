@@ -33,7 +33,7 @@ export function resolveCustomShortcut(
           return [buttonClasses[s]];
         }
         if (contextLightness.length) {
-          const contextColor = `${p}context-${s}:${contextLightness.join('-')}`;
+          const contextColor = `[&.${pName}]:(${p}context-${s}:${contextLightness.join('-')})`;
           return [contextColor];
         }
       },
