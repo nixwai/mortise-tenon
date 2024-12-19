@@ -1,9 +1,6 @@
 <template>
   <button class="btn">
-    empty
-  </button>
-  <button class="btn btn-medium">
-    medium
+    ghost
   </button>
   <button class="btn btn-pale">
     pale

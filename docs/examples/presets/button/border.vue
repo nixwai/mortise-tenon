@@ -1,10 +1,7 @@
 <template>
   <div>
     <button class="btn b-none">
-      empty
-    </button>
-    <button class="btn b-none btn-medium">
-      medium
+      ghost
     </button>
     <button class="btn b-none btn-pale">
       pale
@@ -18,10 +15,7 @@
   </div>
   <div class="mt-4">
     <button class="btn b-none shadow">
-      empty
-    </button>
-    <button class="btn b-none shadow btn-medium">
-      medium
+      ghost
     </button>
     <button class="btn b-none shadow btn-pale">
       pale
@@ -35,10 +29,7 @@
   </div>
   <div class="mt-4">
     <button class="btn b-dashed">
-      empty
-    </button>
-    <button class="btn b-dashed btn-medium">
-      medium
+      ghost
     </button>
     <button class="btn b-dashed btn-pale">
       pale
@@ -52,10 +43,7 @@
   </div>
   <div class="mt-4">
     <button class="btn rounded-full">
-      empty
-    </button>
-    <button class="btn rounded-full btn-medium">
-      medium
+      ghost
     </button>
     <button class="btn rounded-full btn-pale">
       pale
@@ -69,10 +57,7 @@
   </div>
   <div class="mt-4">
     <button class="btn rounded-full aspect-square">
-      e
-    </button>
-    <button class="btn rounded-full aspect-square btn-medium">
-      m
+      g
     </button>
     <button class="btn rounded-full aspect-square btn-pale">
       p

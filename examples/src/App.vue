@@ -7,8 +7,8 @@
       <button btn="~ xs pale red">
         pale
       </button>
-      <button btn="~ sm medium warning">
-        medium
+      <button btn="~ sm soft warning">
+        soft
       </button>
       <button btn="~ md bright #699864">
         bright
