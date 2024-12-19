@@ -1,5 +1,5 @@
 import type { CustomRule, PresetMtOptions } from '../types';
-import { resolveContextColor } from '../utils/context';
+import { resolveContextColor, reverseContextColor } from '../utils/context';
 
 export function context(options?: PresetMtOptions): CustomRule[] {
   const p = options?.prefix || '';
@@ -14,6 +14,10 @@ export function context(options?: PresetMtOptions): CustomRule[] {
           return [colors];
         }
       },
+    ],
+    [
+      new RegExp(`^${p}reverse-light$`),
+      () => [reverseContextColor()],
     ],
   ];
 }

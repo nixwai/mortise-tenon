@@ -30,17 +30,17 @@ const colorKeys = Object.keys(colorDiff);
  * getContextColor() =>
  * {
  *   'DEFAULT': 'hsl(var(--mt-context-500))',
- *   '50': 'var(var(--mt-reserve-50, var(--mt-context-50)))',
- *   '100': 'var(var(--mt-reserve-100, var(--mt-context-100)))',
+ *   '50': 'var(var(--mt-reverse-50, var(--mt-context-50)))',
+ *   '100': 'var(var(--mt-reverse-100, var(--mt-context-100)))',
  *   ...
  * }
  * ```
  */
 export function getContextColor() {
   const themeColors = Object.fromEntries(colorKeys.map((k) => {
-    const reserveValue = colorName('reserve', k); // context的反转的明亮度
+    const reverseValue = colorName('reverse', k); // context的反转的明亮度
     const contextValue = colorName('context', k); // context的正常的明亮度
-    return [k, `hsl(var(${reserveValue}, var(${contextValue})))`];
+    return [k, `hsl(var(${reverseValue}, var(${contextValue})))`];
   }));
   themeColors.DEFAULT = 'hsl(var(--mt-context-500))';
   return themeColors;
@@ -51,17 +51,17 @@ export function getContextColor() {
  * @returns
  * ```ts
  * {
- *    --mt-reserve-50: var(--mt-context-950);
- *    --mt-reserve-100: var(--mt-context-900);
- *    --mt-reserve-200: var(--mt-context-800);
+ *    --mt-reverse-50: var(--mt-context-950);
+ *    --mt-reverse-100: var(--mt-context-900);
+ *    --mt-reverse-200: var(--mt-context-800);
  *    ...
  * }
   ```
  */
-export function reserveContextColor(): CSSValue {
+export function reverseContextColor(): CSSValue {
   const cssValue: CSSValue = {};
   colorKeys.forEach((k) => {
-    cssValue[`${colorName('reserve', k)}`] = `var(${colorName('context', 500 - colorDiff[k])})`;
+    cssValue[`${colorName('reverse', k)}`] = `var(${colorName('context', 500 - colorDiff[k])})`;
   });
   return cssValue;
 }
@@ -75,7 +75,12 @@ export function getContextLightness(preset: Record<string, ShortcutValue>) {
       if (matches) {
         matches.forEach((match) => {
           const value = match.replace(/-context-?/, '');
-          lightness.push(value);
+          if (!value) {
+            lightness.push('500');
+          }
+          else if (colorKeys.includes(value)) {
+            lightness.push(value);
+          }
         });
       }
     }
@@ -124,9 +129,6 @@ export function resolveContextColor(str: string, theme: Theme, lightness = color
     let colorLightness: string[] = [];
     // 过滤可用的颜色明亮度和反转的明亮度
     lightness.forEach((key) => {
-      if (!key) {
-        colorLightness.push('500');
-      }
       if (colorKeys.includes(key)) {
         colorLightness.push(key);
         colorLightness.push(String(500 - colorDiff[key]));

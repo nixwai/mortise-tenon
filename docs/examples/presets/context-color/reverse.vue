@@ -5,8 +5,8 @@
     </div>
   </div>
 
-  <div class="dark bg-dark-500">
-    <div class="context-gray:700 c-context-700 reverse-light">
+  <div class="dark bg-dark-500 reverse-light">
+    <div class="context-gray:700 c-context-700">
       dark
     </div>
   </div>

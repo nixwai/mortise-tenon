@@ -1,5 +1,5 @@
 <template>
-  <div class="context-red:500 c-context">
+  <div class="c-context context-red:500">
     红
   </div>
   <div class="c-context context-yellow:500">

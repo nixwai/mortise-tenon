@@ -13,8 +13,8 @@ export function resolveCustomShortcut(
   let buttonClasses: Record<string, ShortcutValue> = Object.assign(presetShortcuts, options?.custom?.[name]);
   buttonClasses = Object.fromEntries(Object.entries(buttonClasses).map(([k, v]) => {
     if (typeof v === 'string') {
-      v = v.replaceAll(new RegExp(`${name}-`, 'g'), `${pName}-`);
-      v = v.replaceAll(/reserve-light/g, `${p}reserve-light`);
+      v = v.replaceAll(new RegExp(`\s${name}-`, 'g'), `\s${pName}-`);
+      v = v.replaceAll(/reverse-light/g, `${p}reverse-light`);
     }
     return [k, v];
   }));
