@@ -1,6 +1,5 @@
 import type { ShortcutValue } from 'unocss';
 import type { CustomShortcut, OptionsCustom, PresetMtOptions } from '../types';
-import { getContextLightness } from '../utils/context';
 
 export function resolveCustomShortcut(
   name: keyof OptionsCustom,
@@ -14,12 +13,9 @@ export function resolveCustomShortcut(
   buttonClasses = Object.fromEntries(Object.entries(buttonClasses).map(([k, v]) => {
     if (typeof v === 'string') {
       v = v.replaceAll(new RegExp(`\s${name}-`, 'g'), `\s${pName}-`);
-      v = v.replaceAll(/reverse-ctx/g, `${p}reverse-ctx`);
     }
     return [k, v];
   }));
-
-  const contextLightness = getContextLightness(buttonClasses);
 
   return [
     [
@@ -32,10 +28,7 @@ export function resolveCustomShortcut(
         if (s in buttonClasses) {
           return [buttonClasses[s]];
         }
-        if (contextLightness.length) {
-          const contextColor = `[&.${pName}]:(${p}ctxs-${s}:${contextLightness.join('-')})`;
-          return [contextColor];
-        }
+        return [`[&.${pName}]:(ctx-c-mt_${s})`];
       },
     ],
   ];
