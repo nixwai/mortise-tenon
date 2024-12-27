@@ -20,6 +20,10 @@ export default antfu(
     },
   },
   {
+    files: ['**/*.md'],
+    rules: { 'format/prettier': ['off'] },
+  },
+  {
     rules: {
       'style/semi': ['error', 'always'], // 末尾带分号
       'object-curly-newline': ['error', { multiline: true }], // 花括号内换行规则

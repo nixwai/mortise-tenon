@@ -13,8 +13,8 @@ export const presetsSidebar: DefaultTheme.SidebarItem[] = [
         link: '/zh/presets/theme-color.md',
       },
       {
-        text: '上下文颜色',
-        link: '/zh/presets/context-color.md',
+        text: '上下文',
+        link: '/zh/presets/context.md',
       },
       {
         text: '可配置项',

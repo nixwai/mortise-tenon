@@ -1,8 +1,8 @@
 <template>
-  <button class="btn btn-primary">
+  <button class="btn btn-danger">
     ghost
   </button>
-  <button class="btn btn-pale btn-warning">
+  <button class="btn btn-pale btn-warning-400">
     pale
   </button>
   <button class="btn btn-soft btn-#F4AFFFFF">
