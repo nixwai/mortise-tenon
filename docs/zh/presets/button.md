@@ -20,6 +20,12 @@
 
 <demo vue="presets/button/color.vue"/>
 
+## 文本按钮
+
+没有背景颜色的按钮。
+
+<demo vue="presets/button/text.vue"/>
+
 ## 更多
 
 <demo vue="presets/button/border.vue"/>

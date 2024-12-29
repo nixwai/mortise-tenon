@@ -3,11 +3,11 @@ import { resolveCustomShortcut } from './helper.ts';
 
 const buttonPreset = {
   /** 默认样式 */
-  default: 'btn-common btn-gap btn-transition btn-md btn-ctx btn-ghost dark:ctx-r-y',
+  default: 'btn-ctx btn-common btn-gap btn-transition btn-md btn-ghost dark:ctx-r-y',
   /** ctx */
-  ctx: 'ctx-c-mt_primary ctx-c-gray_gray-500 ',
+  ctx: 'ctx-c-gray_gray-500 ctx-c-mt_primary ctx-c-mt-c_ctx-c-mt ctx-c-mt-b_ctx-c-mt ctx-c-mt-bg_ctx-c-mt',
   /** 通用 */
-  common: 'b-1 b-solid c-gray-500 cursor-pointer ctx-c-mt_primary',
+  common: 'b-1 b-solid cursor-pointer',
   /** 间距 */
   gap: '[&+button]:(ml-3)',
   /** 过渡动画 */
@@ -22,33 +22,37 @@ const buttonPreset = {
   lg: 'min-w-10.5 px-3 py-2 text-base font-500 rounded-1.5',
   /** 幽灵（空背景） */
   ghost: `
-  c-ctx-c-gray-600 b-ctx-c-gray bg-transparent
-  hover:(c-ctx-c-mt b-ctx-c-mt bg-transparent)
-  active:(c-ctx-c-mt-600 b-ctx-c-mt-600 bg-transparent)
+  c-ctx-c-gray-600 bg-transparent
+  hover:(c-ctx-c-mt-c b-ctx-c-mt-b bg-transparent)
+  active:(c-ctx-c-mt-c-600 b-ctx-c-mt-b-600 bg-transparent)
   `,
   /** 淡色 */
   pale: `
-  c-ctx-c-gray-600 b-ctx-c-gray bg-transparent
-  hover:(c-ctx-c-mt b-ctx-c-mt bg-ctx-c-mt/20)
-  active:(c-ctx-c-mt-600 b-ctx-c-mt-600 bg-ctx-c-mt/30)
+  c-ctx-c-gray-600 bg-transparent
+  hover:(c-ctx-c-mt-c b-ctx-c-mt-b bg-ctx-c-mt-bg/20)
+  active:(c-ctx-c-mt-c-600 b-ctx-c-mt-b-600 bg-ctx-c-mt-bg/30)
   `,
   /** 柔和 */
   soft: `
-  c-ctx-c-mt b-ctx-c-mt bg-ctx-c-mt/20
-  hover:(c-ctx-c-mt-600! b-transparent! bg-ctx-c-mt/40!)
-  active:(c-ctx-c-mt-600! b-transparent! bg-ctx-c-mt/50!)
+  c-ctx-c-mt-c bg-ctx-c-mt-bg/20
+  hover:(c-ctx-c-mt-c-600! b-transparent! bg-ctx-c-mt-bg/40!)
+  active:(c-ctx-c-mt-c-600! b-transparent! bg-ctx-c-mt-bg/50!)
   `,
   /** 亮色 */
   bright: `
-  c-ctx-c-mt b-ctx-c-mt bg-ctx-c-mt/20
-  hover:(c-white b-ctx-c-mt bg-ctx-c-mt)
-  active:(c-white b-ctx-c-mt-600 bg-ctx-c-mt-600)
+  c-ctx-c-mt-c bg-ctx-c-mt-bg/20
+  hover:(c-white b-ctx-c-mt-b bg-ctx-c-mt-bg)
+  active:(c-white b-ctx-c-mt-b-600 bg-ctx-c-mt-bg-600)
   `,
   /** 深色 */
   deep: `
-  c-white b-ctx-c-mt bg-ctx-c-mt
-  hover:(c-white b-ctx-c-mt-400 bg-ctx-c-mt-400)
-  active:(c-white b-ctx-c-mt-600 bg-ctx-c-mt-600)
+  c-white b-ctx-c-mt-b bg-ctx-c-mt-bg
+  hover:(c-white b-ctx-c-mt-b-400 bg-ctx-c-mt-bg-400)
+  active:(c-white b-ctx-c-mt-b-600 bg-ctx-c-mt-bg-600)
+  `,
+  /** 文字按钮 */
+  text: `
+  ctx-c-mt-bg_gray-300 c-ctx-c-mt-c! b-none
   `,
 };
 
