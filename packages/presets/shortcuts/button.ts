@@ -5,7 +5,7 @@ const buttonPreset = {
   /** 默认样式 */
   default: 'btn-ctx btn-common btn-gap btn-transition btn-md btn-ghost dark:ctx-r-y',
   /** ctx */
-  ctx: 'ctx-c-gray_gray-500 ctx-c-mt_primary ctx-c-mt-c_ctx-c-mt ctx-c-mt-b_ctx-c-mt ctx-c-mt-bg_ctx-c-mt',
+  ctx: 'ctx-c-gray_gray-500 ctx-c-mt_primary ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt ctx-c-bg_ctx-c-mt',
   /** 通用 */
   common: 'b-1 b-solid cursor-pointer',
   /** 间距 */
@@ -23,36 +23,36 @@ const buttonPreset = {
   /** 幽灵（空背景） */
   ghost: `
   c-ctx-c-gray-600 bg-transparent
-  hover:(c-ctx-c-mt-c b-ctx-c-mt-b bg-transparent)
-  active:(c-ctx-c-mt-c-600 b-ctx-c-mt-b-600 bg-transparent)
+  hover:(c-ctx-c-c b-ctx-c-b bg-transparent)
+  active:(c-ctx-c-c-600 b-ctx-c-b-600 bg-transparent)
   `,
   /** 淡色 */
   pale: `
   c-ctx-c-gray-600 bg-transparent
-  hover:(c-ctx-c-mt-c b-ctx-c-mt-b bg-ctx-c-mt-bg/20)
-  active:(c-ctx-c-mt-c-600 b-ctx-c-mt-b-600 bg-ctx-c-mt-bg/30)
+  hover:(c-ctx-c-c b-ctx-c-b bg-ctx-c-bg/20)
+  active:(c-ctx-c-c-600 b-ctx-c-b-600 bg-ctx-c-bg/30)
   `,
   /** 柔和 */
   soft: `
-  c-ctx-c-mt-c bg-ctx-c-mt-bg/20
-  hover:(c-ctx-c-mt-c-600! b-transparent! bg-ctx-c-mt-bg/40!)
-  active:(c-ctx-c-mt-c-600! b-transparent! bg-ctx-c-mt-bg/50!)
+  c-ctx-c-c bg-ctx-c-bg/20
+  hover:(c-ctx-c-c-600! b-transparent! bg-ctx-c-bg/40!)
+  active:(c-ctx-c-c-600! b-transparent! bg-ctx-c-bg/50!)
   `,
   /** 亮色 */
   bright: `
-  c-ctx-c-mt-c bg-ctx-c-mt-bg/20
-  hover:(c-white b-ctx-c-mt-b bg-ctx-c-mt-bg)
-  active:(c-white b-ctx-c-mt-b-600 bg-ctx-c-mt-bg-600)
+  c-ctx-c-c bg-ctx-c-bg/20
+  hover:(c-white b-ctx-c-b bg-ctx-c-bg)
+  active:(c-white b-ctx-c-b-600 bg-ctx-c-bg-600)
   `,
   /** 深色 */
   deep: `
-  c-white b-ctx-c-mt-b bg-ctx-c-mt-bg
-  hover:(c-white b-ctx-c-mt-b-400 bg-ctx-c-mt-bg-400)
-  active:(c-white b-ctx-c-mt-b-600 bg-ctx-c-mt-bg-600)
+  c-white b-ctx-c-b bg-ctx-c-bg
+  hover:(c-white b-ctx-c-b-400 bg-ctx-c-bg-400)
+  active:(c-white b-ctx-c-b-600 bg-ctx-c-bg-600)
   `,
   /** 文字按钮 */
   text: `
-  ctx-c-mt-bg_gray-300 c-ctx-c-mt-c! b-none
+  ctx-c-bg_gray-300 c-ctx-c-c! b-none
   `,
 };
 
