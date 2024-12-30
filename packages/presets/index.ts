@@ -6,11 +6,18 @@ import { preflights } from './preflights';
 import { shortcuts } from './shortcuts';
 
 export const presetMortiseTenon = definePreset<PresetMtOptions, Theme>((options) => {
+  const resolvedOptions: PresetMtOptions = Object.assign(
+    {
+      reverseLightness: true,
+      color: '#3451b2',
+    },
+    options,
+  );
   return {
     name: 'mortise-tenon-preset',
     presets: [presetCtx()],
-    shortcuts: shortcuts(options),
-    theme: { colors: { ...themeColors({ primary: options?.color || '#3451b2' }) } },
+    shortcuts: shortcuts(resolvedOptions),
+    theme: { colors: { ...themeColors({ primary: resolvedOptions.color! }) } },
     preflights,
   };
 });

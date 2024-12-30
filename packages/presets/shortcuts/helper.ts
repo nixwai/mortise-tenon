@@ -20,7 +20,10 @@ export function resolveCustomShortcut(
   return [
     [
       new RegExp(`^${pName}$`),
-      () => [buttonClasses.default],
+      () => [
+        options?.reverseLightness ? 'dark:ctx-r-y' : '',
+        buttonClasses.default,
+      ],
     ],
     [
       new RegExp(`^${pName}-(.+)$`),

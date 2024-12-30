@@ -18,6 +18,11 @@ export interface PresetMtOptions {
    */
   prefix?: string
   /**
+   * 暗黑模式时是否反转亮度
+   * @default true
+   */
+  reverseLightness?: boolean
+  /**
    * 自定义预设
    */
   custom?: OptionsCustom

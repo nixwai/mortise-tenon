@@ -12,6 +12,11 @@ export interface PresetMtOptions {
    */
   prefix?: string
   /**
+   * 暗黑模式时是否反转亮度
+   * @default true
+   */
+  reverseLightness?: boolean
+  /**
    * 自定义预设
    */
   custom?: OptionsCustom
@@ -49,6 +54,10 @@ export default defineConfig({
   </button>
 </template>
 ```
+
+## reverseLightness
+
+暗黑模式时是否反转亮度，默认为`true`。启用时预设UI将添加`dark:ctx-r-y`来反转颜色的明亮。
 
 ## custom
 
