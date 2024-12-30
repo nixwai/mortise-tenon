@@ -26,6 +26,10 @@
 
 <demo vue="presets/button/text.vue"/>
 
+## 禁用
+
+<demo vue="presets/button/disabled.vue"/>
+
 ## 更多
 
 <demo vue="presets/button/border.vue"/>

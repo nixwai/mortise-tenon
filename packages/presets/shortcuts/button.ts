@@ -25,33 +25,41 @@ const buttonPreset = {
   c-ctx-c-gray-600 bg-transparent
   hover:(c-ctx-c-c b-ctx-c-b bg-transparent)
   active:(c-ctx-c-c-600 b-ctx-c-b-600 bg-transparent)
+  disabled:(c-ctx-c-gray-400! b-ctx-c-gray-400! bg-transparent!)
   `,
   /** 淡色 */
   pale: `
   c-ctx-c-gray-600 bg-transparent
   hover:(c-ctx-c-c b-ctx-c-b bg-ctx-c-bg/20)
   active:(c-ctx-c-c-600 b-ctx-c-b-600 bg-ctx-c-bg/30)
+  disabled:(c-ctx-c-gray-400! b-ctx-c-gray-400! bg-transparent!)
   `,
   /** 柔和 */
   soft: `
   c-ctx-c-c bg-ctx-c-bg/20
-  hover:(c-ctx-c-c-600! b-transparent! bg-ctx-c-bg/40!)
-  active:(c-ctx-c-c-600! b-transparent! bg-ctx-c-bg/50!)
+  hover:(c-ctx-c-c-600 b-transparent bg-ctx-c-bg/40)
+  active:(c-ctx-c-c-600 b-transparent bg-ctx-c-bg/50)
+  disabled:(c-ctx-c-c-300! b-ctx-c-b-300! bg-ctx-c-bg-300/20!)
   `,
   /** 亮色 */
   bright: `
   c-ctx-c-c bg-ctx-c-bg/20
-  hover:(c-white b-ctx-c-b bg-ctx-c-bg)
-  active:(c-white b-ctx-c-b-600 bg-ctx-c-bg-600)
+  hover:(ctx-c-c_white c-ctx-c-c b-ctx-c-b bg-ctx-c-bg)
+  active:(c-ctx-c-c b-ctx-c-b-600 bg-ctx-c-bg-600)
+  disabled:(ctx-c-c_ctx-c-mt! c-ctx-c-c-300! b-ctx-c-b-300! bg-ctx-c-bg-300/20!)
   `,
   /** 深色 */
   deep: `
-  c-white b-ctx-c-b bg-ctx-c-bg
-  hover:(c-white b-ctx-c-b-400 bg-ctx-c-bg-400)
-  active:(c-white b-ctx-c-b-600 bg-ctx-c-bg-600)
+  ctx-c-c_white c-ctx-c-c b-transparent bg-ctx-c-bg
+  hover:(c-ctx-c-c b-transparent bg-ctx-c-bg-400)
+  active:(c-ctx-c-c b-transparent bg-ctx-c-bg-600)
+  disabled:(c-ctx-c-c-300! b-transparent! bg-ctx-c-bg-300!)
   `,
   /** 文字按钮 */
-  text: `ctx-c-bg_gray-300 c-ctx-c-c! b-none`,
+  text: `
+  ctx-c-bg_gray-300 ctx-c-c_ctx-c-mt b-none
+  hover:(ctx-c-c_ctx-c-mt)
+  `,
 };
 
 export type ButtonPreset = keyof typeof buttonPreset;
