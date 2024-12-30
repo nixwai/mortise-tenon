@@ -5,7 +5,7 @@ const buttonPreset = {
   /** 默认样式 */
   default: 'btn-ctx btn-common btn-gap btn-transition btn-md btn-ghost dark:ctx-r-y',
   /** ctx */
-  ctx: 'ctx-c-gray_gray-500 ctx-c-mt_primary ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt ctx-c-bg_ctx-c-mt',
+  ctx: 'ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt ctx-c-bg_ctx-c-mt',
   /** 通用 */
   common: 'b-1 b-solid cursor-pointer',
   /** 间距 */
@@ -51,9 +51,7 @@ const buttonPreset = {
   active:(c-white b-ctx-c-b-600 bg-ctx-c-bg-600)
   `,
   /** 文字按钮 */
-  text: `
-  ctx-c-bg_gray-300 c-ctx-c-c! b-none
-  `,
+  text: `ctx-c-bg_gray-300 c-ctx-c-c! b-none`,
 };
 
 export type ButtonPreset = keyof typeof buttonPreset;
