@@ -3,13 +3,13 @@ import { resolveCustomShortcut } from './helper.ts';
 
 const buttonPreset = {
   /** 默认样式 */
-  default: 'mt-btn-ctx mt-btn-common mt-btn-gap mt-btn-transition mt-btn-md mt-btn-ghost',
+  default: 'pmt-btn-ctx pmt-btn-common pmt-btn-gap pmt-btn-transition pmt-btn-md pmt-btn-ghost',
   /** ctx */
   ctx: 'ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt ctx-c-bg_ctx-c-mt',
   /** 通用 */
   common: 'b-1 b-solid cursor-pointer',
   /** 间距 */
-  gap: '[&+.mt-btn]:(ml-3)',
+  gap: '[&+.pmt-btn]:(ml-3)',
   /** 过渡动画 */
   transition: 'transition-all duration-200',
   /** 小小按钮 */

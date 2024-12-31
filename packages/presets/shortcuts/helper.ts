@@ -42,8 +42,8 @@ function transformShortcuts(shortcuts: PresetShortcuts, name: keyof OptionsCusto
     let classes = ([] as ShortcutValue[]).concat(v);
     if (k !== 'default') {
       // 提升下非默认设置的优先级
-      if (!defaultClasses.includes(`mt-${name}-${k}`)) {
-        classes = classes.map(item => typeof item === 'string' ? `[&.mt-${name}]:(${item})` : item);
+      if (!defaultClasses.includes(`pmt-${name}-${k}`)) {
+        classes = classes.map(item => typeof item === 'string' ? `[&.pmt-${name}]:(${item})` : item);
       }
     }
     return [k, classes];
@@ -55,7 +55,7 @@ function addPrefix(shortcuts: Record<string, ShortcutValue[]>, prefix = '') {
   return Object.fromEntries(Object.entries(shortcuts).map(([k, v]) => {
     const prefixV = v.map((item) => {
       if (typeof item === 'string') {
-        item = ` ${item}`.replaceAll(/([\s.])mt-/g, `$1${prefix}`); // 前缀修改
+        item = ` ${item}`.replaceAll(/([\s.])pmt-/g, `$1${prefix}`); // 前缀修改
       }
       return item;
     });
