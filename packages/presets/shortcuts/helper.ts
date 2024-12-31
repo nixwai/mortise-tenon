@@ -10,9 +10,9 @@ export function resolveCustomShortcut(
 ): CustomShortcut[] {
   const p = options?.prefix || '';
   const pName = p + name;
-
-  const mtShortcuts = transformShortcuts(name, presetShortcuts);
-  const newShortcuts = addPrefix(mtShortcuts, p);
+  const asShortcuts = Object.assign(presetShortcuts, options?.custom?.[name] || {});
+  const transfShortcuts = transformShortcuts(asShortcuts, name);
+  const mtShortcuts = addPrefix(transfShortcuts, p);
 
   return [
     [
@@ -20,14 +20,14 @@ export function resolveCustomShortcut(
       () => [
         'disabled:(cursor-not-allowed)', // 禁用状态
         options?.reverseLightness ? 'dark:ctx-r-y' : '', // 是否暗黑模式反转颜色
-        ...(newShortcuts.default || []),
+        ...(mtShortcuts.default || []),
       ],
     ],
     [
       new RegExp(`^${pName}-(.+)$`),
       ([, s]) => {
-        if (s in newShortcuts) {
-          return newShortcuts[s];
+        if (s in mtShortcuts) {
+          return mtShortcuts[s];
         }
         return [`[&.${pName}]:(ctx-c-mt_${s})`];
       },
@@ -36,7 +36,7 @@ export function resolveCustomShortcut(
 }
 
 /** 转化快捷方式 */
-function transformShortcuts(name: keyof OptionsCustom, shortcuts: PresetShortcuts) {
+function transformShortcuts(shortcuts: PresetShortcuts, name: keyof OptionsCustom) {
   const defaultClasses = JSON.stringify(shortcuts.default) || '';
   return Object.fromEntries(Object.entries(shortcuts).map(([k, v]) => {
     let classes = ([] as ShortcutValue[]).concat(v);

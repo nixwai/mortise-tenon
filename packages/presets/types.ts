@@ -30,5 +30,5 @@ export interface PresetMtOptions {
 }
 
 export interface OptionsCustom {
-  btn?: Record<ButtonPreset, ShortcutValue | ShortcutValue[]>
+  btn?: Partial<Record<ButtonPreset, ShortcutValue | ShortcutValue[]>>
 }
