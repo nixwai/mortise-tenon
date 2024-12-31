@@ -8,6 +8,7 @@ import { shortcuts } from './shortcuts';
 export const presetMortiseTenon = definePreset<PresetMtOptions, Theme>((options) => {
   const resolvedOptions: PresetMtOptions = Object.assign(
     {
+      prefix: '',
       reverseLightness: true,
       color: '#3451b2',
     },

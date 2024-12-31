@@ -1,45 +1,64 @@
 import type { ShortcutValue } from 'unocss';
 import type { CustomShortcut, OptionsCustom, PresetMtOptions } from '../types';
 
+type PresetShortcuts = Record<string, ShortcutValue | ShortcutValue[]>;
+
 export function resolveCustomShortcut(
   name: keyof OptionsCustom,
-  presetShortcuts: Record<string, ShortcutValue>,
+  presetShortcuts: PresetShortcuts,
   options?: PresetMtOptions,
 ): CustomShortcut[] {
   const p = options?.prefix || '';
   const pName = p + name;
 
-  let buttonClasses: Record<string, ShortcutValue> = Object.assign(presetShortcuts, options?.custom?.[name]);
-  buttonClasses = Object.fromEntries(Object.entries(buttonClasses).map(([k, v]) => {
-    if (typeof v === 'string') {
-      v = ` ${v}`.replaceAll(new RegExp(`\s${name}-`, 'g'), `\s${pName}-`);
-    }
-    return [k, v];
-  }));
+  const mtShortcuts = transformShortcuts(name, presetShortcuts);
+  const newShortcuts = addPrefix(mtShortcuts, p);
 
   return [
     [
       new RegExp(`^${pName}$`),
       () => [
         'disabled:(cursor-not-allowed)', // 禁用状态
-        options?.reverseLightness ? 'dark:ctx-r-y' : '',
-        buttonClasses.default,
+        options?.reverseLightness ? 'dark:ctx-r-y' : '', // 是否暗黑模式反转颜色
+        ...(newShortcuts.default || []),
       ],
     ],
     [
       new RegExp(`^${pName}-(.+)$`),
       ([, s]) => {
-        if (s in buttonClasses) {
-          if (typeof buttonClasses.default === 'string' && buttonClasses.default.includes(`${pName}-${s}`)) {
-            return [buttonClasses[s]];
-          }
-          else {
-            // 提升下非默认的优先级
-            return [`[&.${pName}]:(${buttonClasses[s]})`];
-          }
+        if (s in newShortcuts) {
+          return newShortcuts[s];
         }
         return [`[&.${pName}]:(ctx-c-mt_${s})`];
       },
     ],
   ];
+}
+
+/** 转化快捷方式 */
+function transformShortcuts(name: keyof OptionsCustom, shortcuts: PresetShortcuts) {
+  const defaultClasses = JSON.stringify(shortcuts.default) || '';
+  return Object.fromEntries(Object.entries(shortcuts).map(([k, v]) => {
+    let classes = ([] as ShortcutValue[]).concat(v);
+    if (k !== 'default') {
+      // 提升下非默认设置的优先级
+      if (!defaultClasses.includes(`mt-${name}-${k}`)) {
+        classes = classes.map(item => typeof item === 'string' ? `[&.mt-${name}]:(${item})` : item);
+      }
+    }
+    return [k, classes];
+  }));
+}
+
+/** 添加配置的前缀 */
+function addPrefix(shortcuts: Record<string, ShortcutValue[]>, prefix = '') {
+  return Object.fromEntries(Object.entries(shortcuts).map(([k, v]) => {
+    const prefixV = v.map((item) => {
+      if (typeof item === 'string') {
+        item = ` ${item}`.replaceAll(/([\s.])mt-/g, `$1${prefix}`); // 前缀修改
+      }
+      return item;
+    });
+    return [k, prefixV];
+  }));
 }

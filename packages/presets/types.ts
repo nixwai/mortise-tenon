@@ -14,7 +14,8 @@ export interface PresetMtOptions {
    */
   color?: string
   /**
-   * 类名前缀
+   * 类名前缀（默认没有前缀）
+   * @default ''
    */
   prefix?: string
   /**
@@ -29,5 +30,5 @@ export interface PresetMtOptions {
 }
 
 export interface OptionsCustom {
-  btn?: Record<ButtonPreset, ShortcutValue>
+  btn?: Record<ButtonPreset, ShortcutValue | ShortcutValue[]>
 }
