@@ -11,13 +11,12 @@ export function resolveCustomShortcut(
   const p = options?.prefix || '';
   const pName = p + name;
   const asShortcuts = Object.assign(presetShortcuts, options?.custom?.[name] || {});
-  const transfShortcuts = transformShortcuts(asShortcuts, name);
-  const mtShortcuts = addPrefix(transfShortcuts, p);
+  const mtShortcuts = transformShortcuts(asShortcuts, p);
 
   return [
     [
-      new RegExp(`^${pName}$`),
-      () => [
+      pName,
+      [
         'disabled:(cursor-not-allowed)', // 禁用状态
         options?.reverseLightness ? 'dark:ctx-r-y' : '', // 是否暗黑模式反转颜色
         ...(mtShortcuts.default || []),
@@ -31,29 +30,16 @@ export function resolveCustomShortcut(
         }
         return [`[&.${pName}]:(ctx-c-mt_${s})`];
       },
+      { layer: 'components' },
     ],
   ];
 }
 
 /** 转化快捷方式 */
-function transformShortcuts(shortcuts: PresetShortcuts, name: keyof OptionsCustom) {
-  const defaultClasses = JSON.stringify(shortcuts.default) || '';
+function transformShortcuts(shortcuts: PresetShortcuts, prefix = '') {
   return Object.fromEntries(Object.entries(shortcuts).map(([k, v]) => {
-    let classes = ([] as ShortcutValue[]).concat(v);
-    if (k !== 'default') {
-      // 提升下非默认设置的优先级
-      if (!defaultClasses.includes(`pmt-${name}-${k}`)) {
-        classes = classes.map(item => typeof item === 'string' ? `[&.pmt-${name}]:(${item})` : item);
-      }
-    }
-    return [k, classes];
-  }));
-}
-
-/** 添加配置的前缀 */
-function addPrefix(shortcuts: Record<string, ShortcutValue[]>, prefix = '') {
-  return Object.fromEntries(Object.entries(shortcuts).map(([k, v]) => {
-    const prefixV = v.map((item) => {
+    const classes = ([] as ShortcutValue[]).concat(v);
+    const prefixV = classes.map((item) => {
       if (typeof item === 'string') {
         item = ` ${item}`.replaceAll(/([\s.])pmt-/g, `$1${prefix}`); // 前缀修改
       }
