@@ -45,8 +45,8 @@ const buttonPreset = {
   'bright': `
   c-ctx-c-c bg-ctx-c-bg/20
   not-disabled:hover:(ctx-c-c_white c-ctx-c-c b-ctx-c-b bg-ctx-c-bg)
-  not-disabled:active:(c-ctx-c-c b-ctx-c-b-600 bg-ctx-c-bg-600)
-  disabled:(ctx-c-c_ctx-c-mt c-ctx-c-c-300 b-ctx-c-b-300 bg-ctx-c-bg-300/20)
+  not-disabled:active:(ctx-c-c_white c-ctx-c-c b-ctx-c-b-600 bg-ctx-c-bg-600)
+  disabled:(c-ctx-c-c-300 b-ctx-c-b-300 bg-ctx-c-bg-300/20)
   `,
   /** 深色 */
   'deep': `
@@ -59,6 +59,7 @@ const buttonPreset = {
   'text': `
   ctx-c-bg_gray-300 ctx-c-c_ctx-c-mt b-none
   not-disabled:hover:(ctx-c-c_ctx-c-mt)
+  not-disabled:active:(ctx-c-c_ctx-c-mt)
   `,
   /** 按钮组 */
   'group': `
@@ -73,6 +74,13 @@ const buttonPreset = {
   [&>.pmt-btn]:(m-0)
   not-first:[&>.pmt-btn]:(rounded-t-0 b-t-0) 
   not-last:[&>.pmt-btn]:(rounded-b-0)
+  `,
+  /** 水波纹 */
+  'ripple': `
+  pos-relative overflow-hidden ctx-c-ripple_light dark:(ctx-c-ripple_dark)
+  after:hover:(content-empty pos-absolute pos-inset-0 m-auto rounded-full aspect-square)
+  after:hover:(transition-all op-0 duration-600 transform-scale-120 bg-ctx-c-ripple)
+  not-disabled:after:active:(op-60 duration-0 transform-scale-0)
   `,
 };
 

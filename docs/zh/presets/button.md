@@ -34,6 +34,12 @@
 
 <demo vue="presets/button/group.vue"/>
 
+## 水波纹
+
+点击按钮时，会显示一个水波纹效果。
+
+<demo vue="presets/button/ripple.vue"/>
+
 ## 更多
 
 <demo vue="presets/button/border.vue"/>
