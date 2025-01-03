@@ -58,6 +58,7 @@ const buttonPreset = {
   /** 文字按钮 */
   'text': `
   ctx-c-bg_gray-300 ctx-c-c_ctx-c-mt b-none
+  not-disabled:before:(shadow-black/0)
   not-disabled:hover:(ctx-c-c_ctx-c-mt)
   not-disabled:active:(ctx-c-c_ctx-c-mt)
   `,
@@ -75,12 +76,20 @@ const buttonPreset = {
   not-first:[&>.pmt-btn]:(rounded-t-0 b-t-0) 
   not-last:[&>.pmt-btn]:(rounded-b-0)
   `,
-  /** 水波纹 */
+  /** 波纹效果 */
   'ripple': `
-  pos-relative overflow-hidden ctx-c-ripple_light dark:(ctx-c-ripple_dark)
-  after:hover:(content-empty pos-absolute pos-inset-0 m-auto rounded-full aspect-square)
-  after:hover:(transition-all op-0 duration-600 transform-scale-120 bg-ctx-c-ripple)
+  not-disabled:(pos-relative)
+  not-disabled:after:(content-empty pos-absolute pos-inset-0 m-auto rounded-full aspect-square)
+  not-disabled:after:(transition-all op-0 duration-600 transform-scale-100 bg-light dark:bg-dark)
   not-disabled:after:active:(op-60 duration-0 transform-scale-0)
+  `,
+  /** 波浪效果 */
+  'wave': `
+  not-disabled:(pos-relative)
+  not-disabled:before:(content-empty pos-absolute pos-inset-0 m-auto rounded-inherit aspect-inherit)
+  not-disabled:before:(shadow-ctx-c-b animate-wave animate-iteration-0)
+  not-disabled:before:focus:(animate-iteration-1)
+  not-disabled:before:active:(animate-unset)
   `,
 };
 

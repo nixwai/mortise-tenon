@@ -1,9 +1,10 @@
 import type { Theme } from '@unocss/preset-mini';
 import type { PresetMtOptions } from './types';
 import { definePreset } from 'unocss';
-import { presetCtx, themeColors } from 'unocss-preset-ctx';
+import { presetCtx } from 'unocss-preset-ctx';
 import { preflights } from './preflights';
 import { shortcuts } from './shortcuts';
+import { theme } from './theme';
 
 export const presetMortiseTenon = definePreset<PresetMtOptions, Theme>((options) => {
   const resolvedOptions: PresetMtOptions = Object.assign(
@@ -18,7 +19,7 @@ export const presetMortiseTenon = definePreset<PresetMtOptions, Theme>((options)
     name: 'mortise-tenon-preset',
     presets: [presetCtx()],
     shortcuts: shortcuts(resolvedOptions),
-    theme: { colors: { ...themeColors({ primary: resolvedOptions.color! }) } },
+    theme: theme(resolvedOptions),
     preflights,
   };
 });
