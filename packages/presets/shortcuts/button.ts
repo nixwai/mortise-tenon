@@ -79,15 +79,17 @@ const buttonPreset = {
   /** 波纹效果 */
   'ripple': `
   not-disabled:(pos-relative)
-  not-disabled:after:(content-empty pos-absolute pos-inset-0 m-auto rounded-full aspect-square)
-  not-disabled:after:(transition-all op-0 duration-600 transform-scale-100 bg-light dark:bg-dark)
-  not-disabled:after:active:(op-60 duration-0 transform-scale-0)
+  not-disabled:after:(content-empty pos-absolute pos-inset-0 rounded-inherit aspect-inherit)
+  not-disabled:after:(bg-gradient-radial bg-gradient-to-op-0 bg-gradient-[circle,var(--un-gradient-to),transparent_0])
+  not-disabled:after:(bg-gradient-to-light dark:bg-gradient-to-dark animate-ripple animate-iteration-0)
+  not-disabled:after:focus:(animate-iteration-1)
+  not-disabled:after:active:(animate-unset)
   `,
   /** 波浪效果 */
   'wave': `
   not-disabled:(pos-relative)
-  not-disabled:before:(content-empty pos-absolute pos-inset-0 m-auto rounded-inherit aspect-inherit)
-  not-disabled:before:(shadow-ctx-c-b animate-wave animate-iteration-0)
+  not-disabled:before:(content-empty pos-absolute pos-inset-0 rounded-inherit aspect-inherit)
+  not-disabled:before:(shadow-none shadow-ctx-c-b animate-wave animate-iteration-0)
   not-disabled:before:focus:(animate-iteration-1)
   not-disabled:before:active:(animate-unset)
   `,
