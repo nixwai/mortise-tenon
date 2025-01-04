@@ -23,44 +23,44 @@ const buttonPreset = {
   /** 幽灵（空背景） */
   'ghost': `
   c-ctx-c-gray-600 bg-transparent
-  not-disabled:hover:(c-ctx-c-c b-ctx-c-b bg-transparent)
-  not-disabled:active:(c-ctx-c-c-600 b-ctx-c-b-600 bg-transparent)
+  enabled:hover:(c-ctx-c-c b-ctx-c-b bg-transparent)
+  enabled:active:(c-ctx-c-c-600 b-ctx-c-b-600 bg-transparent)
   disabled:(c-ctx-c-gray-400 b-ctx-c-gray-400 bg-transparent)
   `,
   /** 淡色 */
   'pale': `
   c-ctx-c-gray-600 bg-transparent
-  not-disabled:hover:(c-ctx-c-c b-ctx-c-b bg-ctx-c-bg/20)
-  not-disabled:active:(c-ctx-c-c-600 b-ctx-c-b-600 bg-ctx-c-bg/30)
+  enabled:hover:(c-ctx-c-c b-ctx-c-b bg-ctx-c-bg/20)
+  enabled:active:(c-ctx-c-c-600 b-ctx-c-b-600 bg-ctx-c-bg/30)
   disabled:(c-ctx-c-gray-400 b-ctx-c-gray-400 bg-transparent)
   `,
   /** 柔和 */
   'soft': `
   c-ctx-c-c bg-ctx-c-bg/20
-  not-disabled:hover:(c-ctx-c-c-600 b-transparent bg-ctx-c-bg/40)
-  not-disabled:active:(c-ctx-c-c-600 b-transparent bg-ctx-c-bg/50)
+  enabled:hover:(c-ctx-c-c-600 b-transparent bg-ctx-c-bg/40)
+  enabled:active:(c-ctx-c-c-600 b-transparent bg-ctx-c-bg/50)
   disabled:(c-ctx-c-c-300 b-ctx-c-b-300 bg-ctx-c-bg-300/20)
   `,
   /** 亮色 */
   'bright': `
   c-ctx-c-c bg-ctx-c-bg/20
-  not-disabled:hover:(ctx-c-c_white c-ctx-c-c b-ctx-c-b bg-ctx-c-bg)
-  not-disabled:active:(ctx-c-c_white c-ctx-c-c b-ctx-c-b-600 bg-ctx-c-bg-600)
+  enabled:hover:(ctx-c-c_white c-ctx-c-c b-ctx-c-b bg-ctx-c-bg)
+  enabled:active:(ctx-c-c_white c-ctx-c-c b-ctx-c-b-600 bg-ctx-c-bg-600)
   disabled:(c-ctx-c-c-300 b-ctx-c-b-300 bg-ctx-c-bg-300/20)
   `,
   /** 深色 */
   'deep': `
   ctx-c-c_white c-ctx-c-c b-transparent bg-ctx-c-bg
-  not-disabled:hover:(c-ctx-c-c b-transparent bg-ctx-c-bg-400)
-  not-disabled:active:(c-ctx-c-c b-transparent bg-ctx-c-bg-600)
+  enabled:hover:(c-ctx-c-c b-transparent bg-ctx-c-bg-400)
+  enabled:active:(c-ctx-c-c b-transparent bg-ctx-c-bg-600)
   disabled:(c-ctx-c-c-300 b-transparent bg-ctx-c-bg-300)
   `,
   /** 文字按钮 */
   'text': `
   ctx-c-bg_gray-300 ctx-c-c_ctx-c-mt b-none
-  not-disabled:before:(shadow-black/0)
-  not-disabled:hover:(ctx-c-c_ctx-c-mt)
-  not-disabled:active:(ctx-c-c_ctx-c-mt)
+  enabled:before:(shadow-black/0)
+  enabled:hover:(ctx-c-c_ctx-c-mt)
+  enabled:active:(ctx-c-c_ctx-c-mt)
   `,
   /** 按钮组 */
   'group': `
@@ -78,21 +78,29 @@ const buttonPreset = {
   `,
   /** 波纹效果 */
   'ripple': `
-  not-disabled:(pos-relative)
-  not-disabled:after:(content-empty pos-absolute pos-inset-0 rounded-inherit aspect-inherit)
-  not-disabled:after:(bg-gradient-radial bg-gradient-to-op-0 bg-gradient-[circle,var(--un-gradient-to),transparent_0])
-  not-disabled:after:(bg-gradient-to-light dark:bg-gradient-to-dark animate-ripple animate-iteration-0)
-  not-disabled:after:focus:(animate-iteration-1)
-  not-disabled:after:active:(animate-unset)
+  enabled:(pos-relative)
+  enabled:after:(content-empty pos-absolute pos-inset-0 rounded-inherit aspect-inherit)
+  enabled:after:(bg-gradient-radial bg-gradient-to-op-0 bg-gradient-[circle,var(--un-gradient-to),transparent_0])
+  enabled:after:(bg-gradient-to-light dark:bg-gradient-to-dark animate-ripple animate-iteration-0)
+  enabled:after:focus:(animate-iteration-1)
+  enabled:after:active:(animate-unset)
   `,
   /** 波浪效果 */
   'wave': `
-  not-disabled:(pos-relative)
-  not-disabled:before:(content-empty pos-absolute pos-inset-0 rounded-inherit aspect-inherit)
-  not-disabled:before:(shadow-none shadow-ctx-c-b animate-wave animate-iteration-0)
-  not-disabled:before:focus:(animate-iteration-1)
-  not-disabled:before:active:(animate-unset)
+  enabled:(pos-relative)
+  enabled:after:(content-empty pos-absolute pos-inset-0 rounded-inherit aspect-inherit)
+  enabled:after:(transition-[box-shadow,opacity] transition-ease-[cubic-bezier(0.08,0.82,0.17,1)])
+  enabled:after:(shadow-ctx-c-b op-0 shadow-[0_0_0_6px] duration-[0.4s,1.5s])
+  enabled:after:active:(op-30 shadow-[0_0_0_0] duration-0)
+  enabled:after:not-hover:active:(op-0)
   `,
+  /** 波纹效果 */
+  // 'ripple': `
+  // enabled:(pos-relative)
+  // enabled:after:(content-empty pos-absolute pos-inset-0 m-auto rounded-full aspect-square)
+  // enabled:after:(transition-all op-0 duration-600 transform-scale-100 bg-light dark:bg-dark)
+  // enabled:after:active:(op-60 duration-0 transform-scale-0)
+  // `,
 };
 
 export type ButtonPreset = keyof typeof buttonPreset;
