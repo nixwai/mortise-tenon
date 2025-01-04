@@ -80,27 +80,22 @@ const buttonPreset = {
   'ripple': `
   enabled:(pos-relative)
   enabled:after:(content-empty pos-absolute pos-inset-0 rounded-inherit aspect-inherit)
-  enabled:after:(bg-gradient-radial bg-gradient-to-op-0 bg-gradient-[circle,var(--un-gradient-to),transparent_0])
-  enabled:after:(bg-gradient-to-light dark:bg-gradient-to-dark animate-ripple animate-iteration-0)
-  enabled:after:focus:(animate-iteration-1)
-  enabled:after:active:(animate-unset)
+  enabled:after:(bg-center bg-no-repeat bg-gradient-radial)
+  enabled:after:(bg-gradient-[circle,#F6F6F6_25%,transparent_0] dark:bg-gradient-[circle,#222222_25%,transparent_0])
+  enabled:after:(property-[bg-size,opacity] transition-ease-out)
+  enabled:after:(op-0 bg-[size:400%] duration-[0.6s,1s])
+  enabled:after:active:(op-50 bg-[size:0%] duration-0)
+  enabled:after:not-hover:active:(op-0 bg-[size:400%])
   `,
   /** 波浪效果 */
   'wave': `
   enabled:(pos-relative)
-  enabled:after:(content-empty pos-absolute pos-inset-0 rounded-inherit aspect-inherit)
-  enabled:after:(transition-[box-shadow,opacity] transition-ease-[cubic-bezier(0.08,0.82,0.17,1)])
-  enabled:after:(shadow-ctx-c-b op-0 shadow-[0_0_0_6px] duration-[0.4s,1.5s])
-  enabled:after:active:(op-30 shadow-[0_0_0_0] duration-0)
-  enabled:after:not-hover:active:(op-0)
+  enabled:before:(content-empty pos-absolute pos-inset-0 rounded-inherit aspect-inherit)
+  enabled:before:(property-[box-shadow,opacity] transition-ease-[cubic-bezier(0.08,0.82,0.17,1)])
+  enabled:before:(shadow-ctx-c-b op-0 shadow-[0_0_0_6px] duration-[0.4s,1.5s])
+  enabled:before:active:(op-30 shadow-[0_0_0_0] duration-0)
+  enabled:before:not-hover:active:(op-0 shadow-[0_0_0_6px])
   `,
-  /** 波纹效果 */
-  // 'ripple': `
-  // enabled:(pos-relative)
-  // enabled:after:(content-empty pos-absolute pos-inset-0 m-auto rounded-full aspect-square)
-  // enabled:after:(transition-all op-0 duration-600 transform-scale-100 bg-light dark:bg-dark)
-  // enabled:after:active:(op-60 duration-0 transform-scale-0)
-  // `,
 };
 
 export type ButtonPreset = keyof typeof buttonPreset;
