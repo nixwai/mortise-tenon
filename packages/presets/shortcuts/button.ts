@@ -23,44 +23,44 @@ const buttonPreset = {
   /** 幽灵（空背景） */
   'ghost': `
   c-ctx-c-gray-600 bg-transparent
-  enabled:hover:(c-ctx-c-c b-ctx-c-b bg-transparent)
-  enabled:active:(c-ctx-c-c-600 b-ctx-c-b-600 bg-transparent)
+  hover:enabled:(c-ctx-c-c b-ctx-c-b bg-transparent)
+  active:enabled:(c-ctx-c-c-600 b-ctx-c-b-600 bg-transparent)
   disabled:(c-ctx-c-gray-400 b-ctx-c-gray-400 bg-transparent)
   `,
   /** 淡色 */
   'pale': `
   c-ctx-c-gray-600 bg-transparent
-  enabled:hover:(c-ctx-c-c b-ctx-c-b bg-ctx-c-bg/20)
-  enabled:active:(c-ctx-c-c-600 b-ctx-c-b-600 bg-ctx-c-bg/30)
+  hover:enabled:(c-ctx-c-c b-ctx-c-b bg-ctx-c-bg/20)
+  active:enabled:(c-ctx-c-c-600 b-ctx-c-b-600 bg-ctx-c-bg/30)
   disabled:(c-ctx-c-gray-400 b-ctx-c-gray-400 bg-transparent)
   `,
   /** 柔和 */
   'soft': `
   c-ctx-c-c bg-ctx-c-bg/20
-  enabled:hover:(c-ctx-c-c-600 b-transparent bg-ctx-c-bg/40)
-  enabled:active:(c-ctx-c-c-600 b-transparent bg-ctx-c-bg/50)
+  hover:enabled:(c-ctx-c-c-600 b-transparent bg-ctx-c-bg/40)
+  active:enabled:(c-ctx-c-c-600 b-transparent bg-ctx-c-bg/50)
   disabled:(c-ctx-c-c-300 b-ctx-c-b-300 bg-ctx-c-bg-300/20)
   `,
   /** 亮色 */
   'bright': `
   c-ctx-c-c bg-ctx-c-bg/20
-  enabled:hover:(ctx-c-c_white c-ctx-c-c b-ctx-c-b bg-ctx-c-bg)
-  enabled:active:(ctx-c-c_white c-ctx-c-c b-ctx-c-b-600 bg-ctx-c-bg-600)
+  hover:enabled:(ctx-c-c_white c-ctx-c-c b-ctx-c-b bg-ctx-c-bg)
+  active:enabled:(ctx-c-c_white c-ctx-c-c b-ctx-c-b-600 bg-ctx-c-bg-600)
   disabled:(c-ctx-c-c-300 b-ctx-c-b-300 bg-ctx-c-bg-300/20)
   `,
   /** 深色 */
   'deep': `
   ctx-c-c_white c-ctx-c-c b-transparent bg-ctx-c-bg
-  enabled:hover:(c-ctx-c-c b-transparent bg-ctx-c-bg-400)
-  enabled:active:(c-ctx-c-c b-transparent bg-ctx-c-bg-600)
+  hover:enabled:(c-ctx-c-c b-transparent bg-ctx-c-bg-400)
+  active:enabled:(c-ctx-c-c b-transparent bg-ctx-c-bg-600)
   disabled:(c-ctx-c-c-300 b-transparent bg-ctx-c-bg-300)
   `,
   /** 文字按钮 */
   'text': `
   ctx-c-bg_gray-300 ctx-c-c_ctx-c-mt b-none
   enabled:before:(shadow-black/0)
-  enabled:hover:(ctx-c-c_ctx-c-mt)
-  enabled:active:(ctx-c-c_ctx-c-mt)
+  hover:enabled:(ctx-c-c_ctx-c-mt)
+  active:enabled:(ctx-c-c_ctx-c-mt)
   `,
   /** 按钮组 */
   'group': `
@@ -96,6 +96,7 @@ const buttonPreset = {
   enabled:before:active:(op-30 shadow-[0_0_0_0] duration-0)
   enabled:before:not-hover:active:(op-0 shadow-[0_0_0_6px])
   `,
+  /** 立体效果 */
 };
 
 export type ButtonPreset = keyof typeof buttonPreset;
