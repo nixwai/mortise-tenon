@@ -14,9 +14,15 @@ export interface PresetMtOptions {
    */
   color?: string
   /**
-   * 类名前缀
+   * 类名前缀（默认没有前缀）
+   * @default ''
    */
   prefix?: string
+  /**
+   * 暗黑模式时是否反转亮度
+   * @default true
+   */
+  reverseLightness?: boolean
   /**
    * 自定义预设
    */
@@ -24,5 +30,5 @@ export interface PresetMtOptions {
 }
 
 export interface OptionsCustom {
-  btn?: Record<ButtonPreset, ShortcutValue>
+  btn?: Partial<Record<ButtonPreset, ShortcutValue | ShortcutValue[]>>
 }

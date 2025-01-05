@@ -14,20 +14,6 @@
     </button>
   </div>
   <div class="mt-4">
-    <button class="btn b-none shadow">
-      ghost
-    </button>
-    <button class="btn b-none shadow btn-pale">
-      pale
-    </button>
-    <button class="btn b-none shadow btn-soft">
-      soft
-    </button>
-    <button class="btn b-none shadow btn-bright">
-      bright
-    </button>
-  </div>
-  <div class="mt-4">
     <button class="btn b-dashed">
       ghost
     </button>
