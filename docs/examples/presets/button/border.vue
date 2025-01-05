@@ -28,20 +28,6 @@
     </button>
   </div>
   <div class="mt-4">
-    <button class="btn b-dashed">
-      ghost
-    </button>
-    <button class="btn b-dashed btn-pale">
-      pale
-    </button>
-    <button class="btn b-dashed btn-soft">
-      soft
-    </button>
-    <button class="btn b-dashed btn-bright">
-      bright
-    </button>
-  </div>
-  <div class="mt-4">
     <button class="btn rounded-full">
       ghost
     </button>

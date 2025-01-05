@@ -46,6 +46,10 @@
 
 <demo vue="presets/button/wave.vue"/>
 
+## 立体效果
+
+<demo vue="presets/button/3d.vue"/>
+
 ## 更多
 
 <demo vue="presets/button/border.vue"/>
