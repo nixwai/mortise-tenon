@@ -79,7 +79,7 @@ const buttonPreset = {
   not-first:[&>.pmt-btn]:(rounded-l-0 b-l-0) 
   not-last:[&>.pmt-btn]:(rounded-r-0)
   `,
-  /** 按钮组 */
+  /** 按钮组（纵向） */
   'group-v': `
   flex flex-col justify-center
   [&>.pmt-btn]:(m-0)
