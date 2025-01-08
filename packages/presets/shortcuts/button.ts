@@ -3,7 +3,9 @@ import { resolveCustomShortcut } from './helper.ts';
 
 const buttonPreset = {
   /** 默认样式 */
-  'default': 'pmt-btn-common pmt-btn-gap pmt-btn-transition pmt-btn-md pmt-btn-ghost',
+  'default': 'pmt-btn-ctx pmt-btn-common pmt-btn-gap pmt-btn-transition pmt-btn-md pmt-btn-ghost',
+  /** ctx */
+  'ctx': 'c-ctx-c-c b-ctx-c-b bg-ctx-c-bg',
   /** 通用 */
   'common': 'b-1 b-solid cursor-pointer',
   /** 间距 */
@@ -20,53 +22,48 @@ const buttonPreset = {
   'lg': 'min-w-10.5 px-3 py-2 text-base font-500 rounded-1.5',
   /** 幽灵（空背景） */
   'ghost': `
-  ctx-c-c_gray-500 ctx-c-b_gray-500 ctx-c-bg_black
-  c-ctx-c-c-600 b-ctx-c-b-600 bg-ctx-c-bg/0
-  hover:enabled:(ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt ctx-c-bg_black)
-  hover:enabled:(c-ctx-c-c b-ctx-c-b bg-ctx-c-bg/0)
-  active:enabled:(ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt ctx-c-bg_black)
-  active:enabled:(c-ctx-c-c-600 b-ctx-c-b-600 bg-ctx-c-bg/0)
-  disabled:(c-ctx-c-c-400 b-ctx-c-b-400 bg-ctx-c-bg/0)
+  ctx-c-c_ctx-c-gray-600 ctx-c-b_ctx-c-gray-600 ctx-c-bg_ctx-c-gray bg-op-0
+  hover:enabled:(ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt ctx-c-bg_ctx-c-gray)
+  hover:enabled:(bg-op-0 ctx-l-bg-500)
+  active:enabled:(ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt-600 ctx-c-bg_ctx-c-gray)
+  active:enabled:(bg-op-0 ctx-l-c-600 ctx-l-bg-600)
+  disabled:(ctx-l-c-300 ctx-l-b-300 ctx-l-bg-300)
   `,
   /** 淡色 */
   'pale': `
-  ctx-c-c_gray-500 ctx-c-b_gray-500 ctx-c-bg_black
-  c-ctx-c-c-600 b-ctx-c-b-600 bg-ctx-c-bg/0
+  ctx-c-c_ctx-c-gray-600 ctx-c-b_ctx-c-gray-600 ctx-c-bg_ctx-c-gray bg-op-0
   hover:enabled:(ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt ctx-c-bg_ctx-c-mt)
-  hover:enabled:(c-ctx-c-c b-ctx-c-b bg-ctx-c-bg/20)
-  active:enabled:(ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt ctx-c-bg_ctx-c-mt)
-  active:enabled:(c-ctx-c-c-600 b-ctx-c-b-600 bg-ctx-c-bg/30)
-  disabled:(c-ctx-c-c-400 b-ctx-c-b-400 bg-ctx-c-bg/0)
+  hover:enabled:(bg-op-20 ctx-l-bg-500)
+  active:enabled:(ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt-600 ctx-c-bg_ctx-c-mt)
+  active:enabled:(bg-op-30 ctx-l-c-600 ctx-l-bg-600)
+  disabled:(ctx-l-c-300 ctx-l-b-300 ctx-l-bg-300)
   `,
   /** 柔和 */
   'soft': `
-  ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt ctx-c-bg_ctx-c-mt
-  c-ctx-c-c b-ctx-c-b bg-ctx-c-bg/20
-  hover:enabled:(ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt ctx-c-bg_ctx-c-mt)
-  hover:enabled:(c-ctx-c-c-600 b-ctx-c-b/0 bg-ctx-c-bg/40)
-  active:enabled:(ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt ctx-c-bg_ctx-c-mt)
-  active:enabled:(c-ctx-c-c-600 b-ctx-c-b/0 bg-ctx-c-bg/50)
-  disabled:(c-ctx-c-c-300 b-ctx-c-b-300 bg-ctx-c-bg-300/20)
+  ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt ctx-c-bg_ctx-c-mt bg-op-20
+  hover:enabled:(ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt/0 ctx-c-bg_ctx-c-mt)
+  hover:enabled:(bg-op-40 ctx-l-bg-500)
+  active:enabled:(ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt-600/0 ctx-c-bg_ctx-c-mt)
+  active:enabled:(bg-op-50 ctx-l-c-600 ctx-l-bg-600)
+  disabled:(ctx-l-c-300 ctx-l-b-300 ctx-l-bg-300)
   `,
   /** 亮色 */
   'bright': `
-  ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt ctx-c-bg_ctx-c-mt
-  c-ctx-c-c b-ctx-c-b bg-ctx-c-bg/20
+  ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt ctx-c-bg_ctx-c-mt bg-op-20
   hover:enabled:(ctx-c-c_white ctx-c-b_ctx-c-mt ctx-c-bg_ctx-c-mt)
-  hover:enabled:(c-ctx-c-c b-ctx-c-b bg-ctx-c-bg)
-  active:enabled:(ctx-c-c_white ctx-c-b_ctx-c-mt ctx-c-bg_ctx-c-mt)
-  active:enabled:(c-ctx-c-c b-ctx-c-b-600 bg-ctx-c-bg-600)
-  disabled:(c-ctx-c-c-300 b-ctx-c-b-300 bg-ctx-c-bg-300/20)
+  hover:enabled:(bg-op-100 ctx-l-bg-500)
+  active:enabled:(ctx-c-c_white ctx-c-b_ctx-c-mt-600 ctx-c-bg_ctx-c-mt)
+  active:enabled:(bg-op-100 ctx-l-c-600 ctx-l-bg-600)
+  disabled:(ctx-l-c-300 ctx-l-b-300 ctx-l-bg-300)
   `,
   /** 深色 */
   'deep': `
-  ctx-c-c_white ctx-c-b_ctx-c-mt ctx-c-bg_ctx-c-mt
-  c-ctx-c-c b-ctx-c-b/0 bg-ctx-c-bg
-  hover:enabled:(ctx-c-c_white ctx-c-b_ctx-c-mt ctx-c-bg_ctx-c-mt-400)
-  hover:enabled:(c-ctx-c-c b-ctx-c-b/0 bg-ctx-c-bg)
-  active:enabled:(ctx-c-c_white ctx-c-b_ctx-c-mt ctx-c-bg_ctx-c-mt)
-  active:enabled:(c-ctx-c-c b-ctx-c-b/0 bg-ctx-c-bg-600)
-  disabled:(c-ctx-c-c-300 b-ctx-c-b/0 bg-ctx-c-bg-300)
+  ctx-c-c_white ctx-c-b_ctx-c-mt/0 ctx-c-bg_ctx-c-mt bg-op-100
+  hover:enabled:(ctx-c-c_white ctx-c-b_ctx-c-mt/0 ctx-c-bg_ctx-c-mt)
+  hover:enabled:(bg-op-100 ctx-l-c-400 ctx-l-b-400 ctx-l-bg-400)
+  active:enabled:(ctx-c-c_white ctx-c-b_ctx-c-mt-600/0 ctx-c-bg_ctx-c-mt)
+  active:enabled:(bg-op-100 ctx-l-c-600 ctx-l-bg-600)
+  disabled:(ctx-l-c-300 ctx-l-b-300 ctx-l-bg-300)
   `,
   /** 文字按钮 */
   'text': `
@@ -105,7 +102,7 @@ const buttonPreset = {
   enabled:(
     pos-relative
     before:(
-      content-empty pos-absolute pos-inset-0 rounded-inherit aspect-inherit shadow-ctx-c-b
+      content-empty pos-absolute pos-inset-0 rounded-inherit aspect-inherit shadow-ctx-c-b/100
       property-[box-shadow,opacity] transition-ease-[cubic-bezier(0.08,0.82,0.17,1)]
       op-0 shadow-[0_0_0_0.375rem] duration-[0.4s,1.5s]
       active:(op-30 shadow-[0_0_0_0] duration-0)
@@ -119,14 +116,15 @@ const buttonPreset = {
     enabled:active:translate-y-0.5
     before:(
       w-full h-[calc(100%_+_0.25rem)] content-empty pos-absolute bottom-0 pos-inset-0 rounded-inherit aspect-inherit pmt-btn-transition
-      shadow-[0.0625rem_0.1875rem_0.3125rem] ctx-c-shadow_gray-500 shadow-ctx-c-shadow-350
+      shadow-[0.0625rem_0.1875rem_0.3125rem] shadow-ctx-c-gray-350
     )
     before:enabled:active:(h-[calc(100%_+_0.125rem)] shadow-[0.0625rem_0.0625rem_0.1875rem])
     after:(
       w-full h-full content-empty pos-absolute bottom-0 pos-inset-0 rounded-inherit aspect-inherit pmt-btn-transition
-      shadow-[0_0.25rem_0_0] shadow-op-[calc(var(--un-bg-opacity)_+_0.1)]! shadow-ctx-c-bg-600
-      disabled:shadow-ctx-c-bg-300
+      shadow-[0_0.25rem_0_0] shadow-op-[calc(var(--un-bg-opacity)_+_0.1)] shadow-ctx-c-bg ctx-l-bg-600
+      disabled:shadow-ctx-c-bg-350
     )
+    after:enabled:hover:(shadow-op-[calc(var(--un-bg-opacity)_+_0.2)] ctx-l-bg-450)
     after:enabled:active:(shadow-[0_0.125rem_0_0])
   `,
 };

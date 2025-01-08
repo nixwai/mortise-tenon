@@ -34,6 +34,23 @@
     </button>
   </div>
   <div class="mt-4">
+    <button class="btn btn-3d btn-text">
+      ghost
+    </button>
+    <button class="btn btn-3d btn-text btn-pale">
+      pale
+    </button>
+    <button class="btn btn-3d btn-text btn-soft">
+      soft
+    </button>
+    <button class="btn btn-3d btn-text btn-bright">
+      bright
+    </button>
+    <button class="btn btn-3d btn-text btn-deep">
+      deep
+    </button>
+  </div>
+  <div class="mt-4">
     <button class="btn btn-3d rounded-full aspect-square">
       g
     </button>
