@@ -60,7 +60,7 @@ const buttonPreset = {
   'deep': `
   ctx-c-c_white ctx-c-b_ctx-c-mt/0 ctx-c-bg_ctx-c-mt bg-op-100
   hover:enabled:(ctx-c-c_white ctx-c-b_ctx-c-mt/0 ctx-c-bg_ctx-c-mt)
-  hover:enabled:(bg-op-100 ctx-l-c-400 ctx-l-b-400 ctx-l-bg-400)
+  hover:enabled:(bg-op-100 ctx-l-bg-400)
   active:enabled:(ctx-c-c_white ctx-c-b_ctx-c-mt-600/0 ctx-c-bg_ctx-c-mt)
   active:enabled:(bg-op-100 ctx-l-c-600 ctx-l-bg-600)
   disabled:(ctx-l-c-300 ctx-l-b-300 ctx-l-bg-300)
@@ -121,10 +121,8 @@ const buttonPreset = {
     before:enabled:active:(h-[calc(100%_+_0.125rem)] shadow-[0.0625rem_0.0625rem_0.1875rem])
     after:(
       w-full h-full content-empty pos-absolute bottom-0 pos-inset-0 rounded-inherit aspect-inherit pmt-btn-transition
-      shadow-[0_0.25rem_0_0] shadow-op-[calc(var(--un-bg-opacity)_+_0.1)] shadow-ctx-c-bg ctx-l-bg-600
-      disabled:shadow-ctx-c-bg-350
+      shadow-[0_0.25rem_0_0] shadow-op-[calc(var(--un-bg-opacity)_+_0.1)] ctx-c-shadow_ctx-c-bg shadow-ctx-c-shadow ctx-l-shadow_ctx-l-bg-600
     )
-    after:enabled:hover:(shadow-op-[calc(var(--un-bg-opacity)_+_0.2)] ctx-l-bg-450)
     after:enabled:active:(shadow-[0_0.125rem_0_0])
   `,
 };
