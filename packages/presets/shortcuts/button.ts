@@ -22,52 +22,53 @@ const buttonPreset = {
   'lg': 'min-w-10.5 px-3 py-2 text-base font-500 rounded-1.5',
   /** 幽灵（空背景） */
   'ghost': `
-  ctx-c-c_ctx-c-gray-600 ctx-c-b_ctx-c-gray-600 ctx-c-bg_ctx-c-gray bg-op-0
-  hover:enabled:(ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt ctx-c-bg_ctx-c-gray)
-  hover:enabled:(bg-op-0 ctx-l-bg-500)
-  active:enabled:(ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt-600 ctx-c-bg_ctx-c-gray)
-  active:enabled:(bg-op-0 ctx-l-c-600 ctx-l-bg-600)
+  ctx-c-c_ctx-c-gray-600 ctx-c-b_ctx-c-gray-600 ctx-c-bg_ctx-c-gray/0
+  hover:enabled:(ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt ctx-c-bg_ctx-c-gray/0)
+  hover:enabled:(ctx-l-bg-500)
+  active:enabled:(ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt-600 ctx-c-bg_ctx-c-gray/0)
+  active:enabled:(ctx-l-c-600 ctx-l-bg-600)
   disabled:(ctx-l-c-300 ctx-l-b-300 ctx-l-bg-300)
   `,
   /** 淡色 */
   'pale': `
-  ctx-c-c_ctx-c-gray-600 ctx-c-b_ctx-c-gray-600 ctx-c-bg_ctx-c-gray bg-op-0
-  hover:enabled:(ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt ctx-c-bg_ctx-c-mt)
-  hover:enabled:(bg-op-20 ctx-l-bg-500)
-  active:enabled:(ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt-600 ctx-c-bg_ctx-c-mt)
-  active:enabled:(bg-op-30 ctx-l-c-600 ctx-l-bg-600)
+  ctx-c-c_ctx-c-gray-600 ctx-c-b_ctx-c-gray-600 ctx-c-bg_ctx-c-gray/0
+  hover:enabled:(ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt ctx-c-bg_ctx-c-mt/20)
+  hover:enabled:(ctx-l-bg-500)
+  active:enabled:(ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt-600 ctx-c-bg_ctx-c-mt/30)
+  active:enabled:(ctx-l-c-600 ctx-l-bg-600)
   disabled:(ctx-l-c-300 ctx-l-b-300 ctx-l-bg-300)
   `,
   /** 柔和 */
   'soft': `
-  ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt ctx-c-bg_ctx-c-mt bg-op-20
-  hover:enabled:(ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt/0 ctx-c-bg_ctx-c-mt)
-  hover:enabled:(bg-op-40 ctx-l-bg-500)
-  active:enabled:(ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt-600/0 ctx-c-bg_ctx-c-mt)
-  active:enabled:(bg-op-50 ctx-l-c-600 ctx-l-bg-600)
+  ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt ctx-c-bg_ctx-c-mt/20
+  hover:enabled:(ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt/0 ctx-c-bg_ctx-c-mt/40)
+  hover:enabled:(ctx-l-bg-500)
+  active:enabled:(ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt-600/0 ctx-c-bg_ctx-c-mt/50)
+  active:enabled:(ctx-l-c-600 ctx-l-bg-600)
   disabled:(ctx-l-c-300 ctx-l-b-300 ctx-l-bg-300)
   `,
   /** 亮色 */
   'bright': `
-  ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt ctx-c-bg_ctx-c-mt bg-op-20
-  hover:enabled:(ctx-c-c_white ctx-c-b_ctx-c-mt ctx-c-bg_ctx-c-mt)
-  hover:enabled:(bg-op-100 ctx-l-bg-500)
-  active:enabled:(ctx-c-c_white ctx-c-b_ctx-c-mt-600 ctx-c-bg_ctx-c-mt)
-  active:enabled:(bg-op-100 ctx-l-c-600 ctx-l-bg-600)
+  ctx-c-c_ctx-c-mt ctx-c-b_ctx-c-mt ctx-c-bg_ctx-c-mt/20
+  hover:enabled:(ctx-c-c_white ctx-c-b_ctx-c-mt ctx-c-bg_ctx-c-mt/100)
+  hover:enabled:(ctx-l-bg-500)
+  active:enabled:(ctx-c-c_white ctx-c-b_ctx-c-mt-600 ctx-c-bg_ctx-c-mt/100)
+  active:enabled:(ctx-l-c-600 ctx-l-bg-600)
   disabled:(ctx-l-c-300 ctx-l-b-300 ctx-l-bg-300)
   `,
   /** 深色 */
   'deep': `
-  ctx-c-c_white ctx-c-b_ctx-c-mt/0 ctx-c-bg_ctx-c-mt bg-op-100
-  hover:enabled:(ctx-c-c_white ctx-c-b_ctx-c-mt/0 ctx-c-bg_ctx-c-mt)
-  hover:enabled:(bg-op-100 ctx-l-bg-400)
-  active:enabled:(ctx-c-c_white ctx-c-b_ctx-c-mt-600/0 ctx-c-bg_ctx-c-mt)
-  active:enabled:(bg-op-100 ctx-l-c-600 ctx-l-bg-600)
+  ctx-c-c_white ctx-c-b_ctx-c-mt/0 ctx-c-bg_ctx-c-mt/100
+  hover:enabled:(ctx-c-c_white ctx-c-b_ctx-c-mt/0 ctx-c-bg_ctx-c-mt/100)
+  hover:enabled:(ctx-l-bg-400)
+  active:enabled:(ctx-c-c_white ctx-c-b_ctx-c-mt-600/0 ctx-c-bg_ctx-c-mt/100)
+  active:enabled:(ctx-l-c-600 ctx-l-bg-600)
   disabled:(ctx-l-c-300 ctx-l-b-300 ctx-l-bg-300)
   `,
   /** 文字按钮 */
   'text': `
-  ctx-c-c_ctx-c-mt! ctx-c-b_black/0! ctx-c-bg_gray-300!
+  ctx-c-c_ctx-c-mt! ctx-c-b_black/0!
+  bg-ctx-c-gray bg-op-[var(--ctx-c-bg-op)] ctx-l-gray_ctx-l-bg-130
   `,
   /** 按钮组 */
   'group': `
@@ -121,7 +122,7 @@ const buttonPreset = {
     before:enabled:active:(h-[calc(100%_+_0.125rem)] shadow-[0.0625rem_0.0625rem_0.1875rem])
     after:(
       w-full h-full content-empty pos-absolute bottom-0 pos-inset-0 rounded-inherit aspect-inherit pmt-btn-transition
-      shadow-[0_0.25rem_0_0] shadow-op-[calc(var(--un-bg-opacity)_+_0.1)] ctx-c-shadow_ctx-c-bg shadow-ctx-c-shadow ctx-l-shadow_ctx-l-bg-600
+      shadow-[0_0.25rem_0_0] ctx-c-shadow_ctx-c-bg shadow-ctx-c-shadow ctx-l-shadow_ctx-l-bg-600 shadow-op-[calc(var(--ctx--bg-opacity)_+_0.1)]
     )
     after:enabled:active:(shadow-[0_0.125rem_0_0])
   `,

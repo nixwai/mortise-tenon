@@ -4,7 +4,7 @@
   "description": "unocss preset",
   "main": "index.ts",
   "devDependencies": {
-    "@unocss/preset-mini": "^0.65.4",
-    "unocss-preset-ctx": "^0.3.4"
+    "@unocss/preset-mini": "^65.4.0",
+    "unocss-preset-ctx": "^0.3.5"
   }
 }
