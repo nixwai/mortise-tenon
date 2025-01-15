@@ -188,8 +188,8 @@ importers:
         specifier: ^65.4.0
         version: 65.4.0
       unocss-preset-ctx:
-        specifier: ^0.3.5
-        version: 0.3.5
+        specifier: 0.4.0-beta.1
+        version: 0.4.0-beta.1
 
   packages/utils:
     dependencies:
@@ -4798,8 +4798,8 @@ packages:
   unocss-preset-ctx@0.2.7:
     resolution: {integrity: sha512-+D/GWE/ev608iHe6wohILnOanXOQdI2DknPkUBHmmSJKls25yLbeHYCc1UEV/w9n0MZkiF4RHucW7unvLszJcQ==}
 
-  unocss-preset-ctx@0.3.5:
-    resolution: {integrity: sha512-6qQbFr3Bncv4btcPrW7Gh1np+PmLCsbjV5ICtSZBuYTDlNEPCb3EVIKw4TvIeFRo6L5Ugu2fIg4P05nPZohemw==}
+  unocss-preset-ctx@0.4.0-beta.1:
+    resolution: {integrity: sha512-GG2OJVklzh0FHJYKi/rPzqghCihrk0/Tsi6C2ioFI9HVyv7+99wBF7pgK60ePRiEk7HJQ+I+bVE5fsLcVV8bSw==}
 
   unocss@65.4.0:
     resolution: {integrity: sha512-1JO+9YHJ1n0xedOUWfgjJfQXentoxtMuXqR9+kB8I8A9N+PC73KX2YOMjvTia+NSrnSgnCmmnnsUWQqnJZR9fA==}
@@ -10172,7 +10172,7 @@ snapshots:
       '@unocss/preset-mini': 0.65.4
       magic-color: 2.0.0
 
-  unocss-preset-ctx@0.3.5:
+  unocss-preset-ctx@0.4.0-beta.1:
     dependencies:
       '@unocss/preset-mini': 0.65.4
       magic-color: 2.0.0
