@@ -1,6 +1,6 @@
 import { spawn } from 'node:child_process';
 
-export async function run(command: string, path: string) {
+export async function run(command: string, path = '.') {
   // cmd表示命令，args代表参数，如 rm -rf  rm就是命令，-rf就为参数
   const [cmd, ...args] = command.split(' ');
   return new Promise((resolve) => {
