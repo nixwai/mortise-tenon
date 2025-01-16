@@ -9,10 +9,13 @@
     "design:publish": "gulp -f build-design/gulp-publish.ts",
     "use:release": "gulp -f build-use/gulp-release.ts",
     "use:build": "gulp -f build-use/gulp-build.ts",
+    "use:publish": "gulp -f build-use/gulp-publish.ts",
     "tool:release": "gulp -f build-tool/gulp-release.ts",
     "tool:build": "gulp -f build-tool/gulp-build.ts",
+    "tool:publish": "gulp -f build-tool/gulp-publish.ts",
     "preset:release": "gulp -f build-preset/gulp-release.ts",
-    "preset:build": "gulp -f build-preset/gulp-build.ts"
+    "preset:build": "gulp -f build-preset/gulp-build.ts",
+    "preset:publish": "gulp -f build-preset/gulp-publish.ts"
   },
   "publishConfig": {
     "access": "public"
