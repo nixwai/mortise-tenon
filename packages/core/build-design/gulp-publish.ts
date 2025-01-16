@@ -1,9 +1,8 @@
-import { parallel, series } from 'gulp';
+import { series } from 'gulp';
 import { designOutput } from '../paths';
 import { run } from '../tasks';
 
 export default series(
-  parallel(
-    () => run('release-it', designOutput),
-  ),
+  () => run('npm config set registry https://registry.npmjs.org'),
+  () => run('pnpm publish', designOutput),
 );

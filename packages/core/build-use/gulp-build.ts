@@ -5,6 +5,6 @@ import { delPath, run } from '../tasks';
 export default series(
   () => delPath(useOutput),
   parallel(
-    () => run('vite build', '.'),
+    () => run('vite build'),
   ),
 );
