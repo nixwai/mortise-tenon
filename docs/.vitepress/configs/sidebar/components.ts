@@ -25,6 +25,10 @@ export const componentsSidebar: DefaultTheme.SidebarItem[] = [
         text: 'table 表格',
         link: '/zh/components/table.md',
       },
+      {
+        text: 'component-neo 动态组件',
+        link: '/zh/components/component-neo.md',
+      },
     ],
   },
 ];
