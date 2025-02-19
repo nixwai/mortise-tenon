@@ -1,11 +1,7 @@
-import type { App } from 'vue';
+import { install } from '../utils/install';
 import Expand from './src/expand.vue';
 
-Expand.install = (app: App): void => {
-  if (Expand.name) {
-    app.component(Expand.name, Expand);
-  }
-};
+Expand.install = install(Expand);
 
 export const MtExpand = Expand;
 
