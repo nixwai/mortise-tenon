@@ -1,23 +1,19 @@
-import type { DefineComponent } from 'vue';
-import { createGlobalState } from '@vueuse/core';
-import { ref } from 'vue';
-import { useComponentRef } from './use-component-ref';
+import type { VNode } from 'vue';
+import type { InstanceComponent } from '../component-neo';
+import { useComponentState } from './use-component-state';
 
-export type ComponentInstance = DefineComponent<any, any, any, any, any, any, any, any>;
-export type ImportComponentFn = () => Promise<{ default: ComponentInstance }>;
-export type ComponentType = ComponentInstance | ImportComponentFn;
+export type ImportComponentFn = () => Promise<Record<string, any>>;
+export type DynamicComponent = InstanceComponent | ImportComponentFn | VNode;
 
-export const useComponentNeo = createGlobalState(() => {
-  const componentNeoMap = ref<Record<string, { comp: ComponentInstance, attrs: Record<string, any> }>>({});
-
-  const { getComponentRef } = useComponentRef();
+export function useComponentNeo(uniqueId = '') {
+  const { setComponent, getComponent } = useComponentState();
 
   /**
    * 切换渲染的组件
    * @param comp 组件，可传入两种类型，1.直接函数格式返回import动态导入 2.组件类型
    * @param attrs 组件属性，可使用`on事件`方式添加事件方法，属性支持Ref类型进行绑定以实现动态变化, 支持通过{'vModal:value': value}方式双向绑定数据
    */
-  async function onToggleComponent(comp: ComponentType, attrs?: Record<string, any>, key = '') {
+  async function toggleComponent(comp: DynamicComponent, attrs?: Record<string, any>) {
     try {
       const renderComp = typeof comp === 'function' ? (await (comp as ImportComponentFn)()).default : comp;
       const renderAttrs: Record<string, any> = {};
@@ -37,19 +33,15 @@ export const useComponentNeo = createGlobalState(() => {
           renderAttrs[key] = bindValue;
         }
       }
-      componentNeoMap.value[key] = {
-        comp: renderComp,
-        attrs: renderAttrs,
-      };
-      return getComponentRef(key);
+      setComponent(uniqueId, renderComp, renderAttrs);
+      return getComponent(uniqueId);
     }
     catch (e) {
       console.error(e);
     }
   }
   return {
-    componentNeoMap,
-    getComponentRef,
-    onToggleComponent,
+    getComponentRef: () => getComponent(uniqueId)?.Instance.value,
+    toggleComponent,
   };
-});
+};

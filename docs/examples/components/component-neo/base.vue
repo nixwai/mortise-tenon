@@ -7,8 +7,8 @@ const comp2 = h('div', 'World');
 
 const val = ref(true);
 
-function handleToggle() {
-  console.warn('已切换');
+function handleToggle(_name?: string, componentRef?: any) {
+  console.warn('已切换', componentRef);
 }
 </script>
 
