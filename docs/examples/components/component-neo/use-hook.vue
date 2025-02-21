@@ -5,7 +5,7 @@ import { h, ref } from 'vue';
 const comp1 = h('div', 'Hollo');
 const comp2 = h('div', 'World');
 
-const { getComponentRef, toggleComponent } = useComponentNeo('uniqueId');
+const { getComponentRef, toggleComponent } = useComponentNeo('uniqueId1');
 
 const val = ref(false);
 function handleClick() {
@@ -29,7 +29,7 @@ handleClick();
   <div>
     <button class="btn mb-2" @click="handleClick">
       切换组件
-    </button>、
-    <MtComponentNeo unique-id="uniqueId" @toggle-component="handleToggle" />、
+    </button>
+    <MtComponentNeo unique-id="uniqueId1" @toggle-component="handleToggle" />
   </div>
 </template>

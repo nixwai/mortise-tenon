@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { VNode } from 'vue';
 import type { ComponentNeoProps, InstanceComponent } from './component-neo';
-import { computed, nextTick, onBeforeUnmount, ref, shallowRef, unref, useAttrs, useSlots, watch } from 'vue';
+import { Comment, computed, h, nextTick, onBeforeUnmount, ref, shallowRef, unref, useAttrs, watch } from 'vue';
 import { useComponentState } from './hooks/use-component-state';
 
 defineOptions({ name: 'MtComponentNeo', inheritAttrs: false });
@@ -29,22 +29,7 @@ else {
   onBeforeUnmount(() => removeComponent(props.uniqueId));
 }
 
-const compSlots = useSlots();
 const compAttrs = useAttrs();
-
-const compInstance = computed(() => componentNeo.value || props.is);
-
-// 监听组件切换，触发回调
-watch(compInstance, async () => {
-  await nextTick();
-  if (typeof compInstance.value === 'object' && 'name' in compInstance.value) {
-    emit('toggleComponent', compInstance.value.name, componentRef.value);
-  }
-  else {
-    emit('toggleComponent', undefined, componentRef.value);
-  }
-});
-
 /** 结合注入的属性和公共属性 */
 const renderAttrs = computed(() => {
   const newAttrs: Record<string, any> = {};
@@ -57,14 +42,37 @@ const renderAttrs = computed(() => {
   return Object.assign(newAttrs, compAttrs);
 });
 
+const compInstance = computed(() => componentNeo.value || props.is);
+
+const compVNode = computed(() => {
+  if (!compInstance.value) {
+    return h(Comment, 'componentNeo is empty');
+  }
+  else {
+    return h(
+      compInstance.value,
+      { ...renderAttrs.value },
+    );
+  }
+});
+
+// 监听组件切换，触发回调
+watch(compInstance, async () => {
+  await nextTick();
+  if (typeof compInstance.value === 'object' && 'name' in compInstance.value) {
+    emit('toggleComponent', compInstance.value.name, componentRef.value);
+  }
+  else {
+    emit('toggleComponent', undefined, componentRef.value);
+  }
+});
+
 defineExpose({ componentRef });
 </script>
 
 <template>
-  <component :is="compInstance" ref="componentRef" v-bind="renderAttrs">
-    <!-- 继承插槽 -->
-    <template v-for="(_index, name) in compSlots" #[name]="slotData">
-      <slot :name="name" v-bind="slotData || {}" />
-    </template>
-  </component>
+  <!-- eslint-disable-next-line vue/attribute-hyphenation -->
+  <slot :Component="compVNode" :attrs="renderAttrs">
+    <component :is="compVNode" ref="componentRef" v-bind="renderAttrs" />
+  </slot>
 </template>

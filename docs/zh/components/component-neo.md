@@ -16,6 +16,11 @@ vue内置组件component的扩展，提供了更丰富的切换方式，切换�
 
 <demo vue="components/component-neo/use-hook.vue"/>
 
+## KeepAlive
+组件并不能对直接通过[KeepAlive](https://cn.vuejs.org/guide/built-ins/keep-alive.html#keepalive)包裹方式进行缓存，为了实现这个目的，我们可以将 KeepAlive 组件放置在插槽内，同理也可如此实现[Transition](https://vuejs.org/guide/built-ins/transition.html)
+
+<demo vue="components/component-neo/keep-state.vue"/>
+
 ## 属性
 
 | 参数           | 说明                 | 类型    | 默认值 |
