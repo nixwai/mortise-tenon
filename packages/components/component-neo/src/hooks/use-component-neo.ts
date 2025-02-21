@@ -20,11 +20,11 @@ export function useComponentNeo(uniqueId = '') {
       for (let key in attrs) {
         const bindValue = attrs[key];
         // 兼容vModal
-        if (key.startsWith('vModal:')) {
-          key = key.replace('vModal:', '');
+        if (key.startsWith('vModel:')) {
+          key = key.replace('vModel:', '');
           renderAttrs[key] = bindValue;
           renderAttrs[`onUpdate:${key}`] = (value: any) => {
-            if (value in bindValue) {
+            if ('value' in bindValue) {
               bindValue.value = value;
             }
           };
