@@ -1,1 +1,0 @@
-import{a6 as o,a7 as n}from"./framework.CjGSnerP.js";function r(e){return o()?(n(e),!0):!1}const i=typeof window<"u"&&typeof document<"u";typeof WorkerGlobalScope<"u"&&globalThis instanceof WorkerGlobalScope;export{i,r as t};

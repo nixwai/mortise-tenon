@@ -1,0 +1,1 @@
+import{d as o,p as n,c as s,o as r,r as l,a as u,t as c}from"./framework.cvzX9Zjb.js";const v=o({name:"ExampleCount",__name:"count",setup(p){const e=n(0);return(a,t)=>(r(),s("div",{class:"cursor-pointer",onClick:t[0]||(t[0]=i=>e.value++)},[l(a.$slots,"count",{value:e.value},()=>[u(" 点击："+c(e.value),1)])]))}});export{v as default};
