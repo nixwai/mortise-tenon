@@ -80,7 +80,7 @@ vue内置组件component的扩展，提供了更丰富的切换方式，切换�
 
 | 插槽名  | 说明           | 作用域                                                       |
 | ------- | -------------- | ------------------------------------------------------------ |
-| default | 自定义组件内容 | Component:VNodal (节点)<br />compRef:Function (引用)<br />attrs:Record<string,any> (属性)<br />compName?:string (组件名)<br /> |
+| default | 自定义组件内容 | Component:VNode (引用节点)<br />compRef:Function (引用)<br />attrs:Record<string,any> (属性)<br />compName?:string (组件名)<br /> |
 
 ## 暴露
 

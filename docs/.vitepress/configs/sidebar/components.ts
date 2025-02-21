@@ -23,16 +23,16 @@ export const componentsSidebar: DefaultTheme.SidebarItem[] = [
     text: '功能',
     items: [
       {
+        text: 'ComponentNeo 动态组件',
+        link: '/zh/components/component-neo.md',
+      },
+      {
         text: 'Expand 折叠',
         link: '/zh/components/expand.md',
       },
       {
         text: 'Sort 排序',
         link: '/zh/components/sort.md',
-      },
-      {
-        text: 'ComponentNeo 动态组件',
-        link: '/zh/components/component-neo.md',
       },
     ],
   },
