@@ -57,7 +57,7 @@
     "happy-dom": "^16.8.1",
     "husky": "^9.1.7",
     "lint-staged": "^15.4.3",
-    "postcss": "^8.5.2",
+    "postcss": "^8.5.3",
     "postcss-html": "^1.8.0",
     "postcss-scss": "^4.0.9",
     "release-it": "^18.1.2",
