@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import type { VNode } from 'vue';
-import type { ComponentNeoProps, InstanceComponent } from './component-neo';
-import { Comment, computed, h, nextTick, onBeforeUnmount, ref, shallowRef, unref, useAttrs, watch } from 'vue';
+import type { ComponentNeoProps } from './component-neo';
+import { Comment, computed, h, nextTick, unref, useAttrs, watch } from 'vue';
 import { useComponentState } from './hooks/use-component-state';
 
 defineOptions({ name: 'MtComponentNeo', inheritAttrs: false });
@@ -15,19 +14,9 @@ const emit = defineEmits<{
   (e: 'toggleComponent', compName?: string, compRef?: any): void
 }>();
 
-const { getComponent, initComponent, removeComponent } = useComponentState();
-
-const componentRef = ref();
-const componentNeo = shallowRef<InstanceComponent | VNode>();
-const componentAttrs = ref<Record<string, any>>({});
-
-if (getComponent(props.uniqueId)) {
-  console.error('同一页面内不可同时存在相同uniqueId的组件！');
-}
-else {
-  initComponent({ Instance: componentRef, comp: componentNeo, attrs: componentAttrs }, props.uniqueId);
-  onBeforeUnmount(() => removeComponent(props.uniqueId));
-}
+const { initComponent } = useComponentState();
+const { componentRef, componentNeo, componentAttrs } = initComponent(props.uniqueId);
+const compRef = (el: Element) => componentRef.value = el;
 
 const compAttrs = useAttrs();
 /** 结合注入的属性和公共属性 */
@@ -72,7 +61,7 @@ defineExpose({ componentRef });
 
 <template>
   <!-- eslint-disable-next-line vue/attribute-hyphenation -->
-  <slot :Component="compVNode" :attrs="renderAttrs">
-    <component :is="compVNode" ref="componentRef" v-bind="renderAttrs" />
+  <slot :Component="compVNode" :compRef="compRef" :attrs="renderAttrs">
+    <component :is="compVNode" :ref="compRef" />
   </slot>
 </template>

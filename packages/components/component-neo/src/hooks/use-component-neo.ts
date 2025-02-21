@@ -1,5 +1,5 @@
-import type { VNode } from 'vue';
 import type { InstanceComponent } from '../component-neo';
+import { nextTick, type VNode } from 'vue';
 import { useComponentState } from './use-component-state';
 
 export type ImportComponentFn = () => Promise<Record<string, any>>;
@@ -34,7 +34,8 @@ export function useComponentNeo(uniqueId = '') {
         }
       }
       setComponent(uniqueId, renderComp, renderAttrs);
-      return getComponent(uniqueId);
+      await nextTick();
+      return getComponent(uniqueId)?.Instance.value;
     }
     catch (e) {
       console.error(e);

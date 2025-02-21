@@ -1,6 +1,6 @@
-import type { Ref, ShallowRef, VNode } from 'vue';
 import type { InstanceComponent } from '../component-neo';
 import { createGlobalState } from '@vueuse/core';
+import { onBeforeUnmount, ref, type Ref, shallowRef, type ShallowRef, type VNode } from 'vue';
 
 interface ComponentRefsType {
   /** 实例 */
@@ -18,36 +18,50 @@ export const useComponentState = createGlobalState(() => {
   /** 实例化后的组件 */
   const componentRefsMap = new Map<string, ComponentRefsType>();
   /** 初始化组件 */
-  function initComponent(componentRefs: ComponentRefsType, key = '') {
-    const bufferData = dataBufferMap.get(key);
+  function initComponent(uniqueId = '') {
+    let componentRefs = componentRefsMap.get(uniqueId);
+    if (!componentRefs) {
+      componentRefs = {
+        Instance: ref(),
+        comp: shallowRef<InstanceComponent | VNode>(),
+        attrs: ref<Record<string, any>>({}),
+      };
+      componentRefsMap.set(uniqueId, componentRefs);
+      onBeforeUnmount(() => removeComponent(uniqueId));
+    }
+    // 使用缓存数据初始化数据
+    const bufferData = dataBufferMap.get(uniqueId);
     if (bufferData) {
       componentRefs.comp.value = bufferData.comp;
       componentRefs.attrs.value = bufferData.attrs;
     }
-    componentRefsMap.set(key, componentRefs);
+
+    return {
+      componentRef: componentRefs.Instance,
+      componentNeo: componentRefs.comp,
+      componentAttrs: componentRefs.attrs,
+    };
   }
 
   /** 获取实例 */
-  function getComponent(key = '') {
-    return componentRefsMap.get(key);
+  function getComponent(uniqueId = '') {
+    return componentRefsMap.get(uniqueId);
   }
 
   /** 移除实例 */
-  function removeComponent(key = '') {
-    dataBufferMap.delete(key);
-    componentRefsMap.delete(key);
+  function removeComponent(uniqueId = '') {
+    dataBufferMap.delete(uniqueId);
+    componentRefsMap.delete(uniqueId);
   }
 
   /** 设置组件数据 */
-  function setComponent(key = '', comp: InstanceComponent | VNode, attrs: Record<string, any>) {
-    const componentRefs = getComponent(key);
+  function setComponent(uniqueId = '', comp: InstanceComponent | VNode, attrs: Record<string, any>) {
+    const componentRefs = getComponent(uniqueId);
     if (componentRefs) {
       componentRefs.comp.value = comp;
       componentRefs.attrs.value = attrs;
     }
-    else {
-      dataBufferMap.set(key, { comp, attrs });
-    }
+    dataBufferMap.set(uniqueId, { comp, attrs });
   }
 
   return { initComponent, setComponent, getComponent, removeComponent };

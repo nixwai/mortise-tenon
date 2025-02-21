@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-const count = ref(0);
+const value = ref(0);
 </script>
 
 <template>
-  <div class="cursor-pointer" @click="count++">
-    {{ count }}
+  <div class="cursor-pointer" @click="value++">
+    {{ value }}
   </div>
 </template>
