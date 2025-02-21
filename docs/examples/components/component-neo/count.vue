@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
+defineOptions({ name: 'ExampleCount' });
+
 const value = ref(0);
 </script>
 
 <template>
   <div class="cursor-pointer" @click="value++">
-    {{ value }}
+    <slot name="count" :value="value">
+      点击：{{ value }}
+    </slot>
   </div>
 </template>

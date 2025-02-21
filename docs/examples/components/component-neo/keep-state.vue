@@ -29,7 +29,7 @@ handleClick();
     </button>
     <MtComponentNeo v-slot="{ Component, compRef }" unique-id="uniqueId2" @toggle-component="handleToggle">
       <keep-alive>
-        <component :is="Component" :ref="compRef" aa="666" />
+        <component :is="Component" :ref="compRef" />
       </keep-alive>
     </MtComponentNeo>
   </div>
