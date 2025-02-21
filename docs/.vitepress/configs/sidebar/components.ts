@@ -11,7 +11,7 @@ export const componentsSidebar: DefaultTheme.SidebarItem[] = [
     ],
   },
   {
-    text: '数据组件',
+    text: '数据',
     items: [
       {
         text: 'Table 表格',
@@ -20,7 +20,7 @@ export const componentsSidebar: DefaultTheme.SidebarItem[] = [
     ],
   },
   {
-    text: '功能组件',
+    text: '功能',
     items: [
       {
         text: 'Expand 折叠',
