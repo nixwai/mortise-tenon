@@ -22,7 +22,7 @@ yarn add mortise-tenon-design
 pnpm add mortise-tenon-design
 ```
 
-#### 使用示例
+#### 按需导入
 
 只需从mortise-tenon-design导入你需要的组件，当前组件库样式已在组件中注册，无需额外引入，但不支持SSR。
 
@@ -46,4 +46,27 @@ function toggle() {
     展开后内容
   </MtExpand>
 </template>
+```
+
+#### 完整引入
+
+```ts
+import MtDesign from 'mortise-tenon-design';
+import { createApp } from 'vue';
+import App from './App.vue';
+
+const app = createApp(App);
+app.use(MtDesign);
+```
+
+#### Volar 支持
+如果您使用 Volar，请在 tsconfig.json 中通过 compilerOptions.type 指定全局组件类型。
+
+```tsconfig.json
+{
+  "compilerOptions": {
+    // ...
+    "types": ["mortise-tenon-design/global"]
+  }
+}
 ```
