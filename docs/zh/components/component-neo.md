@@ -23,6 +23,7 @@ vue内置组件component的扩展，提供了更丰富的切换方式，切换�
 - **参数**
   1. 需要显示的组件，可以是VNode类型，也支持 ()=>import("组件路径") 的动态加载方式。
   2. 组件的属性，为对象类型，支持ref传入动态控制，事件可以通过“on事件名”方式传入，双向绑定可使用“vModel:属性”方式进行绑定。
+  3. 组件的插槽，类型Slot，参考[h函数](https://cn.vuejs.org/api/render-function.html#h)中的插槽定义，不可与“传递插槽”方式同时使用。
 
 - **返回值**
 
@@ -56,7 +57,7 @@ vue内置组件component的扩展，提供了更丰富的切换方式，切换�
 
 ## 传递插槽
 
-使用component插槽给引入的组件传递插槽。实践中通常不会这么做，因为这样会导致所有组件**都使用相同的插槽**。
+使用component插槽给引入的组件传递插槽。实践中通常不会这么做，因为这样会导致所有组件**都使用相同的插槽，且使toggleComponent中的插槽参数失效**。
 
 <demo
   vue="components/component-neo/custom-slot.vue"
