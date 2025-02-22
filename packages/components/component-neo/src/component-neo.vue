@@ -34,7 +34,7 @@ const compAttrs = computed(() => {
 const compInstance = computed(() => componentNeo.value || props.is);
 
 const compVNode = computed(() => {
-  return !compInstance.value ? h(Comment, 'componentNeo is empty') : h(compInstance.value, compAttrs.value, componentSlots.value);
+  return !compInstance.value ? h(Comment, 'ComponentNeo is empty') : h(compInstance.value, compAttrs.value, componentSlots.value);
 });
 
 const compName = computed(() => {
