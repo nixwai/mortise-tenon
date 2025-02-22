@@ -6,9 +6,9 @@ Mortise Tenon提供了UI的主题颜色（默认为蓝色#3451b2），能够更�
 
 ```ts
 import { presetMortiseTenon } from '@mortise-tenon/presets';
-import { defineConfig, presetUno } from 'unocss';
+import { defineConfig, presetWind3 } from 'unocss';
 
-export default defineConfig({ presets: [presetUno(), presetMortiseTenon({ color: '#3451b2' })], });
+export default defineConfig({ presets: [presetWind3(), presetMortiseTenon({ color: '#3451b2' })], });
 ```
 
 ```vue
@@ -41,10 +41,10 @@ export default defineConfig({ presets: [presetUno(), presetMortiseTenon({ color:
 
 ```ts
 import { presetMortiseTenon, themeColors } from 'mortise-tenon-preset';
-import { defineConfig, presetUno } from 'unocss';
+import { defineConfig, presetWind3 } from 'unocss';
 
 export default defineConfig({
-  presets: [presetUno(), presetMortiseTenon()],
+  presets: [presetWind3(), presetMortiseTenon()],
   theme: { colors: themeColors({ warning: '#ffb300', danger: '#e53935' }) },
 });
 ```

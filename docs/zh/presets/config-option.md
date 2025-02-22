@@ -33,10 +33,10 @@ export interface PresetMtOptions {
 
 ```ts
 import { presetMortiseTenon } from 'mortise-tenon-preset';
-import { defineConfig, presetUno } from 'unocss';
+import { defineConfig, presetWind3 } from 'unocss';
 
 export default defineConfig({
-  presets: [presetUno(), presetMortiseTenon({ prefix: 'mt-' })],
+  presets: [presetWind3(), presetMortiseTenon({ prefix: 'mt-' })],
   shortcuts: [
     { btn: 'py-2 px-4 font-semibold rounded-lg shadow-md' },
   ]
@@ -68,7 +68,7 @@ export default defineConfig({
 ```ts
 import type { OptionsCustom } from 'mortise-tenon-preset';
 import { presetMortiseTenon } from 'mortise-tenon-preset';
-import { defineConfig, presetUno } from 'unocss';
+import { defineConfig, presetWind3 } from 'unocss';
 
 const customPreset: OptionsCustom = {
   btn: {
@@ -79,7 +79,7 @@ const customPreset: OptionsCustom = {
 
 export default defineConfig({
   presets: [
-    presetUno(),
+    presetWind3(),
     presetMortiseTenon({ custom: customPreset }),
   ],
 });

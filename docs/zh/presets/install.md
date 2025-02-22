@@ -30,18 +30,18 @@ pnpm add mortise-tenon-preset -D
 
 ```ts
 import { presetMortiseTenon } from 'mortise-tenon-preset';
-import { defineConfig, presetUno } from 'unocss';
+import { defineConfig, presetWind3 } from 'unocss';
 
-export default defineConfig({ presets: [presetUno(), presetMortiseTenon()] });
+export default defineConfig({ presets: [presetWind3(), presetMortiseTenon()] });
 ```
 
 使用时推荐您可以先查看有关UnoCss官方的[预设](https://unocss.dev/presets/uno)，有些预设会让你的代码更加简洁。例如Attributify：
 
 ```ts
 import { presetMortiseTenon } from 'mortise-tenon-preset';
-import { defineConfig, presetAttributify, presetUno } from 'unocss';
+import { defineConfig, presetAttributify, presetWind3 } from 'unocss';
 
-export default defineConfig({ presets: [presetAttributify(), presetUno(), presetMortiseTenon()], });
+export default defineConfig({ presets: [presetAttributify(), presetWind3(), presetMortiseTenon()], });
 ```
 
 ```vue

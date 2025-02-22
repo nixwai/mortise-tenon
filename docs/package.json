@@ -12,12 +12,12 @@
     "docs:preview": "vitepress preview"
   },
   "dependencies": {
-    "mortise-tenon-design": "^0.2.0",
+    "mortise-tenon-design": "^0.4.0",
     "mortise-tenon-tool": "^0.2.0",
     "mortise-tenon-use": "^0.1.1"
   },
   "devDependencies": {
-    "mortise-tenon-preset": "^0.3.1",
+    "mortise-tenon-preset": "0.3.2-beta.1",
     "vitepress": "^1.6.3",
     "vitepress-demo-plugin": "^1.2.3"
   }
