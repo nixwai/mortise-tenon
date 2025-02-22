@@ -1,5 +1,6 @@
-import type { InstanceComponent } from '../component-neo';
-import { nextTick, type VNode } from 'vue';
+import type { VNode } from 'vue';
+import type { ComponentSlots, InstanceComponent } from '../component-neo';
+import { nextTick } from 'vue';
 import { useComponentState } from './use-component-state';
 
 export type ImportComponentFn = () => Promise<Record<string, any>>;
@@ -10,20 +11,21 @@ export function useComponentNeo(uniqueId = '') {
 
   /**
    * 切换渲染的组件
-   * @param comp 组件，可传入两种类型，1.直接函数格式返回import动态导入 2.组件类型
+   * @param comp 组件，可传入两种类型，1.import动态导入 2.组件类型 3.VNode
    * @param attrs 组件属性，可使用`on事件`方式添加事件方法，属性支持Ref类型进行绑定以实现动态变化, 支持通过{'vModal:value': value}方式双向绑定数据
+   * @param slots 组件插槽
    */
-  async function toggleComponent(comp: DynamicComponent, attrs?: Record<string, any>) {
+  async function toggleComponent(comp?: DynamicComponent, attrs?: Record<string, any>, slots?: ComponentSlots) {
     try {
       const renderComp = typeof comp === 'function' ? (await (comp as ImportComponentFn)()).default : comp;
-      const renderAttrs: Record<string, any> = {};
+      const renderAttrs: Record<string, unknown> = {};
       for (let key in attrs) {
         const bindValue = attrs[key];
-        // 兼容vModal
+        // 兼容vModel
         if (key.startsWith('vModel:')) {
           key = key.replace('vModel:', '');
           renderAttrs[key] = bindValue;
-          renderAttrs[`onUpdate:${key}`] = (value: any) => {
+          renderAttrs[`onUpdate:${key}`] = (value: unknown) => {
             if ('value' in bindValue) {
               bindValue.value = value;
             }
@@ -33,7 +35,7 @@ export function useComponentNeo(uniqueId = '') {
           renderAttrs[key] = bindValue;
         }
       }
-      setComponent(uniqueId, renderComp, renderAttrs);
+      setComponent(uniqueId, { comp: renderComp, attrs: renderAttrs, slots: slots || {} });
       await nextTick();
       return getComponent(uniqueId)?.Instance.value;
     }
