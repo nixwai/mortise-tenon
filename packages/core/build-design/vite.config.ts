@@ -42,6 +42,6 @@ export default defineConfig({
     vue(),
     styleInjectPlugin(),
     dtsPlugin(compRoot, designOutput),
-    copyPlugin(designOutput),
+    copyPlugin(designOutput, ['README.md', 'package.json', 'global.d.ts']),
   ],
 });

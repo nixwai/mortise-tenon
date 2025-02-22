@@ -9,6 +9,11 @@
     "type": "git",
     "url": "https://github.com/nixwai/mortise-tenon"
   },
+  "exports": {
+    "./global": {
+      "types": "./global.d.ts"
+    }
+  },
   "main": "lib/index.js",
   "module": "es/index.mjs",
   "types": "types/index.d.ts",

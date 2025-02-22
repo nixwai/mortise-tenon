@@ -1,12 +1,6 @@
-import type { App } from 'vue';
+import { withInstall } from '../utils/install';
 import Table from './src/table.vue';
 
-Table.install = (app: App): void => {
-  if (Table.name) {
-    app.component(Table.name, Table);
-  }
-};
-
-export const MtTable = Table;
+export const MtTable = withInstall(Table);
 
 export * from './src/table';
