@@ -1,9 +1,8 @@
-<script setup lang="ts">
+<script setup lang="tsx">
 import { MtComponentNeo, useComponentNeo } from '@mortise-tenon/components';
-import { h, ref } from 'vue';
-
-const comp1 = h('div', 'Hollo');
-const comp2 = h('div', 'World');
+import { h, onMounted, ref } from 'vue';
+import Count from './count.vue';
+import Text from './text.vue';
 
 const { getComponentRef, toggleComponent } = useComponentNeo('uniqueId1');
 
@@ -11,10 +10,10 @@ const val = ref(false);
 function handleClick() {
   val.value = !val.value;
   if (val.value) {
-    toggleComponent(comp1, { class: 'c-red' });
+    toggleComponent(Count, { class: 'c-red' }, { count: (slotData: { value: number }) => h('div', `我是Count插槽，点击+1：${slotData?.value}`) });
   }
   else {
-    toggleComponent(comp2, { class: 'c-blue' });
+    toggleComponent(Text, {}, { text: (slotData: { value: string }) => h('div', `我是Text插槽，输出：${slotData?.value}`) });
   }
 }
 
@@ -22,12 +21,14 @@ function handleToggle() {
   console.warn('已切换', getComponentRef());
 }
 
-handleClick();
+onMounted(() => {
+  handleClick();
+});
 </script>
 
 <template>
   <div>
-    <button class="btn mb-2" @click="handleClick">
+    <button class="btn mb-2 flex flex-col-reverse" @click="handleClick">
       切换组件
     </button>
     <MtComponentNeo unique-id="uniqueId1" @toggle-component="handleToggle" />

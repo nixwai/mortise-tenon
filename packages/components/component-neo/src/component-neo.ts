@@ -1,4 +1,4 @@
-import type { Component, DefineComponent } from 'vue';
+import type { Component, DefineComponent, VNode } from 'vue';
 
 export interface ComponentNeoProps {
   /** 唯一标识 */
@@ -8,3 +8,5 @@ export interface ComponentNeoProps {
 }
 
 export type InstanceComponent = DefineComponent<any, any, any, any, any, any, any, any, any, any>;
+
+export type ComponentSlots = Record<string, (arg: any) => VNode>;

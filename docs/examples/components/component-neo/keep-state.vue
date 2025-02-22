@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { MtComponentNeo, useComponentNeo } from '@mortise-tenon/components';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 const { getComponentRef, toggleComponent } = useComponentNeo('uniqueId2');
 
@@ -19,7 +19,9 @@ function handleToggle() {
   console.warn('已切换', getComponentRef());
 }
 
-handleClick();
+onMounted(() => {
+  handleClick();
+});
 </script>
 
 <template>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { MtComponentNeo, useComponentNeo } from '@mortise-tenon/components';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 const { toggleComponent } = useComponentNeo('uniqueId3');
 
@@ -15,7 +15,9 @@ function handleClick() {
   }
 }
 
-handleClick();
+onMounted(() => {
+  handleClick();
+});
 </script>
 
 <template>

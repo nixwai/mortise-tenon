@@ -1,7 +1,7 @@
 import type { PropType, VNode } from 'vue';
 import { computed, defineComponent } from 'vue';
 
-export interface SortSpaceProps {
+export interface SortProps {
   /** 排序配置 */
   sortList?: (string | number)[]
   /** 排序key名 */
@@ -40,7 +40,7 @@ function getVNodeMap(keyName: string, vNodeList: VNode[], vNodeMap: Record<(stri
     const sortKey = item.props?.[keyName];
     if (sortKey) {
       if (vNodeMap[sortKey]) {
-        console.warn(`<mt-sort-space> ${keyName}: ${sortKey} repeat`);
+        console.warn(`<mt-sort> ${keyName}: ${sortKey} repeat`);
       }
       else {
         vNodeMap[sortKey] = item;

@@ -1,3 +1,4 @@
+import type { Theme } from '@unocss/preset-mini';
 import type { Preflight } from 'unocss';
 import { resolveCtxColor } from 'unocss-preset-ctx';
 
@@ -18,9 +19,9 @@ export const preflights: Preflight[] = [
   },
   {
   // 定义选中文字选中的颜色
-    getCSS: ({ theme }: Record<string, any>) => {
-      const themeColor: string | undefined = theme.colors?.primary;
-      if (themeColor) {
+    getCSS: ({ theme }: { theme: Theme }) => {
+      const themeColor = theme.colors?.primary;
+      if (themeColor && typeof themeColor === 'object') {
         return `
           :root {
             --mt-primary-color: ${themeColor[500]};

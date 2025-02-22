@@ -7,7 +7,7 @@ import { cloneDeep, get, set, unset } from 'lodash-es';
  * @param defaultValue 如果解析 value 是 undefined 会以 defaultValue 取代
  * @returns 新对象
  */
-export function objectFormatKey<R extends object, T extends object>(obj: T, paths: (string | string[])[][], defaultValue?: any) {
+export function objectFormatKey<R extends object, T extends object, D>(obj: T, paths: (string | string[])[][], defaultValue?: D) {
   const newObj = cloneDeep(obj) as object;
   paths.forEach(([oldPath, newPath]) => {
     if (newPath) {

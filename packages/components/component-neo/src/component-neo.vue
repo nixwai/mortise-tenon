@@ -15,13 +15,13 @@ const emit = defineEmits<{
 }>();
 
 const { initComponent } = useComponentState();
-const { componentRef, componentNeo, componentAttrs } = initComponent(props.uniqueId);
+const { componentRef, componentNeo, componentAttrs, componentSlots } = initComponent(props.uniqueId);
 const compRef = (el: Element) => componentRef.value = el;
 
 const commonAttrs = useAttrs();
 /** 结合注入的属性和公共属性 */
 const compAttrs = computed(() => {
-  const newAttrs: Record<string, any> = {};
+  const newAttrs: Record<string, unknown> = {};
   // 仅传入有值的属性
   for (const key in componentAttrs.value) {
     if (typeof componentAttrs.value[key] !== 'undefined') {
@@ -34,7 +34,7 @@ const compAttrs = computed(() => {
 const compInstance = computed(() => componentNeo.value || props.is);
 
 const compVNode = computed(() => {
-  return !compInstance.value ? h(Comment, 'componentNeo is empty') : h(compInstance.value, compAttrs.value);
+  return !compInstance.value ? h(Comment, 'componentNeo is empty') : h(compInstance.value, compAttrs.value, componentSlots.value);
 });
 
 const compName = computed(() => {
