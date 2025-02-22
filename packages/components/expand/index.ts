@@ -1,8 +1,6 @@
-import { install } from '../utils/install';
+import { withInstall } from '../utils/install';
 import Expand from './src/expand.vue';
 
-Expand.install = install(Expand);
-
-export const MtExpand = Expand;
+export const MtExpand = withInstall(Expand);
 
 export * from './src/expand';

@@ -1,12 +1,6 @@
-import type { App } from 'vue';
+import { withInstall } from '../utils/install';
 import Sort from './src/sort';
 
-Sort.install = (app: App): void => {
-  if (Sort.name) {
-    app.component(Sort.name, Sort);
-  }
-};
-
-export const MtSort = Sort;
+export const MtSort = withInstall(Sort);
 
 export * from './src/sort';
