@@ -22,9 +22,11 @@ function makeInstaller(components: Component[] = []) {
   };
 }
 
-export default makeInstaller([
+const installer = makeInstaller([
   MtComponentNeo,
   MtExpand,
   MtSort,
   MtTable,
 ]);
+
+export default installer;
