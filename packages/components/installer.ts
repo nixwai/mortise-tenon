@@ -1,11 +1,9 @@
 import type { App, Component, Plugin } from 'vue';
-import {
-  MtComponentNeo,
-  MtExpand,
-  MtSort,
-  MtTable,
-} from '@mortise-tenon/components';
-import { version } from './package.json';
+import { version } from '../core/build-design/package.json';
+import { MtComponentNeo } from './component-neo';
+import { MtExpand } from './expand';
+import { MtSort } from './sort';
+import { MtTable } from './table';
 
 const INSTALLED_KEY = Symbol('MT_INSTALLED_KEY');
 
