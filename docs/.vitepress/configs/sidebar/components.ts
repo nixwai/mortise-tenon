@@ -11,19 +11,28 @@ export const componentsSidebar: DefaultTheme.SidebarItem[] = [
     ],
   },
   {
-    text: '基础组件',
+    text: '数据',
     items: [
       {
-        text: 'expand 折叠',
+        text: 'Table 表格',
+        link: '/zh/components/table.md',
+      },
+    ],
+  },
+  {
+    text: '功能',
+    items: [
+      {
+        text: 'ComponentNeo 动态组件',
+        link: '/zh/components/component-neo.md',
+      },
+      {
+        text: 'Expand 折叠',
         link: '/zh/components/expand.md',
       },
       {
-        text: 'sort 排序',
+        text: 'Sort 排序',
         link: '/zh/components/sort.md',
-      },
-      {
-        text: 'table 表格',
-        link: '/zh/components/table.md',
       },
     ],
   },
