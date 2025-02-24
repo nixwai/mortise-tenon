@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { MtComponentNeo, useComponentNeo } from '@mortise-tenon/components';
 import { onMounted, ref } from 'vue';
+import Count from './count.vue';
+import Text from './text.vue';
 
 const { getComponentRef, toggleComponent } = useComponentNeo('uniqueId2');
 
@@ -8,10 +10,10 @@ const val = ref(false);
 function handleClick() {
   val.value = !val.value;
   if (val.value) {
-    toggleComponent(() => import('./count.vue'), { class: 'c-red' });
+    toggleComponent(Count, { class: 'c-red' });
   }
   else {
-    toggleComponent(() => import('./text.vue'));
+    toggleComponent(Text);
   }
 }
 

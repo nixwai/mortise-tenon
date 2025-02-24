@@ -18,7 +18,7 @@ const { initComponent } = useComponentState();
 const { componentRef, componentNeo, componentAttrs, componentSlots } = initComponent(props.uniqueId);
 const compRef = (el: Element) => componentRef.value = el;
 
-const commonAttrs = useAttrs();
+const commonAttrs: Record<string, unknown> = useAttrs();
 /** 结合注入的属性和公共属性 */
 const compAttrs = computed(() => {
   const newAttrs: Record<string, unknown> = {};
