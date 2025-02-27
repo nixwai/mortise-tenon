@@ -1,7 +1,7 @@
 import type { App, Component, Plugin } from 'vue';
-import { version } from '../core/build-design/package.json';
 import { MtComponentNeo } from './component-neo';
 import { MtExpand } from './expand';
+import { version } from './package.json';
 import { MtSort } from './sort';
 import { MtTable } from './table';
 
