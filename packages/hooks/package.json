@@ -12,9 +12,13 @@
   "main": "lib/index.js",
   "module": "es/index.mjs",
   "types": "types/index.d.ts",
-  "files": ["es", "lib", "types"],
+  "files": [
+    "es",
+    "lib",
+    "types"
+  ],
   "dependencies": {
-    "@vueuse/core": "^11.1.0",
+    "@vueuse/core": "^11.3.0",
     "vue-demi": "^0.14.10"
   }
 }

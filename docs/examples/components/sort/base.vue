@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MtSort } from '@mortise-tenon/components';
+import { MtSort } from 'mortise-tenon-design';
 import { ref } from 'vue';
 
 const list = ref([2, 7, 9, 6, 4, 3, 1]);

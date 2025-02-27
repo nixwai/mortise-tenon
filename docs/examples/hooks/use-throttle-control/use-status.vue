@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useThrottleControl } from '@mortise-tenon/hooks';
+import { useThrottleControl } from 'mortise-tenon-use';
 import { ref } from 'vue';
 
 const num = ref(0);
@@ -35,11 +35,7 @@ function addNum() {
 
 <template>
   <div>当前请求所需时间：{{ num }}秒</div>
-  <button
-    :style="{ color: throttling ? 'red' : 'green' }"
-    class="btn"
-    @click="handleClick()"
-  >
+  <button :style="{ color: throttling ? 'red' : 'green' }" class="btn" @click="handleClick()">
     {{ num }}
   </button>
 </template>

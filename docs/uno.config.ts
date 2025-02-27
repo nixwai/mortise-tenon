@@ -1,4 +1,4 @@
-import { presetMortiseTenon, themeColors } from '@mortise-tenon/presets';
+import { presetMortiseTenon, themeColors } from 'mortise-tenon-preset';
 import { defineConfig, presetAttributify, presetWind3 } from 'unocss';
 
 export default defineConfig({
