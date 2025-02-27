@@ -1,9 +1,20 @@
 {
-  "name": "@mortise-tenon/utils",
-  "version": "0.0.1",
-  "description": "tool fn",
-  "main": "index.ts",
+  "name": "mortise-tenon-tool",
+  "type": "module",
+  "version": "0.2.0",
+  "description": "榫卯工具函数库",
+  "author": "nixwai",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nixwai/mortise-tenon"
+  },
+  "main": "lib/index.js",
+  "module": "es/index.mjs",
+  "types": "types/index.d.ts",
+  "files": ["es", "lib", "types"],
   "dependencies": {
-    "date-fns": "^4.1.0"
+    "date-fns": "^4.1.0",
+    "lodash-es": "^4.17.21"
   }
 }
