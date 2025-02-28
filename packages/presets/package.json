@@ -18,7 +18,7 @@
   ],
   "dependencies": {
     "@unocss/preset-mini": "^66.0.0",
-    "unocss-preset-ctx": "1.1.0"
+    "unocss-preset-ctx": "^1.1.0"
   },
   "devDependencies": {
     "unocss": "^66.0.0"
