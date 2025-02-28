@@ -11,21 +11,18 @@
   },
   "exports": {
     ".": {
-      "types": "./types/index.d.ts",
+      "types": "./dist/types/index.d.ts",
       "import": "./dist/index.js"
     },
     "./helper": {
-      "types": "./types/helper.d.ts",
+      "types": "./dist/types/helper.d.ts",
       "import": "./dist/helper.js"
     }
   },
   "main": "dist/index.js",
   "module": "dist/index.js",
-  "types": "types/index.d.ts",
-  "files": [
-    "dist",
-    "types"
-  ],
+  "types": "dist/types/index.d.ts",
+  "files": ["dist"],
   "dependencies": {
     "@unocss/preset-mini": "^66.0.0",
     "unocss-preset-ctx": "^1.1.0"
