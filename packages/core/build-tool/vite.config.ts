@@ -1,19 +1,13 @@
 import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
-import { toolOutput, utilRoot } from '../paths';
-import { copyPlugin, dtsPlugin } from '../vite-configs';
-
-const entryIndex = resolve(__dirname, './index.ts');
+import { dtsPlugin } from '../vite-configs';
+import { toolOutput, toolRoot } from './paths';
 
 export default defineConfig({
   build: {
     emptyOutDir: false,
     sourcemap: true,
-    lib: {
-      entry: { index: entryIndex },
-      name: 'mortise-tenon-tool',
-      fileName: 'mortise-tenon-tool',
-    },
+    lib: { entry: { index: resolve(toolRoot, 'src/index.ts') } },
     rollupOptions: {
       external: ['lodash-es', 'date-fns'],
       output: [
@@ -34,9 +28,7 @@ export default defineConfig({
       ],
     },
   },
-  resolve: { alias: { '@mortise-tenon/utils': utilRoot } },
   plugins: [
-    dtsPlugin(utilRoot, toolOutput),
-    copyPlugin(toolOutput),
+    dtsPlugin(resolve(toolRoot, 'src'), toolOutput),
   ],
 });

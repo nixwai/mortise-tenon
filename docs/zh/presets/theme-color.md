@@ -5,7 +5,7 @@ Mortise Tenon提供了UI的主题颜色（默认为蓝色#3451b2），能够更�
 可以在参数`color`中传入颜色来修改主题颜色，颜色是通过[magic-color](https://color.zyob.top/)生成，您可以在[官方文档](https://color.zyob.top/)中预览和调试。
 
 ```ts
-import { presetMortiseTenon } from '@mortise-tenon/presets';
+import { presetMortiseTenon } from 'mortise-tenon-preset';
 import { defineConfig, presetWind3 } from 'unocss';
 
 export default defineConfig({ presets: [presetWind3(), presetMortiseTenon({ color: '#3451b2' })], });

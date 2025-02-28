@@ -1,10 +1,33 @@
 {
-  "name": "@mortise-tenon/presets",
-  "version": "0.0.1",
-  "description": "unocss preset",
-  "main": "index.ts",
-  "devDependencies": {
+  "name": "mortise-tenon-preset",
+  "type": "module",
+  "version": "0.3.2",
+  "description": "榫卯UI预设库",
+  "author": "nixwai",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nixwai/mortise-tenon"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./helper": {
+      "types": "./dist/types/helper.d.ts",
+      "import": "./dist/helper.js"
+    }
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/types/index.d.ts",
+  "files": ["dist"],
+  "dependencies": {
     "@unocss/preset-mini": "^66.0.0",
-    "unocss-preset-ctx": "1.0.0"
+    "unocss-preset-ctx": "^1.1.0"
+  },
+  "devDependencies": {
+    "unocss": "^66.0.0"
   }
 }

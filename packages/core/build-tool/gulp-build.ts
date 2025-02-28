@@ -1,10 +1,8 @@
-import { parallel, series } from 'gulp';
-import { toolOutput } from '../paths';
+import { series } from 'gulp';
 import { delPath, run } from '../tasks';
+import { toolOutput } from './paths';
 
 export default series(
   () => delPath(toolOutput),
-  parallel(
-    () => run('vite build'),
-  ),
+  () => run('vite build'),
 );

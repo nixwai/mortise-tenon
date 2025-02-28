@@ -1,19 +1,13 @@
 import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
-import { hookRoot, useOutput } from '../paths';
-import { copyPlugin, dtsPlugin } from '../vite-configs';
-
-const entryIndex = resolve(__dirname, './index.ts');
+import { dtsPlugin } from '../vite-configs';
+import { useOutput, useRoot } from './paths';
 
 export default defineConfig({
   build: {
     emptyOutDir: false,
     sourcemap: true,
-    lib: {
-      entry: { index: entryIndex },
-      name: 'mortise-tenon-use',
-      fileName: 'mortise-tenon-use',
-    },
+    lib: { entry: { index: resolve(useRoot, 'src/index.ts') } },
     rollupOptions: {
       external: ['vue-demi', '@vueuse/core'],
       output: [
@@ -34,9 +28,7 @@ export default defineConfig({
       ],
     },
   },
-  resolve: { alias: { '@mortise-tenon/hooks': hookRoot } },
   plugins: [
-    dtsPlugin(hookRoot, useOutput),
-    copyPlugin(useOutput),
+    dtsPlugin(resolve(useRoot, 'src'), useOutput),
   ],
 });

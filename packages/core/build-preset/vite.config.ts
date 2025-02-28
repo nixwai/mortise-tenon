@@ -1,32 +1,28 @@
 import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
-import { presetOutput, presetRoot } from '../paths';
-import { copyPlugin, dtsPlugin } from '../vite-configs';
-
-const entryIndex = resolve(__dirname, './index.ts');
-const entryHelper = resolve(__dirname, './helper.ts');
+import { dtsPlugin } from '../vite-configs';
+import { presetOutput, presetRoot } from './paths';
 
 export default defineConfig({
   build: {
     emptyOutDir: false,
     lib: {
-      entry: { index: entryIndex, helper: entryHelper },
-      name: 'mortise-tenon-preset',
-      fileName: 'mortise-tenon-preset',
+      entry: {
+        index: resolve(presetRoot, 'src/index.ts'),
+        helper: resolve(presetRoot, 'src/helper.ts'),
+      },
     },
     rollupOptions: {
-      external: ['unocss', '@unocss/preset-mini', 'unocss-preset-ctx', 'magic-color'],
+      external: ['unocss', '@unocss/preset-mini', 'unocss-preset-ctx'],
       output: [{
         format: 'es',
         entryFileNames: '[name].js',
         exports: 'named',
-        dir: resolve(presetOutput, 'dist'),
+        dir: presetOutput,
       }],
     },
   },
-  resolve: { alias: { '@mortise-tenon/presets': presetRoot } },
   plugins: [
-    dtsPlugin(presetRoot, presetOutput),
-    copyPlugin(presetOutput),
+    dtsPlugin(resolve(presetRoot, 'src'), presetOutput),
   ],
 });

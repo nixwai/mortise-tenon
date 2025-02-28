@@ -1,5 +1,5 @@
 {
-  "name": "@mortise-tenon/build",
+  "name": "@mortise-tenon/core",
   "type": "module",
   "version": "0.0.1",
   "description": "",
@@ -24,10 +24,11 @@
     "vue": ">= 3.4.0 < 3.5.0"
   },
   "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
     "@types/gulp": "^4.0.17",
+    "fs-extra": "^11.3.0",
     "gulp": "^5.0.0",
     "gulp-cli": "^3.0.0",
-    "rollup-plugin-copy": "^3.5.0",
     "sucrase": "^3.35.0",
     "vite-plugin-dts": "^4.5.0"
   }

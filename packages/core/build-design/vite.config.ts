@@ -1,10 +1,8 @@
 import { resolve } from 'node:path';
 import vue from '@vitejs/plugin-vue';
 import { defineConfig } from 'vite';
-import { compRoot, designOutput } from '../paths';
-import { copyPlugin, dtsPlugin, styleInjectPlugin } from '../vite-configs';
-
-const entryIndex = resolve(__dirname, './index.ts');
+import { dtsPlugin, styleInjectPlugin } from '../vite-configs';
+import { designOutput, designRoot } from './paths';
 
 export default defineConfig({
   css: { preprocessorOptions: { scss: { api: 'modern-compiler' } } },
@@ -12,11 +10,7 @@ export default defineConfig({
     emptyOutDir: false,
     sourcemap: true,
     cssCodeSplit: true,
-    lib: {
-      entry: { index: entryIndex },
-      name: 'mortise-tenon-design',
-      fileName: 'mortise-tenon-design',
-    },
+    lib: { entry: { index: resolve(designRoot, 'src/index.ts') } },
     rollupOptions: {
       external: ['vue', 'lodash-es', '@vueuse/core'],
       output: [
@@ -37,11 +31,9 @@ export default defineConfig({
       ],
     },
   },
-  resolve: { alias: { '@mortise-tenon/components': compRoot } },
   plugins: [
     vue(),
     styleInjectPlugin(),
-    dtsPlugin(compRoot, designOutput),
-    copyPlugin(designOutput, ['README.md', 'package.json', 'global.d.ts']),
+    dtsPlugin(resolve(designRoot, 'src'), designOutput),
   ],
 });

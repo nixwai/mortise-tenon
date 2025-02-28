@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MtComponentNeo } from '@mortise-tenon/components';
+import { MtComponentNeo } from 'mortise-tenon-design';
 import { h, ref } from 'vue';
 
 const comp1 = h('div', 'Hollo');

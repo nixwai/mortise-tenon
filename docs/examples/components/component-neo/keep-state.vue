@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MtComponentNeo, useComponentNeo } from '@mortise-tenon/components';
+import { MtComponentNeo, useComponentNeo } from 'mortise-tenon-design';
 import { onMounted, ref } from 'vue';
 import Count from './count.vue';
 import Text from './text.vue';

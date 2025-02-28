@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { TableConfig } from '@mortise-tenon/components';
-import { MtTable } from '@mortise-tenon/components';
+import type { TableConfig } from 'mortise-tenon-design';
+import { MtTable } from 'mortise-tenon-design';
 
 const tableConfig: TableConfig[] = [
   { columns: [{ title: '用户信息表' }] },
