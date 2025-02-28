@@ -14,6 +14,7 @@
     "docs:build": "pnpm run -C docs docs:build",
     "examples:dev": "pnpm run -C examples dev",
     "examples:build": "pnpm run -C examples build",
+    "build": "pnpm design:build & pnpm use:build & pnpm tool:build & pnpm preset:build",
     "design:release": "pnpm run -C packages/core design:release",
     "design:build": "pnpm run -C packages/core design:build",
     "design:publish": "pnpm run -C packages/core design:publish",
