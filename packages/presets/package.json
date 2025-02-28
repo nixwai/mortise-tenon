@@ -17,10 +17,10 @@
     "types"
   ],
   "dependencies": {
-    "@unocss/preset-mini": "^65.5.0",
-    "unocss-preset-ctx": "^1.0.0"
+    "@unocss/preset-mini": "^66.0.0",
+    "unocss-preset-ctx": "1.1.0"
   },
   "devDependencies": {
-    "unocss": "^65.5.0"
+    "unocss": "^66.0.0"
   }
 }
