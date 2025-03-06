@@ -56,4 +56,4 @@
 
 ## 源码
 
-[源代码](https://github.com/nixwai/mortise-tenon/blob/main/packages/presets/shortcuts/button.ts)
+[源代码](https://github.com/nixwai/mortise-tenon/blob/main/packages/presets/src/shortcuts/button.ts)

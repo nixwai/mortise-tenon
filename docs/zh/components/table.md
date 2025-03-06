@@ -38,3 +38,7 @@
 | style   | 样式     | CSSProperties |
 | colSpan | 占用列数 | CSSProperties |
 | rowSpan | 占用行数 | Column        |
+
+## 源码
+
+[源代码](https://github.com/nixwai/mortise-tenon/blob/main/packages/components/src/table/src/table.vue)

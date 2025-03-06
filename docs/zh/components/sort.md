@@ -19,3 +19,7 @@
 | -------- | --------------------------- | ------------------ | -------- |
 | sortList | 排列顺序                    | (number\|string)[] | []       |
 | keyName  | 自定义节点排序属性的key名称 | string             | sort-key |
+
+## 源码
+
+[源代码](https://github.com/nixwai/mortise-tenon/blob/main/packages/components/src/sort/src/sort.ts)

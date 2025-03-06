@@ -13,3 +13,7 @@
 | open           | 是否展开             | boolean | true   |
 | targetRange    | 收起时的范围大小(px) | number  | 0      |
 | transitionTime | 动画过渡时间(ms)     | number  | 200    |
+
+## 源码
+
+[源代码](https://github.com/nixwai/mortise-tenon/blob/main/packages/components/src/expand/src/expand.vue)

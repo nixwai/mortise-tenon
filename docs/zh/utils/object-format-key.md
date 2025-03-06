@@ -8,4 +8,4 @@
 
 ## 源码
 
-[源代码](https://github.com/nixwai/mortise-tenon/blob/main/packages/utils/object/format-key.ts)
+[源代码](https://github.com/nixwai/mortise-tenon/blob/main/packages/utils/src/object/format-key.ts)

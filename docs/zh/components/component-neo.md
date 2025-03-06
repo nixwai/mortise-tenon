@@ -91,3 +91,7 @@
 | 属性名       | 说明                       | 类型         |
 | ------------ | -------------------------- | ------------ |
 | componentRef | 当前 `ComponentNeo` 的组件引用 | any          |
+
+## 源码
+
+[源代码](https://github.com/nixwai/mortise-tenon/blob/main/packages/components/src/component-neo/src/component-neo.vue)

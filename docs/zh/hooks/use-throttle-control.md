@@ -12,4 +12,4 @@
 
 ## 源码
 
-[源代码](https://github.com/nixwai/mortise-tenon/blob/main/packages/hooks/use-throttle-control/index.ts)
+[源代码](https://github.com/nixwai/mortise-tenon/blob/main/packages/hooks/src/use-throttle-control/index.ts)
