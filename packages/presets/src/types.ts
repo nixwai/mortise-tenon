@@ -1,6 +1,7 @@
 import type { Theme } from '@unocss/preset-mini';
 import type { DynamicShortcut, Rule, ShortcutValue, StaticShortcut } from 'unocss';
 import type { ButtonPreset } from './shortcuts/button';
+import type { InputPreset } from './shortcuts/input';
 
 export type CustomRule = Rule<Theme>;
 
@@ -26,9 +27,12 @@ export interface PresetMtOptions {
   /**
    * 自定义预设
    */
-  custom?: OptionsCustom
+  custom?: CustomPreset
 }
 
-export interface OptionsCustom {
-  btn?: Partial<Record<ButtonPreset, ShortcutValue | ShortcutValue[]>>
+type PresetOption<T extends string> = Partial<Record<T, ShortcutValue | ShortcutValue[]>>;
+
+export interface CustomPreset {
+  btn?: PresetOption<ButtonPreset>
+  input?: PresetOption<InputPreset>
 }

@@ -19,7 +19,7 @@ export interface PresetMtOptions {
   /**
    * 自定义预设
    */
-  custom?: OptionsCustom
+  custom?: CustomPreset
 }
 ```
 
@@ -66,11 +66,11 @@ export default defineConfig({
 例如：
 
 ```ts
-import type { OptionsCustom } from 'mortise-tenon-preset';
+import type { CustomPreset } from 'mortise-tenon-preset';
 import { presetMortiseTenon } from 'mortise-tenon-preset';
 import { defineConfig, presetWind3 } from 'unocss';
 
-const customPreset: OptionsCustom = {
+const customPreset: CustomPreset = {
   btn: {
     // 覆盖后原有的btn样式便默认没有边框
     common: 'b-none cursor-pointer',

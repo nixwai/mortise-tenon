@@ -1,10 +1,10 @@
 import type { ShortcutValue } from 'unocss';
-import type { CustomShortcut, OptionsCustom, PresetMtOptions } from '../types';
+import type { CustomPreset, CustomShortcut, PresetMtOptions } from '../types';
 
 type PresetShortcuts = Record<string, ShortcutValue | ShortcutValue[]>;
 
 export function resolveCustomShortcut(
-  name: keyof OptionsCustom,
+  name: keyof CustomPreset,
   presetShortcuts: PresetShortcuts,
   options?: PresetMtOptions,
 ): CustomShortcut[] {
