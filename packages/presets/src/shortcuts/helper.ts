@@ -35,15 +35,28 @@ export function resolveCustomShortcut(
   ];
 }
 
+/** 提取使用括号选择器的规则（如：[&+.pmt-btn]:(ml-3)） */
+const bracketReg = /[\w:-]*\[[^\]]+\]:\([^)]+\)/g;
+/** 前缀的匹配规则，匹配 .pmt-、空格pmt、[pmt 开头的名称 */
+const prefixReg = /([[\s.])pmt-/g;
+
 /** 转化快捷方式 */
 function transformShortcuts(shortcuts: PresetShortcuts, prefix = '') {
   return Object.fromEntries(Object.entries(shortcuts).map(([k, v]) => {
     const classes = ([] as ShortcutValue[]).concat(v);
-    const prefixV = classes.map((item) => {
-      if (typeof item === 'string') {
-        item = ` ${item}`.replaceAll(/([\s.])pmt-/g, `$1${prefix}`); // 前缀修改
+    const prefixV = classes.map((classesItem) => {
+      if (typeof classesItem === 'string') {
+        // 兼容presetAttributify模式（https://unocss.dev/presets/attributify#installation）
+        const bracketStyles = classesItem.match(bracketReg)?.filter(str => str.includes(`.pmt-`)) || [];
+        classesItem += ` ${bracketStyles.map(str => str
+          .replace(/\.pmt-(\w+)-(\w+)/g, '[pmt-$1~="$2"]')
+          .replace(/\.pmt-(\w+)(?!-)/g, '[pmt-$1~="\\~"]'),
+        ).join(' ')}`;
+
+        // 替换前缀
+        classesItem = ` ${classesItem}`.replaceAll(prefixReg, `$1${prefix}`);
       }
-      return item;
+      return classesItem;
     });
     return [k, prefixV];
   }));
