@@ -50,7 +50,7 @@ function transformShortcuts(shortcuts: PresetShortcuts, prefix = '') {
         const bracketStyles = classesItem.match(bracketReg)?.filter(str => str.includes(`.pmt-`)) || [];
         classesItem += ` ${bracketStyles.map(str => str
           .replace(/\.pmt-(\w+)-([\w-]+)/g, '[pmt-$1~="$2"]')
-          .replace(/\.pmt-(\w+)(?!-)/g, '[pmt-$1~="\\~"]'),
+          .replace(/\.pmt-(\w+)(?!-)/g, '[pmt-$1]'),
         ).join(' ')}`;
 
         // 替换前缀
