@@ -1,9 +1,10 @@
 import type { PresetMtOptions } from '../types.ts';
+import { mtBtn } from '../config.ts';
 import { resolveCustomShortcut } from './helper.ts';
 
 const buttonPreset = {
   /** 默认样式 */
-  'default': 'pmt-btn-ctx pmt-btn-common pmt-btn-gap pmt-btn-transition pmt-btn-md pmt-btn-ghost',
+  'default': `${mtBtn}-ctx ${mtBtn}-common ${mtBtn}-gap ${mtBtn}-transition ${mtBtn}-md ${mtBtn}-ghost`,
   /** ctx */
   'ctx': `
   c-ctx-c-c b-ctx-c-b bg-ctx-c-bg ctx-c-deep-gray_gray-600 ctx-c-shadow_ctx-c-bg
@@ -12,7 +13,7 @@ const buttonPreset = {
   /** 通用 */
   'common': 'b-1 b-solid cursor-pointer',
   /** 间距 */
-  'gap': '[&+.pmt-btn]:(ml-3)',
+  'gap': `[&+.${mtBtn}]:(ml-3)`,
   /** 过渡动画 */
   'transition': 'transition-all duration-200',
   /** 小小按钮 */
@@ -62,16 +63,16 @@ const buttonPreset = {
   /** 按钮组 */
   'group': `
   flex items-center
-  [&>.pmt-btn]:(m-0)
-  not-first:[&>.pmt-btn]:(rounded-l-0 b-l-0) 
-  not-last:[&>.pmt-btn]:(rounded-r-0)
+  [&>.${mtBtn}]:(m-0)
+  not-first:[&>.${mtBtn}]:(rounded-l-0 b-l-0) 
+  not-last:[&>.${mtBtn}]:(rounded-r-0)
   `,
   /** 按钮组（纵向） */
   'group-v': `
   flex flex-col justify-center
-  [&>.pmt-btn]:(m-0)
-  not-first:[&>.pmt-btn]:(rounded-t-0 b-t-0) 
-  not-last:[&>.pmt-btn]:(rounded-b-0)
+  [&>.${mtBtn}]:(m-0)
+  not-first:[&>.${mtBtn}]:(rounded-t-0 b-t-0) 
+  not-last:[&>.${mtBtn}]:(rounded-b-0)
   `,
   /** 波纹效果 */
   'ripple': `
@@ -104,13 +105,13 @@ const buttonPreset = {
     b-none pos-relative
     enabled:active:translate-y-0.5
     before:(
-      w-full h-[calc(100%_+_0.25rem)] content-empty pos-absolute bottom-0 pos-inset-0 rounded-inherit aspect-inherit pmt-btn-transition
+      w-full h-[calc(100%_+_0.25rem)] content-empty pos-absolute bottom-0 pos-inset-0 rounded-inherit aspect-inherit ${mtBtn}-transition
       shadow-[0.0625rem_0.1875rem_0.3125rem] shadow-ctx-c-gray-300
     )
     before:enabled:active:(h-[calc(100%_+_0.125rem)] shadow-[0.0625rem_0.0625rem_0.1875rem])
     before:disabled:(shadow-ctx-c-gray-150)
     after:(
-      w-full h-full content-empty pos-absolute bottom-0 pos-inset-0 rounded-inherit aspect-inherit pmt-btn-transition
+      w-full h-full content-empty pos-absolute bottom-0 pos-inset-0 rounded-inherit aspect-inherit ${mtBtn}-transition
       shadow-[0_0.25rem_0_0] shadow-ctx-c-shadow ctx-deg-shadow_ctx-deg-bg-620 ctx-op-shadow_ctx-op-bg-110
     )
     after:enabled:active:(shadow-[0_0.125rem_0_0])
