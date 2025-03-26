@@ -13,6 +13,9 @@ export const SHORTCUT_NAME: ShortcutMap = {
 
 const classes = Object.fromEntries(Object.entries(SHORTCUT_NAME).map(([key, value]) => [key, `${PREFIX}-${value}`])) as ShortcutMap;
 
-export const { btn: mtBtn } = classes;
+export const {
+  btn: mtBtn,
+  input: mtInput,
+} = classes;
 
 export type ShortcutKey = keyof typeof SHORTCUT_NAME;

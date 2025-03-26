@@ -1,8 +1,9 @@
 import type { PresetMtOptions } from '../types';
+import { mtInput } from '../config';
 import { resolveCustomShortcut } from './helper';
 
 const inputPreset = {
-  default: 'pmt-common',
+  default: `${mtInput}-common`,
   common: 'b-1 b-solid',
 };
 
