@@ -1,5 +1,6 @@
 import { resolve } from 'node:path';
 import vue from '@vitejs/plugin-vue';
+import vueJsx from '@vitejs/plugin-vue-jsx';
 import { defineConfig } from 'vite';
 import { dtsPlugin, styleInjectPlugin } from '../vite-configs';
 import { designOutput, designRoot } from './paths';
@@ -33,6 +34,7 @@ export default defineConfig({
   },
   plugins: [
     vue(),
+    vueJsx(),
     styleInjectPlugin(),
     dtsPlugin(resolve(designRoot, 'src'), designOutput),
   ],

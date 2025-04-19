@@ -29,6 +29,18 @@
 - **参数**
   1. **component** (可选): 需要显示的组件，可支持 VNode 类型或动态加载方式（如 `()=>import("组件路径")`）。
   2. **attrs** (可选): 组件的属性对象，可支持事件绑定和双向绑定（如 `onEventName` 和 `vModel:property`）。
+  ```ts
+  const inputValues = reactive({
+    input1: '',
+    input2: '',
+    input3: '',
+  });
+
+  // toggleComponent上的vModel仅能绑定ref类型，对于reactive可使用toRef或toRefs进行绑定
+  const valueAsRefs = toRefs(inputValues);
+
+  toggleComponent(Text, { vModel: valueAsRefs.input1 });
+  ```
   3. **slots** (可选): 插槽定义，参考 [h 函数](https://cn.vuejs.org/api/render-function.html#h) 中的插槽定义，不可与传递插槽方式同时使用。
 
 - **返回值**
@@ -43,7 +55,10 @@
 
   返回当前组件的引用 `componentRef`，可用于调用组件的 [暴露内容](https://cn.vuejs.org/api/sfc-script-setup.html#defineexpose)。
 
-<demo vue="components/component-neo/use-hook.vue"/>
+<demo
+  vue="components/component-neo/use-hook.vue"
+  :vueFiles="['components/component-neo/use-hook.vue', 'components/component-neo/text.vue']"
+/>
 
 ## 使用 KeepAlive
 

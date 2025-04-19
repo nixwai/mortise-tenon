@@ -1,4 +1,5 @@
 import { resolve } from 'node:path';
+import vueJsx from '@vitejs/plugin-vue-jsx';
 import UnoCSS from 'unocss/vite';
 import { defineConfig } from 'vitepress';
 import { vitepressDemoPlugin } from 'vitepress-demo-plugin';
@@ -12,7 +13,7 @@ export default defineConfig({
   base: '/mortise-tenon/',
   outDir: resolve(__dirname, '../../dist/docs'),
   vite: {
-    plugins: [UnoCSS() as any],
+    plugins: [vueJsx(), UnoCSS() as any],
     css: { preprocessorOptions: { scss: { api: 'modern-compiler' } } },
   },
   markdown: {

@@ -49,6 +49,7 @@
     "@types/node": "^22.14.1",
     "@unocss/eslint-plugin": "66.0.0",
     "@vitejs/plugin-vue": "^5.2.3",
+    "@vitejs/plugin-vue-jsx": "^4.1.2",
     "@vitest/coverage-v8": "^3.1.1",
     "@vue/test-utils": "^2.4.6",
     "@vue/tsconfig": "^0.7.0",
