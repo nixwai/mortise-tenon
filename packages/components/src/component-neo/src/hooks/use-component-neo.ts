@@ -1,6 +1,6 @@
 import type { VNode } from 'vue';
 import type { ComponentSlots, InstanceComponent } from '../component-neo';
-import { nextTick } from 'vue';
+import { isRef, nextTick } from 'vue';
 import { useComponentState } from './use-component-state';
 
 export type ImportComponentFn = () => Promise<Record<string, any>>;
@@ -25,11 +25,9 @@ export function useComponentNeo(uniqueId = '') {
         if (key.startsWith('vModel:') || key === 'vModel') {
           key = key.replace(/^(vModel):?/, '') || 'modelValue';
           renderAttrs[key] = bindValue;
-          renderAttrs[`onUpdate:${key}`] = (value: unknown) => {
-            if ('value' in bindValue) {
-              bindValue.value = value;
-            }
-          };
+          if (isRef(bindValue)) {
+            renderAttrs[`onUpdate:${key}`] = (value: unknown) => bindValue.value = value;
+          }
         }
         else {
           renderAttrs[key] = bindValue;
