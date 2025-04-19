@@ -43,7 +43,10 @@
 
   返回当前组件的引用 `componentRef`，可用于调用组件的 [暴露内容](https://cn.vuejs.org/api/sfc-script-setup.html#defineexpose)。
 
-<demo vue="components/component-neo/use-hook.vue"/>
+<demo
+  vue="components/component-neo/use-hook.vue"
+  :vueFiles="['components/component-neo/use-hook.vue', 'components/component-neo/text.vue']"
+/>
 
 ## 使用 KeepAlive
 

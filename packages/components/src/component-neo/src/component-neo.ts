@@ -9,4 +9,4 @@ export interface ComponentNeoProps {
 
 export type InstanceComponent = DefineComponent<any, any, any, any, any, any, any, any, any, any>;
 
-export type ComponentSlots = Record<string, (arg: any) => VNode>;
+export type ComponentSlots = Record<string, (arg: any) => VNode> | VNode;

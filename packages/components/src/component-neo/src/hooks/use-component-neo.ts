@@ -11,7 +11,7 @@ export function useComponentNeo(uniqueId = '') {
 
   /**
    * 切换渲染的组件
-   * @param comp 组件，可传入两种类型，1.import动态导入 2.组件类型 3.VNode
+   * @param comp 组件，支持传入，1.import动态导入 2.组件类型 3.VNode
    * @param attrs 组件属性，可使用`on事件`方式添加事件方法，属性支持Ref类型进行绑定以实现动态变化, 支持通过{'vModal:value': value}方式双向绑定数据
    * @param slots 组件插槽
    */
@@ -22,8 +22,8 @@ export function useComponentNeo(uniqueId = '') {
       for (let key in attrs) {
         const bindValue = attrs[key];
         // 兼容vModel
-        if (key.startsWith('vModel:')) {
-          key = key.replace('vModel:', '');
+        if (key.startsWith('vModel:') || key === 'vModel') {
+          key = key.replace(/^(vModel):?/, '') || 'modelValue';
           renderAttrs[key] = bindValue;
           renderAttrs[`onUpdate:${key}`] = (value: unknown) => {
             if ('value' in bindValue) {
