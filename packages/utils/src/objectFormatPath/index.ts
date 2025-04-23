@@ -2,9 +2,9 @@ import type { FormatPathParam } from '../types';
 import { cloneDeep, get, setWith, unset } from 'lodash-es';
 
 /**
- * 将目标对象路径进行修改，返回自定义的key的新对象
+ * 将目标对象路径进行修改，返回自定义新数据
  * @param sourceData 数据
- * @param formatParams 要修改的对象路径组，数组第一个为旧路径，第二个为新路径（没有时表删除），第三个为默认值，第四个可以定制
+ * @param formatParams 要修改数据参数组，[旧路径，新路径（没有时表删除），默认值，用来定制分配的值的函数]
  * @param retainOtherData 是否保留其他数据 （默认不保留）
  * @returns 新对象
  */
