@@ -10,7 +10,7 @@ type TimeDate = Date | string | number | null | undefined;
  * @param options 时间格式选项(https://github.com/date-fns/date-fns/blob/main/docs/unicodeTokens.md)
  * @returns [开始时间, 结束时间]
  */
-export function getTimeRange(times?: TimeDate[] | TimeDate, formatValue = 'T', options?: FormatOptions) {
+export function timeSoonerAndLater(times?: TimeDate[] | TimeDate, formatValue = 'T', options?: FormatOptions) {
   if (!times) {
     return undefined;
   }

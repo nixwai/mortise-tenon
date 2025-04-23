@@ -1,22 +1,22 @@
 import { describe, expect, it } from 'vitest';
-import { getTimeRange } from '../getTimeRange';
+import { timeSoonerAndLater } from '.';
 
-describe('test getTimeRange', () => {
+describe('test timeSoonerAndLater', () => {
   it('base use', () => {
     const result = ['1733155200000', '1733241599999'];
-    expect(getTimeRange('2024-12-03')).toStrictEqual(result);
+    expect(timeSoonerAndLater('2024-12-03')).toStrictEqual(result);
   });
   it('array use', () => {
     const result = ['1733068800000', '1733241599999'];
-    expect(getTimeRange(['2024-12-02', '2024-12-03'])).toStrictEqual(result);
+    expect(timeSoonerAndLater(['2024-12-02', '2024-12-03'])).toStrictEqual(result);
   });
   it('format use', () => {
     const result = ['2024/12/02 00:00:00', '2024/12/03 23:59:59'];
-    expect(getTimeRange(['2024-12-02', '2024-12-03'], 'yyyy/MM/dd HH:mm:ss')).toStrictEqual(result);
+    expect(timeSoonerAndLater(['2024-12-02', '2024-12-03'], 'yyyy/MM/dd HH:mm:ss')).toStrictEqual(result);
   });
   it('options use', () => {
     const result = ['337', '338'];
-    expect(getTimeRange(
+    expect(timeSoonerAndLater(
       ['2024-12-02', '2024-12-03'],
       'DD',
       { useAdditionalDayOfYearTokens: true },

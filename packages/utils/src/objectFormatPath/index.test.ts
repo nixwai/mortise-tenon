@@ -1,5 +1,6 @@
+import type { FormatPathParam } from '../types';
 import { describe, expect, it } from 'vitest';
-import { objectFormatKey } from '../format-key';
+import { objectFormatPath } from './index';
 
 describe('test objectFormatKey', () => {
   it('should format object keys', () => {
@@ -12,7 +13,7 @@ describe('test objectFormatKey', () => {
       o: 4,
     };
 
-    const formatKeys = [
+    const formatKeys: FormatPathParam[] = [
       ['count', 'num'],
       ['time[0]', 'startTime'],
       ['time[1]', 'endTime'],
@@ -33,6 +34,6 @@ describe('test objectFormatKey', () => {
       o: 4,
     };
 
-    expect(objectFormatKey(obj, formatKeys)).toStrictEqual(result);
+    expect(objectFormatPath(obj, formatKeys, true)).toStrictEqual(result);
   });
 });
