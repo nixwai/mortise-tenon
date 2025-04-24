@@ -3,20 +3,38 @@ import { cloneDeep, get, isArray, setWith, unset } from 'lodash-es';
 
 /**
  * 将目标对象路径进行修改，返回自定义新数据
- * @param sourceData 数据
- * @param formatParams 要修改数据参数组，[旧路径，新路径（没有时表删除），默认值，用来定制分配的值的函数]
- * @param retainOtherData 是否保留其他数据 （默认不保留）
- * @returns 新的数据信息
+ * @param sourceData 原数据
+ * @param formatParams 要修改数据参数组，[旧路径，新路径（没有时表删除），转化数据路径的选项类型]
+ * @param grafData 移植数据，可将新的数据直接移植到这个数据中
+ * @returns 新数据或移植数据，当传入的原数据与移植数据是同一个值时，会创建一个新对象，防止直接修改原数据
  */
 export function dataFormatPath<R extends object, T extends object>(
-  sourceData: T,
-  formatParams: FormatPathParam[],
-  retainOtherData = false,
+  sourceData?: T,
+  formatParams?: FormatPathParam[],
+  grafData?: object,
 ) {
-  const targetData = retainOtherData
-    ? cloneDeep(sourceData)
-    : isArray(sourceData) ? [] : {};
-  formatParams.forEach(([oldTargetPath, newTargetPath, defaultValue, customizer]) => {
+  const isSameData = sourceData === grafData;
+  const targetData = grafData
+    ? (isSameData ? cloneDeep(sourceData) : grafData) as object
+    : (isArray(sourceData) ? [] : {});
+  if (isSameData) {
+    // 删除旧key数据
+    formatParams?.forEach(([oldTargetPath, _, { retain } = {}]) => {
+      if (retain) {
+        return;
+      }
+      const oldPathList = resolvePath(oldTargetPath);
+      const lastArrayPath = oldPathList[oldPathList.length - 1];
+      if (isArrayPath(lastArrayPath)) {
+        oldPathList[oldPathList.length - 1] = removeArrayPath(lastArrayPath);
+      }
+      forEachPath(targetData, oldPathList, (_value, targetPath) => {
+        const path = targetPath.filter(item => ![undefined, '', -1].includes(item)).join('.');
+        unset(targetData, path);
+      });
+    });
+  }
+  formatParams?.forEach(([oldTargetPath, newTargetPath, { def, customizer, custom } = {}]) => {
     if (newTargetPath) {
       const oldPathList = resolvePath(oldTargetPath);
       const newPathList = resolvePath(newTargetPath);
@@ -37,31 +55,20 @@ export function dataFormatPath<R extends object, T extends object>(
         lastArrayPath = removeArrayPath(newPathList[newPathLen - 2]);
         lastObjectPath = newPathList[newPathLen - 1];
       }
-      forEachPath(sourceData, oldPathList, (value = defaultValue, targetPath) => {
-        const targetIndex = targetPath[targetPath.length - 2];
-        const pathList = targetPath.slice(0, -3);
+      forEachPath(sourceData, oldPathList, (value, targetPath) => {
+        const targetIndex = targetPath[targetPath.length - 2] as number | undefined;
+        const pathList: (number | string | undefined)[] = targetPath.slice(0, -3);
         pathList.push(lastArrayPath, targetIndex, lastObjectPath);
-        const path = pathList
-          .filter(item => ![undefined, '', -1].includes(item))
-          .join('.');
+        const path = pathList.filter(item => ![undefined, '', -1].includes(item)).join('.');
+        value = cloneDeep(value);
+        if (custom) {
+          value = custom(value, targetIndex);
+        }
+        value ??= def;
         setWith(targetData, path, value, customizer);
       });
     }
   });
-  if (retainOtherData) {
-    // 删除旧key数据
-    formatParams.forEach(([oldTargetPath]) => {
-      const oldPathList = resolvePath(oldTargetPath);
-      const lastArrayPath = oldPathList[oldPathList.length - 1];
-      if (isArrayPath(lastArrayPath)) {
-        oldPathList[oldPathList.length - 1] = removeArrayPath(lastArrayPath);
-      }
-      forEachPath(targetData, oldPathList, (_value, targetPath) => {
-        const path = targetPath.filter(item => ![undefined, '', -1].includes(item)).join('.');
-        unset(targetData, path);
-      });
-    });
-  }
   return targetData as R;
 };
 
@@ -109,9 +116,9 @@ function removeArrayPath(path?: string) {
 
 /** 根据传入的路径，将数据赋值 */
 function forEachPath(
-  target: any,
+  target: unknown,
   pathList: string[],
-  callBack: (value: any, targetPath: (string | number)[]) => void,
+  callBack: (value: unknown, targetPath: (string | number)[]) => void,
   pathIndex = 0,
   targetPath: (string | number)[] = [],
 ) {
