@@ -4,7 +4,7 @@
 
 ## 用法
 
-<<< @/examples/utils/get-time-range/base.ts
+<<< @/examples/utils/time-sooner-and-later/base.ts
 
 ## 日期格式
 
@@ -40,8 +40,12 @@
 
 部分特殊日期格式，如'Y'与'D'的含义与'y'与'd'的含义是不同的，启用的话需要额外配置options，详情请查看[format](https://date-fns.org/v4.1.0/docs/format)
 
-<<< @/examples/utils/get-time-range/use-options.ts
+<<< @/examples/utils/time-sooner-and-later/use-options.ts
+
+## 参数类型
+
+<<< @/../packages/utils/dist/types/timeSoonerAndLater/index.d.ts
 
 ## 源码
 
-[源代码](https://github.com/nixwai/mortise-tenon/blob/main/packages/utils/src/time/getTimeRange.ts)
+[源代码](https://github.com/nixwai/mortise-tenon/blob/main/packages/utils/src/timeSoonerAndLater/index.ts)

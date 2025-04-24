@@ -2,7 +2,7 @@ import type { FormatPathParam } from '../types';
 import { describe, expect, it } from 'vitest';
 import { objectFormatPath } from './index';
 
-describe('test objectFormatKey', () => {
+describe('test objectFormatPath', () => {
   it('应该转化对象路径', () => {
     const obj = {
       count: 3,

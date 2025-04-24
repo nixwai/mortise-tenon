@@ -27,7 +27,7 @@ pnpm add mortise-tenon-tool
 只需从mortise-tenon-tool导入你需要的函数
 
 ```js
-import { objectFormatKey } from 'mortise-tenon-tool';
+import { objectFormatPath } from 'mortise-tenon-tool';
 
-objectFormatKey({ oldKey: 1 }, ['oldKey', 'newKey']);
+objectFormatPath({ oldKey: 1 }, ['oldKey', 'newKey']);
 ```

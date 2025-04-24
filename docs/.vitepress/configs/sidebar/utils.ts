@@ -14,8 +14,17 @@ export const utilsSidebar: DefaultTheme.SidebarItem[] = [
     text: '对象',
     items: [
       {
-        text: 'objectFormatKey',
-        link: '/zh/utils/object-format-key.md',
+        text: 'objectFormatPath',
+        link: '/zh/utils/object-format-path.md',
+      },
+    ],
+  },
+  {
+    text: '集合',
+    items: [
+      {
+        text: 'dataFormatPath',
+        link: '/zh/utils/data-format-path.md',
       },
     ],
   },
@@ -24,7 +33,7 @@ export const utilsSidebar: DefaultTheme.SidebarItem[] = [
     items: [
       {
         text: 'getTimeRange',
-        link: '/zh/utils/get-time-range.md',
+        link: '/zh/utils/time-sooner-and-later.md',
       },
     ],
   },

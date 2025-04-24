@@ -1,4 +1,4 @@
-import { objectFormatKey } from 'mortise-tenon-tool';
+import { objectFormatPath } from 'mortise-tenon-tool';
 
 const obj = {
   count: 3,
@@ -9,7 +9,7 @@ const obj = {
   o: 4,
 };
 
-objectFormatKey(obj, [
+objectFormatPath(obj, [
   ['count', 'num'], // 将count 改为 num
   ['time[0]', 'startTime'], // 将time[0] 改为 startTime
   ['time[1]', 'endTime'], // 将time[1] 改为 endTime
@@ -19,7 +19,7 @@ objectFormatKey(obj, [
   ['option.child[0]', 'option.a'],
   [['option', 'child', '1'], ['option', 'b']], // 支持多级路径
   ['option.child'],
-]);
+], obj);
 /**
  * =>
  * {

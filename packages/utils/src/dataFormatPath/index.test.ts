@@ -2,7 +2,7 @@ import type { FormatPathParam } from '../types';
 import { describe, expect, it } from 'vitest';
 import { dataFormatPath } from './index';
 
-describe('test objectFormatKey', () => {
+describe('test dataFormatPath', () => {
   it('应该根据路径转化成对应的新对象', () => {
     const data = {
       count: 3,

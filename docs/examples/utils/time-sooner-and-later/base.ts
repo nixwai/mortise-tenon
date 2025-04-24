@@ -1,0 +1,10 @@
+import { timeSoonerAndLater } from 'mortise-tenon-tool';
+
+timeSoonerAndLater('2024-12-03');
+// => ['1733155200000', '1733241599999']
+
+timeSoonerAndLater(['2024-12-02', '2024-12-03']);
+// => ['1733068800000', '1733241599999']
+
+timeSoonerAndLater(['2024-12-02', '2024-12-03'], 'yyyy/MM/dd HH:mm:ss');
+// => ['2024/12/02 00:00:00', '2024/12/03 23:59:59']

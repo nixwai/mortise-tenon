@@ -2,11 +2,11 @@ import type { DataPath, FormatPathParam } from '../types';
 import { cloneDeep, get, isArray, setWith, unset } from 'lodash-es';
 
 /**
- * 将目标对象路径进行修改，返回自定义新数据
+ * 将目标对象路径进行修改，返回自定义新数据或移植数据
  * @param sourceData 原数据
- * @param formatParams 要修改数据参数组，[旧路径，新路径（没有时表删除），转化数据路径的选项类型]
- * @param grafData 移植数据，可将新的数据直接移植到这个数据中
- * @returns 新数据或移植数据，当传入的原数据与移植数据是同一个值时，会创建一个新对象，防止直接修改原数据
+ * @param formatParams 要修改数据路径，[旧路径，新路径（没有时表删除），转化的配置项]
+ * @param grafData 移植数据，可将新的数据直接移植到这个数据中(除原数据外)
+ * @returns 新数据或移植数据，如果移植数据传入的是原数据，会拷贝为新数据，防止直接修改原数据
  */
 export function dataFormatPath<R extends object, T extends object>(
   sourceData?: T,
