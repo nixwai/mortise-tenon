@@ -68,10 +68,10 @@ describe('test dataFormatPath', () => {
   it('应该对原数据路径成生默认值与自定义值', () => {
     const data = { a: [{ b: 1, c: 1 }, { b: 2 }] };
     const formatKeys: FormatPathParam[] = [
-      ['a[].c', 'd[]', { custom: (value: number | undefined, index) => value ?? index! }],
-      ['a[1].b', 'b', { def: 0 }],
+      ['a[].b', 'd[]', { custom: (value: number, index) => ({ key: index, value }) }],
+      ['a[0].c', 'c', { def: 0 }],
     ];
-    const result = { d: [1, 1], b: 2 };
+    const result = { d: [{ key: 0, value: 1 }, { key: 1, value: 2 }], c: 1 };
     expect(dataFormatPath(data, formatKeys)).toStrictEqual(result);
   });
   it('应该根据配置的customizer与原数据生成对象数据', () => {
@@ -151,26 +151,26 @@ describe('test dataFormatPath', () => {
   it('应该根据路径将数组转化成对象数组对象', () => {
     const data = [[1, 2], [3, 4]];
     const formatPaths: FormatPathParam[] = [
-      ['[][]', '[].a[].b'],
+      ['[][]', 'a[].b[].c'],
     ];
-    const result = [{ a: [{ b: 1 }, { b: 2 }] }, { a: [{ b: 3 }, { b: 4 }] }];
-    expect(dataFormatPath(data, formatPaths)).toStrictEqual(result);
+    const result = { a: [{ b: [{ c: 1 }, { c: 2 }] }, { b: [{ c: 3 }, { c: 4 }] }] };
+    expect(dataFormatPath(data, formatPaths, {})).toStrictEqual(result);
   });
   it('应该根据路径将数组转化成对象数组对象(数组格式)', () => {
     const data = [[1, 2], [3, 4]];
     const formatPaths: FormatPathParam[] = [
-      [['[]', '[]'], ['[]', 'a[]', 'b']],
+      [['[]', '[]'], ['a[]', 'b[]', 'c']],
     ];
-    const result = [{ a: [{ b: 1 }, { b: 2 }] }, { a: [{ b: 3 }, { b: 4 }] }];
-    expect(dataFormatPath(data, formatPaths)).toStrictEqual(result);
+    const result = { a: [{ b: [{ c: 1 }, { c: 2 }] }, { b: [{ c: 3 }, { c: 4 }] }] };
+    expect(dataFormatPath(data, formatPaths, {})).toStrictEqual(result);
   });
   it('应该根据路径将对象数组转化成对象数组', () => {
-    const data = { a: [[1, 2], [3, 4]] };
+    const data = { a: [[1, 2], [3, 4]], c: 5 };
     const formatPaths: FormatPathParam[] = [
-      ['a[][]', 'a[].b[]'],
+      ['a[][]', 'b[].c[]'],
     ];
-    const result = { a: [{ b: [1, 2] }, { b: [3, 4] }] };
-    expect(dataFormatPath(data, formatPaths)).toStrictEqual(result);
+    const result = { b: [{ c: [1, 2] }, { c: [3, 4] }], c: 5 };
+    expect(dataFormatPath(data, formatPaths, data)).toStrictEqual(result);
   });
   it('应该根据路径将对象数组转化成对象数组(数组格式)', () => {
     const data = { a: [[1, 2], [3, 4]] };

@@ -3,9 +3,9 @@ import { cloneDeep, get, isArray, setWith, unset } from 'lodash-es';
 
 /**
  * 将目标对象路径进行修改，返回自定义新数据或移植数据
- * @param sourceData 原数据
- * @param formatParams 要修改数据路径，[旧路径，新路径（没有时表删除），转化的配置项]
- * @param grafData 移植数据，可将新的数据直接移植到这个数据中(除原数据外)
+ * @param sourceData 原数据(不会影响修改到这个数据)
+ * @param formatParams 要修改数据路径，[旧路径，新路径，转化的配置项]
+ * @param grafData 移植数据，可将新的数据直接移植到这个数据中，如果传入的是原数据，会拷贝为新数据并默认删除旧路径的数据
  * @returns 新数据或移植数据，如果移植数据传入的是原数据，会拷贝为新数据，防止直接修改原数据
  */
 export function dataFormatPath<R extends object>(
@@ -23,11 +23,11 @@ export function dataFormatPath<R extends object>(
       if (retain) {
         return;
       }
-      const oldPathList = resolvePath(oldTargetPath);
-      const lastArrayPath = oldPathList[oldPathList.length - 1];
-      if (isArrayPath(lastArrayPath)) {
-        oldPathList[oldPathList.length - 1] = removeArrayPath(lastArrayPath);
-      }
+      // 删除旧key数据，需要包含'a[][]'这类多维数组，未尾为数组时，需要删除数组，为key时删除对应的key
+      const oldPathList = resolvePath(oldTargetPath).filter(item => item !== '[]');
+      const lastPath = oldPathList[oldPathList.length - 1];
+      oldPathList[oldPathList.length - 1] = removeArrayPath(lastPath);
+      /** 循环最终的targetPath长度，如果少了说明有空数组提前结束循环了 */
       const maxTargetLen = (oldPathList.length - 1) * 2 + 1;
       forEachPath(targetData, oldPathList, (_value, targetPath) => {
         if (targetPath.length < maxTargetLen) {
@@ -41,51 +41,34 @@ export function dataFormatPath<R extends object>(
   formatParams?.forEach(([oldTargetPath, newTargetPath, { def, customizer, custom } = {}]) => {
     if (newTargetPath) {
       const oldPathList = resolvePath(oldTargetPath);
-      const newPathList = resolvePath(newTargetPath);
+      let newPathList = resolvePath(newTargetPath);
       // 判断多级数组赋值非最后一级数组的路径相同
       if (!comparePath(oldPathList, newPathList)) {
         return;
       }
-      /** 最后一个数组类型路径 */
-      let lastArrayPath = '';
-      /** 最后一个对象类型路径 */
-      let lastObjectPath = '';
-
-      const newPathLen = newPathList.length;
-      if (isArrayPath(newPathList[newPathLen - 1])) {
-        lastArrayPath = removeArrayPath(newPathList[newPathLen - 1]);
-      }
-      else {
-        lastArrayPath = removeArrayPath(newPathList[newPathLen - 2]);
-        lastObjectPath = newPathList[newPathLen - 1];
-      }
-      /** 循环最终的targetPath长度，如果少了说明有空数组提前结束循环了 */
-      const maxTargetLen = lastObjectPath ? (newPathLen - 1) * 2 + 1 : newPathLen * 2 + 1;
+      newPathList = newPathList.map(item => removeArrayPath(item));
       forEachPath(sourceData, oldPathList, (value, targetPath) => {
         const targetLen = targetPath.length;
-        if (targetLen < maxTargetLen) {
-          if (targetLen === maxTargetLen - 2) {
-            const pathList: (number | string | undefined)[] = targetPath.slice(0, -1);
-            pathList.push(lastArrayPath);
-            const path = pathList.filter(item => ![undefined, '', -1].includes(item)).join('.');
-            setWith(targetData, path, [], customizer);
+        // 获取转化路径
+        let setPath = '';
+        for (let i = 0, j = 0; i < targetLen; i += 2, j++) {
+          if (newPathList[j]) {
+            setPath += `.${newPathList[j]}`;
           }
-          else {
-            const path = targetPath.filter(item => ![undefined, '', -1].includes(item)).join('.');
-            setWith(targetData, path, [], customizer);
+          if (typeof targetPath[i + 1] === 'number') {
+            setPath += `.${targetPath[i + 1]}`;
           }
-          return;
         }
+        setPath = setPath.slice(1);
+        // 获取转化值
         const targetIndex = targetPath[targetLen - 2] as number | undefined;
-        const pathList: (number | string | undefined)[] = targetPath.slice(0, -3);
-        pathList.push(lastArrayPath, targetIndex, lastObjectPath);
-        const path = pathList.filter(item => ![undefined, '', -1].includes(item)).join('.');
-        value = cloneDeep(value);
+        let setValue = cloneDeep(value);
         if (custom) {
-          value = custom(value, targetIndex);
+          setValue = custom(setValue, targetIndex);
         }
-        value ??= def;
-        setWith(targetData, path, value, customizer);
+        setValue ??= def;
+
+        setWith(targetData, setPath, setValue, customizer);
       });
     }
   });
@@ -108,22 +91,16 @@ function resolvePath(path: DataPath): string[] {
 
 /** 比较路径在多级数组下是符合赋值条件 */
 function comparePath(path1: string[], path2: string[]) {
-  let isSame = true;
   const len = Math.max(path1.length, path2.length);
   for (let i = 0; i < len; i++) {
     const path1IsArrayPath = isArrayPath(path1[i]);
     const path2IsArrayPath = isArrayPath(path2[i]);
     if (path1IsArrayPath && path2IsArrayPath) {
-      if (!isSame) {
-        console.error(`多级数组赋值需要保证非最后一级数组的路径相同
-           ${pathsToString(path1.splice(0, i))} !== ${pathsToString(path2.splice(0, i))}`);
-        return false;
-      }
-      isSame = JSON.stringify(path1[i]) === JSON.stringify(path2[i]);
+      continue;
     }
     else if (path1IsArrayPath || path2IsArrayPath) {
-      console.error(`${pathsToString(path1)}与${pathsToString(path2)}不为同级数组格式`);
-      return;
+      console.error(`${pathsToString(path1)}与${pathsToString(path2)}不为同维度数组格式`);
+      return false;
     }
   }
   return true;
@@ -167,7 +144,7 @@ function forEachPath(
       });
     }
     else {
-      callBack(undefined, presentPath);
+      callBack([], presentPath);
     }
   }
   else {

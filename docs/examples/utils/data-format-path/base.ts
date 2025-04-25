@@ -3,12 +3,12 @@ import { dataFormatPath } from 'mortise-tenon-tool';
 
 const data = { a: [[1, 2], [3, 4]] };
 const formatPaths: FormatPathParam[] = [
-  ['a[][]', 'a[].b[].c'],
+  ['a[][]', 'x[].y[].z'],
 ];
 
 dataFormatPath(data, formatPaths);
 
 /**
  * =>
- *  { a: [{ b: [{ c: 1 }, { c: 2 }] }, { b: [{ c: 3 }, { c: 4 }] }] }
+ *  { x: [{ y: [{ z: 1 }, { z: 2 }] }, { y: [{ z: 3 }, { z: 4 }] }] }
  */
