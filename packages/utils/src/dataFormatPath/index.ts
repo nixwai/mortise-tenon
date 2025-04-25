@@ -17,8 +17,8 @@ export function dataFormatPath<R extends object>(
   const targetData = grafData
     ? (isSameData ? cloneDeep(sourceData) : grafData) as object
     : (isArray(sourceData) ? [] : {});
+  // 当传入原数据与移植数据相同时，删除旧key数据
   if (isSameData) {
-    // 删除旧key数据
     formatParams?.forEach(([oldTargetPath, _, { retain } = {}]) => {
       if (retain) {
         return;
@@ -38,6 +38,7 @@ export function dataFormatPath<R extends object>(
       });
     });
   }
+  // 根据新路径添加数据
   formatParams?.forEach(([oldTargetPath, newTargetPath, { def, customizer, custom } = {}]) => {
     if (newTargetPath) {
       const oldPathList = resolvePath(oldTargetPath);
@@ -99,15 +100,12 @@ function comparePath(path1: string[], path2: string[]) {
       continue;
     }
     else if (path1IsArrayPath || path2IsArrayPath) {
+      const pathsToString = (paths: string[]) => JSON.stringify(paths.join('.')).replace('.[', '[');
       console.error(`${pathsToString(path1)}与${pathsToString(path2)}不为同维度数组格式`);
       return false;
     }
   }
   return true;
-}
-
-function pathsToString(paths: string[]) {
-  return JSON.stringify(paths.join('.')).replace('.[', '[');
 }
 
 /** 路径是否为数组 */
