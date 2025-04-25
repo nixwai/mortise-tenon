@@ -8,12 +8,12 @@ import { cloneDeep, get, isArray, setWith, unset } from 'lodash-es';
  * @param grafData 移植数据，可将新的数据直接移植到这个数据中(除原数据外)
  * @returns 新数据或移植数据，如果移植数据传入的是原数据，会拷贝为新数据，防止直接修改原数据
  */
-export function objectFormatPath<R extends object, T extends object>(
-  sourceData?: T,
+export function objectFormatPath<R extends object>(
+  sourceData?: any,
   formatParams?: FormatPathParam[],
   grafData?: object,
 ) {
-  const isSameData = sourceData === grafData;
+  const isSameData = typeof sourceData === 'object' && typeof grafData === 'object' && sourceData === grafData;
   const targetData = grafData
     ? (isSameData ? cloneDeep(sourceData) : grafData) as object
     : (isArray(sourceData) ? [] : {});
@@ -27,7 +27,7 @@ export function objectFormatPath<R extends object, T extends object>(
   }
   formatParams?.forEach(([oldPath, newPath, { def, customizer, custom } = {}]) => {
     if (newPath) {
-      let value = cloneDeep(get(sourceData, oldPath));
+      let value = cloneDeep(oldPath ? get(sourceData, oldPath) : sourceData);
       if (custom) {
         value = custom(value);
       }

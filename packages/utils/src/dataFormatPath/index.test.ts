@@ -32,6 +32,22 @@ describe('test dataFormatPath', () => {
     };
     expect(dataFormatPath(data, formatKeys)).toStrictEqual(result);
   });
+  it('应该将常量转变为对象', () => {
+    const data = 'val';
+    const formatKeys: FormatPathParam[] = [
+      ['', 'a.b'],
+    ];
+    const result = { a: { b: 'val' } };
+    expect(dataFormatPath(data, formatKeys)).toStrictEqual(result);
+  });
+  it('应该将常量转变为数组', () => {
+    const data = 'val';
+    const formatKeys: FormatPathParam[] = [
+      ['', '[0].a'],
+    ];
+    const result = [{ a: 'val' }];
+    expect(dataFormatPath(data, formatKeys, [])).toStrictEqual(result);
+  });
   it('应该根据路径将成的数据转化给移植数据', () => {
     const data = { a: [{ b: 1 }, { b: 2 }] };
     const grafData = { c: 3 };
@@ -59,12 +75,28 @@ describe('test dataFormatPath', () => {
     expect(dataFormatPath(data, formatKeys)).toStrictEqual(result);
   });
   it('应该根据配置的customizer与原数据生成对象数据', () => {
-    const data = { a: [{ b: 1 }, { b: 2 }] };
+    const data = { a: [{ b: [1, 2] }, { b: [3, 4] }] };
     const formatKeys: FormatPathParam[] = [
-      ['a[].b', 'b[]', { customizer: Object }],
+      ['a[].b[]', 'a[][]', { customizer: Object }],
     ];
-    const result = { b: { 0: 1, 1: 2 } };
+    const result = { a: { 0: { 0: 1, 1: 2 }, 1: { 0: 3, 1: 4 } } };
     expect(dataFormatPath(data, formatKeys)).toStrictEqual(result);
+  });
+  it('应该根据空数组数据生成对应空数组', () => {
+    const data = { a: [] };
+    const formatPaths: FormatPathParam[] = [
+      ['a[][]', 'a[].b[]'],
+    ];
+    const result = { a: [] };
+    expect(dataFormatPath(data, formatPaths)).toStrictEqual(result);
+  });
+  it('应该根据空对象数组数据生成对应空对象数组', () => {
+    const data = { a: [[], []] };
+    const formatPaths: FormatPathParam[] = [
+      ['a[][]', 'a[].b[]'],
+    ];
+    const result = { a: [{ b: [] }, { b: [] }] };
+    expect(dataFormatPath(data, formatPaths)).toStrictEqual(result);
   });
   it('应该调换两个路径', () => {
     const data = [{ a: 1, b: 2 }, { a: 3, b: 4 }];

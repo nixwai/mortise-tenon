@@ -8,12 +8,12 @@ import { cloneDeep, get, isArray, setWith, unset } from 'lodash-es';
  * @param grafData 移植数据，可将新的数据直接移植到这个数据中(除原数据外)
  * @returns 新数据或移植数据，如果移植数据传入的是原数据，会拷贝为新数据，防止直接修改原数据
  */
-export function dataFormatPath<R extends object, T extends object>(
-  sourceData?: T,
+export function dataFormatPath<R extends object>(
+  sourceData?: any,
   formatParams?: FormatPathParam[],
   grafData?: object,
 ) {
-  const isSameData = sourceData === grafData;
+  const isSameData = typeof sourceData === 'object' && typeof grafData === 'object' && sourceData === grafData;
   const targetData = grafData
     ? (isSameData ? cloneDeep(sourceData) : grafData) as object
     : (isArray(sourceData) ? [] : {});
@@ -28,7 +28,11 @@ export function dataFormatPath<R extends object, T extends object>(
       if (isArrayPath(lastArrayPath)) {
         oldPathList[oldPathList.length - 1] = removeArrayPath(lastArrayPath);
       }
+      const maxTargetLen = (oldPathList.length - 1) * 2 + 1;
       forEachPath(targetData, oldPathList, (_value, targetPath) => {
+        if (targetPath.length < maxTargetLen) {
+          return;
+        }
         const path = targetPath.filter(item => ![undefined, '', -1].includes(item)).join('.');
         unset(targetData, path);
       });
@@ -55,8 +59,24 @@ export function dataFormatPath<R extends object, T extends object>(
         lastArrayPath = removeArrayPath(newPathList[newPathLen - 2]);
         lastObjectPath = newPathList[newPathLen - 1];
       }
+      /** 循环最终的targetPath长度，如果少了说明有空数组提前结束循环了 */
+      const maxTargetLen = lastObjectPath ? (newPathLen - 1) * 2 + 1 : newPathLen * 2 + 1;
       forEachPath(sourceData, oldPathList, (value, targetPath) => {
-        const targetIndex = targetPath[targetPath.length - 2] as number | undefined;
+        const targetLen = targetPath.length;
+        if (targetLen < maxTargetLen) {
+          if (targetLen === maxTargetLen - 2) {
+            const pathList: (number | string | undefined)[] = targetPath.slice(0, -1);
+            pathList.push(lastArrayPath);
+            const path = pathList.filter(item => ![undefined, '', -1].includes(item)).join('.');
+            setWith(targetData, path, [], customizer);
+          }
+          else {
+            const path = targetPath.filter(item => ![undefined, '', -1].includes(item)).join('.');
+            setWith(targetData, path, [], customizer);
+          }
+          return;
+        }
+        const targetIndex = targetPath[targetLen - 2] as number | undefined;
         const pathList: (number | string | undefined)[] = targetPath.slice(0, -3);
         pathList.push(lastArrayPath, targetIndex, lastObjectPath);
         const path = pathList.filter(item => ![undefined, '', -1].includes(item)).join('.');
@@ -91,17 +111,26 @@ function comparePath(path1: string[], path2: string[]) {
   let isSame = true;
   const len = Math.max(path1.length, path2.length);
   for (let i = 0; i < len; i++) {
-    if (isArrayPath(path1[i]) || isArrayPath(path2[i])) {
+    const path1IsArrayPath = isArrayPath(path1[i]);
+    const path2IsArrayPath = isArrayPath(path2[i]);
+    if (path1IsArrayPath && path2IsArrayPath) {
       if (!isSame) {
-        const pathsToString = (paths: string[]) => JSON.stringify(paths.map(item => item.split(',')).flat());
         console.error(`多级数组赋值需要保证非最后一级数组的路径相同
            ${pathsToString(path1.splice(0, i))} !== ${pathsToString(path2.splice(0, i))}`);
         return false;
       }
       isSame = JSON.stringify(path1[i]) === JSON.stringify(path2[i]);
     }
+    else if (path1IsArrayPath || path2IsArrayPath) {
+      console.error(`${pathsToString(path1)}与${pathsToString(path2)}不为同级数组格式`);
+      return;
+    }
   }
   return true;
+}
+
+function pathsToString(paths: string[]) {
+  return JSON.stringify(paths.join('.')).replace('.[', '[');
 }
 
 /** 路径是否为数组 */
@@ -131,14 +160,18 @@ function forEachPath(
     pathItem = removeArrayPath(pathItem);
     const presentPath = targetPath.concat(pathItem);
     target = pathItem.length ? get(target, pathItem) : target;
-    if (isArray(target)) {
+    if (isArray(target) && target.length) {
       target.forEach((item, i) => {
         const itemPath = presentPath.concat(i);
         forEachPath(item, pathList, callBack, pathIndex + 1, itemPath);
       });
     }
+    else {
+      callBack(undefined, presentPath);
+    }
   }
   else {
-    callBack(get(target, pathItem), targetPath.concat(pathItem));
+    const value = pathItem ? get(target, pathItem) : target;
+    callBack(value, targetPath.concat(pathItem));
   }
 }

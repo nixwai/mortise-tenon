@@ -35,6 +35,22 @@ describe('test objectFormatPath', () => {
 
     expect(objectFormatPath(obj, formatKeys)).toStrictEqual(result);
   });
+  it('应该将常量转变为对象', () => {
+    const data = 'val';
+    const formatKeys: FormatPathParam[] = [
+      ['', 'a.b'],
+    ];
+    const result = { a: { b: 'val' } };
+    expect(objectFormatPath(data, formatKeys)).toStrictEqual(result);
+  });
+  it('应该将常量转变为数组', () => {
+    const data = 'val';
+    const formatKeys: FormatPathParam[] = [
+      ['', '[0].a'],
+    ];
+    const result = [{ a: 'val' }];
+    expect(objectFormatPath(data, formatKeys, [])).toStrictEqual(result);
+  });
   it('应该根据路径将成的数据转化给移植数据', () => {
     const data = { a: { b: 1, c: 2 } };
     const grafData = { a: 0 };
