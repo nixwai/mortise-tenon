@@ -3,69 +3,73 @@ import { cloneDeep, get, isArray, setWith, unset } from 'lodash-es';
 
 /**
  * 将目标对象路径进行修改，返回自定义新数据或移植数据
- * @param sourceData 原数据
- * @param formatParams 要修改数据路径，[旧路径，新路径（没有时表删除），转化的配置项]
- * @param grafData 移植数据，可将新的数据直接移植到这个数据中(除原数据外)
+ * @param sourceData 原数据(不会影响修改到这个数据)
+ * @param formatParams 要修改数据路径，[旧路径，新路径，转化的配置项]
+ * @param grafData 移植数据，可将新的数据直接移植到这个数据中，如果传入的是原数据，会拷贝为新数据并默认删除旧路径的数据
  * @returns 新数据或移植数据，如果移植数据传入的是原数据，会拷贝为新数据，防止直接修改原数据
  */
-export function dataFormatPath<R extends object, T extends object>(
-  sourceData?: T,
+export function dataFormatPath<R extends object>(
+  sourceData?: any,
   formatParams?: FormatPathParam[],
   grafData?: object,
 ) {
-  const isSameData = sourceData === grafData;
+  const isSameData = typeof sourceData === 'object' && typeof grafData === 'object' && sourceData === grafData;
   const targetData = grafData
     ? (isSameData ? cloneDeep(sourceData) : grafData) as object
     : (isArray(sourceData) ? [] : {});
+  // 当传入原数据与移植数据相同时，删除旧key数据
   if (isSameData) {
-    // 删除旧key数据
     formatParams?.forEach(([oldTargetPath, _, { retain } = {}]) => {
       if (retain) {
         return;
       }
-      const oldPathList = resolvePath(oldTargetPath);
-      const lastArrayPath = oldPathList[oldPathList.length - 1];
-      if (isArrayPath(lastArrayPath)) {
-        oldPathList[oldPathList.length - 1] = removeArrayPath(lastArrayPath);
-      }
+      // 删除旧key数据，需要包含'a[][]'这类多维数组，未尾为数组时，需要删除数组，为key时删除对应的key
+      const oldPathList = resolvePath(oldTargetPath).filter(item => item !== '[]');
+      const lastPath = oldPathList[oldPathList.length - 1];
+      oldPathList[oldPathList.length - 1] = removeArrayPath(lastPath);
+      /** 循环最终的targetPath长度，如果少了说明有空数组提前结束循环了 */
+      const maxTargetLen = (oldPathList.length - 1) * 2 + 1;
       forEachPath(targetData, oldPathList, (_value, targetPath) => {
+        if (targetPath.length < maxTargetLen) {
+          return;
+        }
         const path = targetPath.filter(item => ![undefined, '', -1].includes(item)).join('.');
         unset(targetData, path);
       });
     });
   }
+  // 根据新路径添加数据
   formatParams?.forEach(([oldTargetPath, newTargetPath, { def, customizer, custom } = {}]) => {
     if (newTargetPath) {
       const oldPathList = resolvePath(oldTargetPath);
-      const newPathList = resolvePath(newTargetPath);
+      let newPathList = resolvePath(newTargetPath);
       // 判断多级数组赋值非最后一级数组的路径相同
       if (!comparePath(oldPathList, newPathList)) {
         return;
       }
-      /** 最后一个数组类型路径 */
-      let lastArrayPath = '';
-      /** 最后一个对象类型路径 */
-      let lastObjectPath = '';
-
-      const newPathLen = newPathList.length;
-      if (isArrayPath(newPathList[newPathLen - 1])) {
-        lastArrayPath = removeArrayPath(newPathList[newPathLen - 1]);
-      }
-      else {
-        lastArrayPath = removeArrayPath(newPathList[newPathLen - 2]);
-        lastObjectPath = newPathList[newPathLen - 1];
-      }
+      newPathList = newPathList.map(item => removeArrayPath(item));
       forEachPath(sourceData, oldPathList, (value, targetPath) => {
-        const targetIndex = targetPath[targetPath.length - 2] as number | undefined;
-        const pathList: (number | string | undefined)[] = targetPath.slice(0, -3);
-        pathList.push(lastArrayPath, targetIndex, lastObjectPath);
-        const path = pathList.filter(item => ![undefined, '', -1].includes(item)).join('.');
-        value = cloneDeep(value);
-        if (custom) {
-          value = custom(value, targetIndex);
+        const targetLen = targetPath.length;
+        // 获取转化路径
+        let setPath = '';
+        for (let i = 0, j = 0; i < targetLen; i += 2, j++) {
+          if (newPathList[j]) {
+            setPath += `.${newPathList[j]}`;
+          }
+          if (typeof targetPath[i + 1] === 'number') {
+            setPath += `.${targetPath[i + 1]}`;
+          }
         }
-        value ??= def;
-        setWith(targetData, path, value, customizer);
+        setPath = setPath.slice(1);
+        // 获取转化值
+        const targetIndex = targetPath[targetLen - 2] as number | undefined;
+        let setValue = cloneDeep(value);
+        if (custom) {
+          setValue = custom(setValue, targetIndex);
+        }
+        setValue ??= def;
+
+        setWith(targetData, setPath, setValue, customizer);
       });
     }
   });
@@ -88,17 +92,17 @@ function resolvePath(path: DataPath): string[] {
 
 /** 比较路径在多级数组下是符合赋值条件 */
 function comparePath(path1: string[], path2: string[]) {
-  let isSame = true;
   const len = Math.max(path1.length, path2.length);
   for (let i = 0; i < len; i++) {
-    if (isArrayPath(path1[i]) || isArrayPath(path2[i])) {
-      if (!isSame) {
-        const pathsToString = (paths: string[]) => JSON.stringify(paths.map(item => item.split(',')).flat());
-        console.error(`多级数组赋值需要保证非最后一级数组的路径相同
-           ${pathsToString(path1.splice(0, i))} !== ${pathsToString(path2.splice(0, i))}`);
-        return false;
-      }
-      isSame = JSON.stringify(path1[i]) === JSON.stringify(path2[i]);
+    const path1IsArrayPath = isArrayPath(path1[i]);
+    const path2IsArrayPath = isArrayPath(path2[i]);
+    if (path1IsArrayPath && path2IsArrayPath) {
+      continue;
+    }
+    else if (path1IsArrayPath || path2IsArrayPath) {
+      const pathsToString = (paths: string[]) => JSON.stringify(paths.join('.')).replace('.[', '[');
+      console.error(`${pathsToString(path1)}与${pathsToString(path2)}不为同维度数组格式`);
+      return false;
     }
   }
   return true;
@@ -131,14 +135,18 @@ function forEachPath(
     pathItem = removeArrayPath(pathItem);
     const presentPath = targetPath.concat(pathItem);
     target = pathItem.length ? get(target, pathItem) : target;
-    if (isArray(target)) {
+    if (isArray(target) && target.length) {
       target.forEach((item, i) => {
         const itemPath = presentPath.concat(i);
         forEachPath(item, pathList, callBack, pathIndex + 1, itemPath);
       });
     }
+    else {
+      callBack([], presentPath);
+    }
   }
   else {
-    callBack(get(target, pathItem), targetPath.concat(pathItem));
+    const value = pathItem ? get(target, pathItem) : target;
+    callBack(value, targetPath.concat(pathItem));
   }
 }
