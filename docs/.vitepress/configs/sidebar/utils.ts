@@ -32,8 +32,8 @@ export const utilsSidebar: DefaultTheme.SidebarItem[] = [
     text: '时间',
     items: [
       {
-        text: 'getTimeRange',
-        link: '/zh/utils/time-sooner-and-later.md',
+        text: 'soonerAndLater[times]',
+        link: '/zh/utils/sooner-and-later-times.md',
       },
     ],
   },
