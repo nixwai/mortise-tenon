@@ -16,4 +16,4 @@ export interface FormatPathOptions {
 }
 
 /** 转化数据路径的参数类型 */
-export type FormatPathParam = [DataPath, DataPath, FormatPathOptions] | [DataPath, DataPath] | [DataPath];
+export type FormatPathParam = [DataPath, DataPath?, FormatPathOptions?];
