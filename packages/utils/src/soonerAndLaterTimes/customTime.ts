@@ -35,7 +35,7 @@ export type TimeParam = TimeDate[] | TimeDate;
  * 函数的参数
  * @param_0 时间
  * @param_1 时间格式，默认为时间戳，注意大小写(https://date-fns.org/v4.1.0/docs/format)
- * @param_2 时间格式选项(https://github.com/date-fns/date-fns/blob/main/docs/unicodeTokens.md)
+ * @param_2 时间格式选项(https://date-fns.org/v4.1.0/docs/format#types/FormatOptions/630)
  */
 type SoonerAndLaterParams = [TimeParam?, string?, FormatOptions?];
 
@@ -56,8 +56,9 @@ function formatOfTimeFn(
   if (!Array.isArray(times)) {
     times = [times, times];
   }
-  const startTime = times[0] ? format(startFn(times[0], options), formatValue, options) : '';
-  const endTime = times[1] ? format(endFn(times[1], options), formatValue, options) : '';
+  const fnOptions = { ...options, in: undefined };
+  const startTime = times[0] ? format(startFn(times[0], fnOptions), formatValue, options) : '';
+  const endTime = times[1] ? format(endFn(times[1], fnOptions), formatValue, options) : '';
   return startTime || endTime ? [startTime, endTime] : undefined;
 }
 
@@ -116,12 +117,32 @@ export function soonerAndLaterYear(...params: SoonerAndLaterParams) {
 }
 
 /**
+ * 获取对应的一ISO周年最早一刻到最晚一刻
+ * @see ISO: https://zh.wikipedia.org/wiki/ISO%E9%80%B1%E6%97%A5%E6%9B%86
+ * @params 参数：(时间，格式，格式选项) - {@link SoonerAndLaterParams}
+ * @returns [开始时间, 结束时间]
+ */
+export function soonerAndLaterISOWeekYear(...params: SoonerAndLaterParams) {
+  return formatOfTimeFn(params, [startOfISOWeekYear, endOfISOWeekYear]);
+}
+
+/**
  * 获取对应的一周最早一刻到最晚一刻
  * @params 参数：(时间，格式，格式选项) - {@link SoonerAndLaterParams}
  * @returns [开始时间, 结束时间]
  */
 export function soonerAndLaterWeek(...params: SoonerAndLaterParams) {
   return formatOfTimeFn(params, [startOfWeek, endOfWeek]);
+}
+
+/**
+ * 获取对应的一ISO周最早一刻到最晚一刻
+ * @see ISO: https://zh.wikipedia.org/wiki/ISO%E9%80%B1%E6%97%A5%E6%9B%86
+ * @params 参数：(时间，格式，格式选项) - {@link SoonerAndLaterParams}
+ * @returns [开始时间, 结束时间]
+ */
+export function soonerAndLaterISOWeek(...params: SoonerAndLaterParams) {
+  return formatOfTimeFn(params, [startOfISOWeek, endOfISOWeek]);
 }
 
 /**
@@ -140,24 +161,4 @@ export function soonerAndLaterDecade(...params: SoonerAndLaterParams) {
  */
 export function soonerAndLaterQuarter(...params: SoonerAndLaterParams) {
   return formatOfTimeFn(params, [startOfQuarter, endOfQuarter]);
-}
-
-/**
- * 获取对应的一ISO周最早一刻到最晚一刻
- * @see ISO: https://zh.wikipedia.org/wiki/ISO%E9%80%B1%E6%97%A5%E6%9B%86
- * @params 参数：(时间，格式，格式选项) - {@link SoonerAndLaterParams}
- * @returns [开始时间, 结束时间]
- */
-export function soonerAndLaterISOWeek(...params: SoonerAndLaterParams) {
-  return formatOfTimeFn(params, [startOfISOWeek, endOfISOWeek]);
-}
-
-/**
- * 获取对应的一ISO周年最早一刻到最晚一刻
- * @see ISO: https://zh.wikipedia.org/wiki/ISO%E9%80%B1%E6%97%A5%E6%9B%86
- * @params 参数：(时间，格式，格式选项) - {@link SoonerAndLaterParams}
- * @returns [开始时间, 结束时间]
- */
-export function soonerAndLaterISOWeekYear(...params: SoonerAndLaterParams) {
-  return formatOfTimeFn(params, [startOfISOWeekYear, endOfISOWeekYear]);
 }

@@ -3,8 +3,9 @@ import { endOfToday, endOfTomorrow, endOfYesterday, format, startOfToday, startO
 
 /**
  * 函数的参数
- * @param_0 时间格式，默认为时间戳，注意大小写(https://date-fns.org/v4.1.0/docs/format)
- * @param_1 时间格式选项(https://github.com/date-fns/date-fns/blob/main/docs/unicodeTokens.md)
+ * @param_0 时间
+ * @param_1 时间格式，默认为时间戳，注意大小写(https://date-fns.org/v4.1.0/docs/format)
+ * @param_2 时间格式选项(https://date-fns.org/v4.1.0/docs/format#types/FormatOptions/630)
  */
 type SoonerAndLaterParams = [string?, FormatOptions?];
 
@@ -19,8 +20,9 @@ function formatOfTimeFn(
 ) {
   const [formatValue = 'T', options] = timesParams;
   const [startFn, endFn] = fns;
-  const startTime = format(startFn(options), formatValue, options);
-  const endTime = format(endFn(options), formatValue, options);
+  const fnOptions = { ...options, in: undefined };
+  const startTime = format(startFn(fnOptions), formatValue, options);
+  const endTime = format(endFn(fnOptions), formatValue, options);
   return startTime || endTime ? [startTime, endTime] : undefined;
 }
 
