@@ -3,9 +3,8 @@ import { endOfToday, endOfTomorrow, endOfYesterday, format, startOfToday, startO
 
 /**
  * 函数的参数
- * @param_0 时间
- * @param_1 时间格式，默认为时间戳，注意大小写(https://date-fns.org/v4.1.0/docs/format)
- * @param_2 时间格式选项(https://date-fns.org/v4.1.0/docs/format#types/FormatOptions/630)
+ * @param_0 时间格式，默认为时间戳，注意大小写(https://date-fns.org/v4.1.0/docs/format)
+ * @param_1 格式选项(https://date-fns.org/v4.1.0/docs/format#types/FormatOptions/630)
  */
 type SoonerAndLaterParams = [string?, FormatOptions?];
 
