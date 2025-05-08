@@ -1,24 +1,18 @@
 <script setup lang="tsx">
 import { MtComponentNeo, useComponentNeo } from 'mortise-tenon-design';
-import { h, onMounted, reactive, toRefs } from 'vue';
+import { h, onMounted, ref } from 'vue';
 import Text from './text.vue';
 
 const { getComponentRef, toggleComponent } = useComponentNeo('uniqueId1');
 
-const inputValues = reactive({
-  input1: '',
-  input2: '',
-  input3: '',
-});
-
-const valueAsRefs = toRefs(inputValues);
+const inputValue = ref('');
 
 function handleClick(index = 1) {
   switch (index) {
     case 1:
       toggleComponent(
         Text,
-        { key: 'input1', vModel: valueAsRefs.input1 },
+        { key: 'input1', vModel: inputValue },
         {
           text: (slotData: { value: string }) =>
             h('div', `输入框1：${slotData?.value}`),
@@ -28,7 +22,7 @@ function handleClick(index = 1) {
     case 2:
       toggleComponent(
         () => import('./text.vue'),
-        { 'key': 'input2', 'vModel:modelValue': valueAsRefs.input2 },
+        { 'key': 'input2', 'vModel:modelValue': inputValue },
         {
           text: (slotData: { value: string }) => (
             <div>
@@ -44,7 +38,7 @@ function handleClick(index = 1) {
         h(() => (
           <Text
             key="input3"
-            v-model={valueAsRefs.input3.value}
+            v-model={inputValue}
           >
             {{
               text: (slotData: { value: string }) => (
@@ -72,7 +66,7 @@ onMounted(() => {
 
 <template>
   <div>
-    <!-- <Text v-model="inputValue" class="mb-2" /> -->
+    <Text v-model="inputValue" class="mb-2" />
     <button
       v-for="i in 3"
       :key="i"
