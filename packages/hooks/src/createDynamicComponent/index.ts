@@ -65,6 +65,7 @@ export function createDynamicComponent() {
 
   const DynamicComponent = defineComponent({
     name: 'DynamicComponent',
+    inheritAttrs: false,
     props: {
       is: {
         type: [String, Object, Function] as PropType<string | Component>,
