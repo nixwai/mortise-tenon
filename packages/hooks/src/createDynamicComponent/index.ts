@@ -13,7 +13,7 @@ export interface ComponentContext {
   /** 插槽 */
   slots?: ComponentSlots
   /** 实例引用 */
-  domRef?: Element
+  domRef?: any
   /** 渲染回调 */
   onRendered?: () => void
 }
@@ -71,15 +71,15 @@ export function createDynamicComponent() {
         default: undefined,
       },
     },
-    emits: ['rendered'],
-    setup(props, { slots, attrs, emit, expose }) {
-      const componentRefHandler = ((el: Element) => instance.domRef = el) as VNodeRef;
+    emits: { rendered: (_domRef?: any, _componentName?: string) => true },
+    setup(props, { slots, attrs, emit }) {
+      const compRefHandler = ((el: Element) => instance.domRef = el) as VNodeRef;
 
       /** 组件实例 */
       const currentComponent = computed<string | Component>(() => instance.component || props.is || Comment);
 
       /** 组件名称 */
-      const componentName = computed(() =>
+      const compName = computed(() =>
         typeof currentComponent.value === 'object' && 'name' in currentComponent.value
           ? currentComponent.value.name
           : undefined,
@@ -99,23 +99,20 @@ export function createDynamicComponent() {
       });
 
       instance.onRendered = () => {
-        emit('rendered', componentName.value, instance.domRef);
+        emit('rendered', instance.domRef, compName.value);
       };
 
       if (slots.default) {
         return () => h(Fragment, null, slots.default?.({
-          Component: h(currentComponent.value, compAttrs.value, instance.slots),
-          compRef: componentRefHandler,
+          Component: h(currentComponent.value, { ...compAttrs.value, ref: compRefHandler }, instance.slots),
           attrs: compAttrs.value,
-          compName: componentName.value,
+          compName: compName.value,
         }));
       }
 
-      expose({ ...instance.domRef });
-
-      return () => h(currentComponent.value, { ...compAttrs.value, ref: componentRefHandler }, instance.slots);
+      return () => h(currentComponent.value, { ...compAttrs.value, ref: compRefHandler }, instance.slots);
     },
   });
 
-  return { DynamicComponent, renderComponent, getRef: () => instance.domRef };
+  return { DynamicComponent, renderComponent, getDomRef: () => instance.domRef };
 }
