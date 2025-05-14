@@ -1,11 +1,23 @@
 import type { Component, DefineComponent, PropType, VNode, VNodeRef } from 'vue-demi';
 import { Comment, computed, defineComponent, Fragment, h, isRef, nextTick, shallowReactive, unref } from 'vue-demi';
 
-export type AnyDefineComponent = DefineComponent<any, any, any, any, any, any, any, any, any, any>;
-export type DynamicImportComponent = () => Promise<Record<string, any>>;
+type AnyDefineComponent = DefineComponent<any, any, any, any, any, any, any, any, any, any>;
+type DynamicImportComponent = () => Promise<Record<string, any>>;
+/** 渲染的组件 */
 export type ComponentSource = AnyDefineComponent | DynamicImportComponent | VNode;
+/** 组件插槽 */
 export type ComponentSlots = Record<string, (arg: any) => VNode> | VNode;
-export interface ComponentContext {
+/** 组件渲染后的事件参数 */
+export interface RenderedOptions {
+  /** 组件名称 */
+  name?: string
+  /** 属性 */
+  attributes?: Record<string, unknown>
+  /** 实例引用 */
+  domRef?: any
+};
+
+interface ComponentContext {
   /** 组件 */
   component?: AnyDefineComponent | VNode
   /** 属性 */
@@ -22,7 +34,7 @@ export function createDynamicComponent() {
   const instance = shallowReactive<ComponentContext>({});
 
   /**
-   * 切换渲染的组件
+   * 渲染组件方法
    * @param source 组件，支持传入，1.import动态导入 2.组件类型 3.VNode
    * @param props 组件属性，可使用`on事件`方式添加事件方法，属性支持Ref类型进行绑定以实现动态变化, 支持通过{'vModal:value': value}方式双向绑定数据
    * @param slots 组件插槽
@@ -73,7 +85,7 @@ export function createDynamicComponent() {
         default: undefined,
       },
     },
-    emits: { rendered: (_domRef?: any, _componentName?: string) => true },
+    emits: { rendered: (_options: RenderedOptions) => true },
     setup(props, { slots, attrs, emit }) {
       const compRefHandler = ((el: Element) => instance.domRef = el) as VNodeRef;
 
@@ -101,7 +113,7 @@ export function createDynamicComponent() {
       });
 
       instance.onRendered = () => {
-        emit('rendered', instance.domRef, compName.value);
+        emit('rendered', { name: compName.value, domRef: instance.domRef, attributes: compAttrs.value });
       };
 
       if (slots.default) {
