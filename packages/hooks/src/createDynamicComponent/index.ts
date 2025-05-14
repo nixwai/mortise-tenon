@@ -1,13 +1,13 @@
 import type { Component, DefineComponent, PropType, VNode, VNodeRef } from 'vue-demi';
 import { Comment, computed, defineComponent, Fragment, h, isRef, nextTick, shallowReactive, unref } from 'vue-demi';
 
-export type ComponentDefinition = DefineComponent<any, any, any, any, any, any, any, any, any, any>;
+export type AnyDefineComponent = DefineComponent<any, any, any, any, any, any, any, any, any, any>;
 export type DynamicImportComponent = () => Promise<Record<string, any>>;
-export type ComponentSource = ComponentDefinition | DynamicImportComponent | VNode;
+export type ComponentSource = AnyDefineComponent | DynamicImportComponent | VNode;
 export type ComponentSlots = Record<string, (arg: any) => VNode> | VNode;
 export interface ComponentContext {
   /** 组件 */
-  component?: ComponentDefinition | VNode
+  component?: AnyDefineComponent | VNode
   /** 属性 */
   attributes?: Record<string, unknown>
   /** 插槽 */
@@ -41,6 +41,7 @@ export function createDynamicComponent() {
     }
   }
 
+  const vModelRegex = /^vModel:?(.*)/;
   /**  提取 v-model 处理逻辑为独立函数 */
   function processVModelAttributes(rawAttrs?: Record<string, any>) {
     const processed: Record<string, unknown> = {};
@@ -48,7 +49,7 @@ export function createDynamicComponent() {
     for (const key in rawAttrs) {
       const value = rawAttrs[key];
       if (key.startsWith('vModel') || key === 'vModel') {
-        const propName = key.replace(/^vModel:?/, '') || 'modelValue';
+        const propName = key.replace(vModelRegex, '') || 'modelValue';
         processed[propName] = value;
 
         if (isRef(value)) {
