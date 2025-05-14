@@ -4,6 +4,8 @@ import { ref } from 'vue';
 defineOptions({ name: 'ExampleCount' });
 
 const value = ref(0);
+
+defineExpose({ value });
 </script>
 
 <template>

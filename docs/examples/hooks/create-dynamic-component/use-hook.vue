@@ -1,16 +1,16 @@
 <script setup lang="tsx">
-import { MtComponentNeo, useComponentNeo } from 'mortise-tenon-design';
-import { h, onMounted, ref } from 'vue';
+import type { RenderedOptions } from 'mortise-tenon-use';
+import { createDynamicComponent } from 'mortise-tenon-use';
+import { h, ref } from 'vue';
 import Text from './text.vue';
 
-const { getComponentRef, toggleComponent } = useComponentNeo('uniqueId1');
-
+const { DynamicComponent, renderComponent } = createDynamicComponent();
 const inputValue = ref('');
 
 function handleClick(index = 1) {
   switch (index) {
     case 1:
-      toggleComponent(
+      renderComponent(
         Text,
         { key: 'input1', vModel: inputValue },
         {
@@ -20,7 +20,7 @@ function handleClick(index = 1) {
       );
       break;
     case 2:
-      toggleComponent(
+      renderComponent(
         () => import('./text.vue'),
         { 'key': 'input2', 'vModel:modelValue': inputValue },
         {
@@ -34,11 +34,11 @@ function handleClick(index = 1) {
       );
       break;
     case 3:
-      toggleComponent(
+      renderComponent(
         h(() => (
           <Text
             key="input3"
-            v-model={inputValue}
+            v-model={inputValue.value}
           >
             {{
               text: (slotData: { value: string }) => (
@@ -55,13 +55,11 @@ function handleClick(index = 1) {
   }
 }
 
-function handleToggle() {
-  console.warn('已切换', getComponentRef());
+function handleRendered({ name, domRef }: RenderedOptions) {
+  console.warn('已切换', name, domRef);
 }
 
-onMounted(() => {
-  handleClick();
-});
+handleClick();
 </script>
 
 <template>
@@ -75,6 +73,6 @@ onMounted(() => {
     >
       组件{{ i }}
     </button>
-    <MtComponentNeo unique-id="uniqueId1" @toggle-component="handleToggle" />
+    <DynamicComponent @rendered="handleRendered" />
   </div>
 </template>

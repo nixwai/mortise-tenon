@@ -2,6 +2,8 @@
 defineOptions({ name: 'ExampleText' });
 
 const value = defineModel<string>({ type: String, default: '' });
+
+defineExpose({ value });
 </script>
 
 <template>

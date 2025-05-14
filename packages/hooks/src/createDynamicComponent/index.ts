@@ -53,15 +53,14 @@ export function createDynamicComponent() {
     }
   }
 
-  const vModelRegex = /^vModel:?(.*)/;
   /**  提取 v-model 处理逻辑为独立函数 */
   function processVModelAttributes(rawAttrs?: Record<string, any>) {
     const processed: Record<string, unknown> = {};
 
     for (const key in rawAttrs) {
       const value = rawAttrs[key];
-      if (key.startsWith('vModel') || key === 'vModel') {
-        const propName = key.replace(vModelRegex, '') || 'modelValue';
+      if (key.startsWith('vModel:') || key === 'vModel') {
+        const propName = key.replace(/^(vModel):?/, '') || 'modelValue';
         processed[propName] = value;
 
         if (isRef(value)) {

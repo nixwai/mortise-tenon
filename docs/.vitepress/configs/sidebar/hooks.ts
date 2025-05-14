@@ -19,4 +19,13 @@ export const hooksSidebar: DefaultTheme.SidebarItem[] = [
       },
     ],
   },
+  {
+    text: '组件',
+    items: [
+      {
+        text: 'createDynamicComponent',
+        link: '/zh/hooks/create-dynamic-component.md',
+      },
+    ],
+  },
 ];

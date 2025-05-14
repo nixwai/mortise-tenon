@@ -1,25 +1,23 @@
 <script setup lang="ts">
-import { MtComponentNeo, useComponentNeo } from 'mortise-tenon-design';
-import { onMounted, ref } from 'vue';
+import { createDynamicComponent } from 'mortise-tenon-use';
+import { ref } from 'vue';
 import Count from './count.vue';
 import Text from './text.vue';
 
-const { toggleComponent } = useComponentNeo('uniqueId3');
+const { DynamicComponent, renderComponent } = createDynamicComponent();
 
 const val = ref(false);
 function handleClick() {
   val.value = !val.value;
   if (val.value) {
-    toggleComponent(Count, { class: 'c-green' });
+    renderComponent(Count, { class: 'c-green' });
   }
   else {
-    toggleComponent(Text);
+    renderComponent(Text);
   }
 }
 
-onMounted(() => {
-  handleClick();
-});
+handleClick();
 </script>
 
 <template>
@@ -27,8 +25,8 @@ onMounted(() => {
     <button class="btn mb-2 flex flex-col-reverse" @click="handleClick">
       切换组件
     </button>
-    <MtComponentNeo v-slot="{ Component, compRef, compName }" unique-id="uniqueId3">
-      <component :is="Component" :ref="compRef">
+    <DynamicComponent v-slot="{ Component, compName }" unique-id="uniqueId3">
+      <component :is="Component">
         <template #count="{ value }">
           <div>我是{{ compName }}的自定义插槽，点击+1：{{ value }}</div>
         </template>
@@ -36,6 +34,6 @@ onMounted(() => {
           <div>我是{{ compName }}的自定义插槽，输出：{{ value }}</div>
         </template>
       </component>
-    </MtComponentNeo>
+    </DynamicComponent>
   </div>
 </template>
