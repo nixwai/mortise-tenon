@@ -1,1 +1,2 @@
-export * from './use-throttle-control';
+export * from './createDynamicComponent';
+export * from './useThrottleControl';
