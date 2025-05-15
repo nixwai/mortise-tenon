@@ -27,10 +27,11 @@ const isOutRange = computed(() => contentRange.value > props.targetRange);
 
 /** 展开或收起后容器样式 */
 const contentStyle = computed(() => {
-  if (!contentRange.value) {
+  if (!contentRange.value && props.open) {
     return {};
   }
   const size = !isOutRange.value || props.open ? contentRange.value : props.targetRange;
+
   return { height: `${size}px` };
 });
 </script>
