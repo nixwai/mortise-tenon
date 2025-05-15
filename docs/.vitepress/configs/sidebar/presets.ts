@@ -31,4 +31,8 @@ export const presetsSidebar: DefaultTheme.SidebarItem[] = [
       },
     ],
   },
+  {
+    text: '变更日志',
+    link: '/zh/presets/changelog.md',
+  },
 ];

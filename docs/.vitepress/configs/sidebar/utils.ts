@@ -37,4 +37,8 @@ export const utilsSidebar: DefaultTheme.SidebarItem[] = [
       },
     ],
   },
+  {
+    text: '变更日志',
+    link: '/zh/utils/changelog.md',
+  },
 ];

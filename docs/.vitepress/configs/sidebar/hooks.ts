@@ -28,4 +28,8 @@ export const hooksSidebar: DefaultTheme.SidebarItem[] = [
       },
     ],
   },
+  {
+    text: '变更日志',
+    link: '/zh/hooks/changelog.md',
+  },
 ];

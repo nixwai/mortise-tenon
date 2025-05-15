@@ -32,4 +32,8 @@ export const componentsSidebar: DefaultTheme.SidebarItem[] = [
       },
     ],
   },
+  {
+    text: '变更日志',
+    link: '/zh/components/changelog.md',
+  },
 ];
