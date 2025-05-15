@@ -11,6 +11,9 @@
     "docs:build": "vitepress build",
     "docs:preview": "vitepress preview"
   },
+  "dependencies": {
+    "@vueuse/core": "^13.2.0"
+  },
   "devDependencies": {
     "postcss": "^8.5.3",
     "vitepress": "^1.6.3",
