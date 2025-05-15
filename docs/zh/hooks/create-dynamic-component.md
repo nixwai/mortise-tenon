@@ -1,5 +1,9 @@
 # createDynamicComponent
 
+:::warning 注意
+该函数仅支持vue3使用
+:::
+
 创建动态组件，作用与 Vue 的 [component](https://cn.vuejs.org/api/built-in-special-elements.html#component) 类似，但希望通过更好的方法进行切换组件，可以单独传入切换后组件、参数、插槽。
 
 ## DynamicComponent
