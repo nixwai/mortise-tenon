@@ -1,7 +1,7 @@
 {
   "name": "mortise-tenon-use",
   "type": "module",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "榫卯的vue组合式工作集",
   "author": "nixwai",
   "license": "ISC",
