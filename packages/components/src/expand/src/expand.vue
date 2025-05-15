@@ -31,7 +31,6 @@ const contentStyle = computed(() => {
     return {};
   }
   const size = !isOutRange.value || props.open ? contentRange.value : props.targetRange;
-
   return { height: `${size}px` };
 });
 </script>
