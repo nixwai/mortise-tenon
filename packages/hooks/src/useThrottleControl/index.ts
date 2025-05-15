@@ -1,5 +1,5 @@
-import { tryOnScopeDispose } from '@vueuse/core';
 import { readonly, ref } from 'vue-demi';
+import { tryOnScopeDispose } from '../helper';
 
 /**
  * 节流控制

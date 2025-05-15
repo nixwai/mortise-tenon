@@ -18,7 +18,7 @@ function handleClick() {
 }
 
 function handleRendered() {
-  console.warn('已切换', getDomRef().value);
+  console.warn('已切换', getDomRef()?.value);
 }
 
 handleClick();

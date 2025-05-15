@@ -1,5 +1,5 @@
 import type { Component, DefineComponent, PropType, VNode, VNodeRef } from 'vue-demi';
-import { Comment, computed, defineComponent, Fragment, h, isRef, nextTick, shallowReactive, unref } from 'vue-demi';
+import { computed, defineComponent, h, isRef, nextTick, shallowReactive, unref } from 'vue-demi';
 
 type AnyDefineComponent = DefineComponent<any, any, any, any, any, any, any, any, any, any>;
 type DynamicImportComponent = () => Promise<Record<string, any>>;
@@ -89,7 +89,7 @@ export function createDynamicComponent() {
       const compRefHandler = ((el: Element) => instance.domRef = el) as VNodeRef;
 
       /** 组件实例 */
-      const currentComponent = computed<string | Component>(() => instance.component || props.is || Comment);
+      const currentComponent = computed<string | Component>(() => instance.component || props.is || Symbol.for('v-cmt'));
 
       /** 组件名称 */
       const compName = computed(() =>
@@ -116,11 +116,11 @@ export function createDynamicComponent() {
       };
 
       if (slots.default) {
-        return () => h(Fragment, null, slots.default?.({
+        return () => slots.default?.({
           Component: h(currentComponent.value, { ...compAttrs.value, ref: compRefHandler }, instance.slots),
           attrs: compAttrs.value,
           compName: compName.value,
-        }));
+        });
       }
 
       return () => h(currentComponent.value, { ...compAttrs.value, ref: compRefHandler }, instance.slots);
