@@ -28,7 +28,7 @@
     "preset:build": "pnpm run -C packages/core preset:build",
     "preset:publish": "pnpm run -C packages/core preset:publish",
     "lint:style": "stylelint \"./**/*.{css,less,vue,html}\" --fix",
-    "prepare": "husky install",
+    "prepare": "husky",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
