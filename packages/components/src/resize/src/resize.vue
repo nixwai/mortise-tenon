@@ -1,23 +1,86 @@
 <script setup lang="ts">
 import type { ResizeProps } from './resize';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
-type ResizingContent = (moveEvent: PointerEvent, size: { clientWidth: number, clientHeight: number }) => void;
+defineOptions({ name: 'MtResize' });
 
-const props = withDefaults(defineProps<ResizeProps>(), { disabled: false });
+const props = withDefaults(
+  defineProps<ResizeProps>(),
+  {
+    disabled: false,
+    positioned: false,
+    directions: () => ['right'],
+  },
+);
 
+/** 元素实例 */
 const contentRef = ref<HTMLDivElement>();
 
-let contentTranslateX = 0;
-let contentTranslateY = 0;
+const isCustomPosition = typeof props.positioned === 'object';
+/** X轴位移 */
+let contentTranslateX = isCustomPosition ? props.positioned.x || 0 : 0;
+/** Y轴位移 */
+let contentTranslateY = isCustomPosition ? props.positioned.y || 0 : 0;
+
+/** 向前调整（往右或者往下） */
+function resizingForward(start: number, end: number, clientValue: number, offsetValue: number) {
+  const move = start - end;
+  const value = clientValue + move;
+  return value > 0 ? { value, offset: offsetValue - move } : { value, offset: offsetValue + clientValue };
+}
+
+/** 向后调整（往左或者往上） */
+function resizingBackward(start: number, end: number, clientValue: number, offsetValue: number) {
+  const move = start - end;
+  const value = clientValue - move;
+  return value > 0 ? { value, offset: offsetValue } : { value, offset: offsetValue + value };
+}
+
+/** 设置宽度 */
+const setStyleWidth = props.positioned
+  ? (width: number) => contentRef.value!.style.width = `${Math.abs(width)}px`
+  : (width: number) => contentRef.value!.style.width = `${width > 0 ? width : 0}px`;
+
+/** 设置高度 */
+const setStyleHeight = props.positioned
+  ? (height: number) => contentRef.value!.style.height = `${Math.abs(height)}px`
+  : (height: number) => contentRef.value!.style.height = `${height > 0 ? height : 0}px`;
+
+/** 设置位移 */
+const setStyletTransform = props.positioned
+  ? (translateX: number, translateY: number) => contentRef.value!.style.transform = `translate(${translateX}px, ${translateY}px)`
+  : () => {};
+
+/** 开始拖拽容器 */
+function beginResizeContent(
+  beginEvent: PointerEvent,
+  resizingContent: (moveEvent: PointerEvent, clientSize: { clientWidth: number, clientHeight: number }) => void,
+) {
+  if (props.disabled) { return; }
+  if (!contentRef.value) { return; }
+  const { clientWidth, clientHeight } = contentRef.value;
+  contentRef.value.setPointerCapture(beginEvent.pointerId);
+  contentRef.value.onpointerup = overResizeContent;
+  contentRef.value.onpointermove = moveEvent => resizingContent(moveEvent, { clientWidth, clientHeight });
+}
+
+const translateValueReg = /translate\((.+)px,(.+)px\)/;
+/** 结束拖拽容器 */
+function overResizeContent(overEvent: PointerEvent) {
+  if (!contentRef.value) { return; }
+  contentTranslateX = Number(contentRef.value.style.transform?.match(translateValueReg)?.[1] || 0);
+  contentTranslateY = Number(contentRef.value.style.transform?.match(translateValueReg)?.[2] || 0);
+  contentRef.value.onpointermove = null;
+  contentRef.value.releasePointerCapture(overEvent.pointerId);
+}
 
 /** 选择调整左侧 */
 function handleResizeLeft(beginEvent: PointerEvent) {
   const { clientX: startX } = beginEvent;
   beginResizeContent(beginEvent, ({ clientX: endX }, { clientWidth }) => {
-    const { width, translateX } = resizingLeft(startX, endX, clientWidth);
-    contentRef.value!.style.width = `${width}px`;
-    contentRef.value!.style.transform = `translate(${translateX}px, ${contentTranslateY}px)`;
+    const { value, offset } = resizingForward(startX, endX, clientWidth, contentTranslateX);
+    setStyleWidth(value);
+    setStyletTransform(offset, contentTranslateY);
   });
 }
 
@@ -25,8 +88,9 @@ function handleResizeLeft(beginEvent: PointerEvent) {
 function handleResizeRight(beginEvent: PointerEvent) {
   const { clientX: startX } = beginEvent;
   beginResizeContent(beginEvent, ({ clientX: endX }, { clientWidth }) => {
-    const { width } = resizingRight(startX, endX, clientWidth);
-    contentRef.value!.style.width = `${width}px`;
+    const { value, offset } = resizingBackward(startX, endX, clientWidth, contentTranslateX);
+    setStyleWidth(value);
+    setStyletTransform(offset, contentTranslateY);
   });
 }
 
@@ -34,9 +98,9 @@ function handleResizeRight(beginEvent: PointerEvent) {
 function handleResizeTop(beginEvent: PointerEvent) {
   const { clientY: startY } = beginEvent;
   beginResizeContent(beginEvent, ({ clientY: endY }, { clientHeight }) => {
-    const { height, translateY } = resizingTop(startY, endY, clientHeight);
-    contentRef.value!.style.height = `${height}px`;
-    contentRef.value!.style.transform = `translate(${contentTranslateX}px, ${translateY}px)`;
+    const { value, offset } = resizingForward(startY, endY, clientHeight, contentTranslateY);
+    setStyleHeight(value);
+    setStyletTransform(contentTranslateX, offset);
   });
 }
 
@@ -44,8 +108,9 @@ function handleResizeTop(beginEvent: PointerEvent) {
 function handleResizeBottom(beginEvent: PointerEvent) {
   const { clientY: startY } = beginEvent;
   beginResizeContent(beginEvent, ({ clientY: endY }, { clientHeight }) => {
-    const { height } = resizingBottom(startY, endY, clientHeight);
-    contentRef.value!.style.height = `${height}px`;
+    const { value, offset } = resizingBackward(startY, endY, clientHeight, contentTranslateY);
+    setStyleHeight(value);
+    setStyletTransform(contentTranslateX, offset);
   });
 }
 
@@ -53,11 +118,11 @@ function handleResizeBottom(beginEvent: PointerEvent) {
 function handleResizeLeftTop(beginEvent: PointerEvent) {
   const { clientX: startX, clientY: startY } = beginEvent;
   beginResizeContent(beginEvent, ({ clientX: endX, clientY: endY }, { clientWidth, clientHeight }) => {
-    const { width, translateX } = resizingLeft(startX, endX, clientWidth);
-    const { height, translateY } = resizingTop(startY, endY, clientHeight);
-    contentRef.value!.style.width = `${width}px`;
-    contentRef.value!.style.height = `${height}px`;
-    contentRef.value!.style.transform = `translate(${translateX}px, ${translateY}px)`;
+    const { value: width, offset: translateX } = resizingForward(startX, endX, clientWidth, contentTranslateX);
+    const { value: height, offset: translateY } = resizingForward(startY, endY, clientHeight, contentTranslateY);
+    setStyleWidth(width);
+    setStyleHeight(height);
+    setStyletTransform(translateX, translateY);
   });
 }
 
@@ -65,11 +130,11 @@ function handleResizeLeftTop(beginEvent: PointerEvent) {
 function handleResizeRightTop(beginEvent: PointerEvent) {
   const { clientX: startX, clientY: startY } = beginEvent;
   beginResizeContent(beginEvent, ({ clientX: endX, clientY: endY }, { clientWidth, clientHeight }) => {
-    const { width } = resizingRight(startX, endX, clientWidth);
-    const { height, translateY } = resizingTop(startY, endY, clientHeight);
-    contentRef.value!.style.width = `${width}px`;
-    contentRef.value!.style.height = `${height}px`;
-    contentRef.value!.style.transform = `translate(${contentTranslateX}px, ${translateY}px)`;
+    const { value: width, offset: translateX } = resizingBackward(startX, endX, clientWidth, contentTranslateX);
+    const { value: height, offset: translateY } = resizingForward(startY, endY, clientHeight, contentTranslateY);
+    setStyleWidth(width);
+    setStyleHeight(height);
+    setStyletTransform(translateX, translateY);
   });
 }
 
@@ -77,11 +142,11 @@ function handleResizeRightTop(beginEvent: PointerEvent) {
 function handleResizeLeftBottom(beginEvent: PointerEvent) {
   const { clientX: startX, clientY: startY } = beginEvent;
   beginResizeContent(beginEvent, ({ clientX: endX, clientY: endY }, { clientWidth, clientHeight }) => {
-    const { width, translateX } = resizingLeft(startX, endX, clientWidth);
-    const { height } = resizingBottom(startY, endY, clientHeight);
-    contentRef.value!.style.width = `${width}px`;
-    contentRef.value!.style.height = `${height}px`;
-    contentRef.value!.style.transform = `translate(${translateX}px, ${contentTranslateY}px)`;
+    const { value: width, offset: translateX } = resizingForward(startX, endX, clientWidth, contentTranslateX);
+    const { value: height, offset: translateY } = resizingBackward(startY, endY, clientHeight, contentTranslateY);
+    setStyleWidth(width);
+    setStyleHeight(height);
+    setStyletTransform(translateX, translateY);
   });
 }
 
@@ -89,74 +154,36 @@ function handleResizeLeftBottom(beginEvent: PointerEvent) {
 function handleResizeRightBottom(beginEvent: PointerEvent) {
   const { clientX: startX, clientY: startY } = beginEvent;
   beginResizeContent(beginEvent, ({ clientX: endX, clientY: endY }, { clientWidth, clientHeight }) => {
-    const { width } = resizingRight(startX, endX, clientWidth);
-    const { height } = resizingBottom(startY, endY, clientHeight);
-    contentRef.value!.style.width = `${width}px`;
-    contentRef.value!.style.height = `${height}px`;
+    const { value: width, offset: translateX } = resizingBackward(startX, endX, clientWidth, contentTranslateX);
+    const { value: height, offset: translateY } = resizingBackward(startY, endY, clientHeight, contentTranslateY);
+    setStyleWidth(width);
+    setStyleHeight(height);
+    setStyletTransform(translateX, translateY);
   });
 }
 
-/** 调整容器左侧 */
-function resizingLeft(startX: number, endX: number, clientWidth: number) {
-  const moveX = startX - endX;
-  const width = clientWidth + moveX;
-  return width > 0 ? { width, translateX: contentTranslateX - moveX } : { width: 0, translateX: contentTranslateX + clientWidth };
-}
-
-/** 调整右侧 */
-function resizingRight(startX: number, endX: number, clientWidth: number) {
-  const moveX = startX - endX;
-  const width = clientWidth - moveX;
-  return width > 0 ? { width } : { width: 0 };
-}
-
-/** 调整上方 */
-function resizingTop(startY: number, endY: number, clientHeight: number) {
-  const moveY = startY - endY;
-  const height = clientHeight + moveY;
-  return height > 0 ? { height, translateY: contentTranslateY - moveY } : { height: 0, translateY: contentTranslateY + clientHeight };
-}
-
-/** 调整下方 */
-function resizingBottom(startY: number, endY: number, clientHeight: number) {
-  const moveY = startY - endY;
-  const height = clientHeight - moveY;
-  return height > 0 ? { height } : { height: 0 };
-}
-
-/** 开始拖拽容器 */
-function beginResizeContent(beginEvent: PointerEvent, resizingContent: ResizingContent) {
-  if (props.disabled) { return; }
-  if (!contentRef.value) { return; }
-  const { clientWidth, clientHeight } = contentRef.value;
-  contentRef.value!.setPointerCapture(beginEvent.pointerId);
-  contentRef.value!.onpointermove = (moveEvent) => {
-    resizingContent(moveEvent, { clientWidth, clientHeight });
-  };
-  contentRef.value!.onpointerup = overResizeContent;
-}
-
-const translateValueReg = /translate\((.+)px,(.+)px\)/;
-/** 结束拖拽容器 */
-function overResizeContent(overEvent: PointerEvent) {
-  if (!contentRef.value) { return; }
-  contentTranslateX = Number(contentRef.value!.style.transform?.match(translateValueReg)?.[1] || 0);
-  contentTranslateY = Number(contentRef.value!.style.transform?.match(translateValueReg)?.[2] || 0);
-  contentRef.value.onpointermove = null;
-  contentRef.value.releasePointerCapture(overEvent.pointerId);
-}
+const isLeftDir = computed(() => props.directions.includes('left'));
+const isRightDir = computed(() => props.directions.includes('right'));
+const isTopDir = computed(() => props.directions.includes('top'));
+const isBottomDir = computed(() => props.directions.includes('bottom'));
 </script>
 
 <template>
-  <div ref="contentRef" class="mt-resize">
-    <div class="left-box" @pointerdown.stop.prevent="handleResizeLeft" />
-    <div class="right-box" @pointerdown.stop.prevent="handleResizeRight" />
-    <div class="top-box" @pointerdown.stop.prevent="handleResizeTop" />
-    <div class="bottom-box" @pointerdown.stop.prevent="handleResizeBottom" />
-    <div class="left-top-box" @pointerdown.stop.prevent="handleResizeLeftTop" />
-    <div class="right-top-box" @pointerdown.stop.prevent="handleResizeRightTop" />
-    <div class="left-bottom-box" @pointerdown.stop.prevent="handleResizeLeftBottom" />
-    <div class="right-bottom-box" @pointerdown.stop.prevent="handleResizeRightBottom" />
+  <div
+    ref="contentRef"
+    class="mt-resize"
+    :style="isCustomPosition ? { transform: `translate(${contentTranslateX}px,${contentTranslateY}px)` } : {}"
+  >
+    <template v-if="!disabled">
+      <div v-if="isLeftDir" class="left-box" @pointerdown.stop.prevent="handleResizeLeft" />
+      <div v-if="isRightDir" class="right-box" @pointerdown.stop.prevent="handleResizeRight" />
+      <div v-if="isTopDir" class="top-box" @pointerdown.stop.prevent="handleResizeTop" />
+      <div v-if="isBottomDir" class="bottom-box" @pointerdown.stop.prevent="handleResizeBottom" />
+      <div v-if="isLeftDir && isTopDir" class="left-top-box" @pointerdown.stop.prevent="handleResizeLeftTop" />
+      <div v-if="isRightDir && isTopDir" class="right-top-box" @pointerdown.stop.prevent="handleResizeRightTop" />
+      <div v-if="isLeftDir && isBottomDir" class="left-bottom-box" @pointerdown.stop.prevent="handleResizeLeftBottom" />
+      <div v-if="isRightDir && isBottomDir" class="right-bottom-box" @pointerdown.stop.prevent="handleResizeRightBottom" />
+    </template>
     <slot />
   </div>
 </template>
