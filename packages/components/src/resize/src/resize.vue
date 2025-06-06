@@ -50,15 +50,10 @@ const resizingBackward: ResizingFn = (start, end, clientValue, offsetValue) => {
   return value > 0 ? { value, offset: offsetValue - move } : { value, offset: offsetValue + clientValue };
 };
 
-/** 设置宽度 */
-const setStyleWidth = props.positioned
-  ? (width: number) => contentRef.value!.style.width = `${Math.abs(width)}px`
-  : (width: number) => contentRef.value!.style.width = `${width > 0 ? width : 0}px`;
-
-/** 设置高度 */
-const setStyleHeight = props.positioned
-  ? (height: number) => contentRef.value!.style.height = `${Math.abs(height)}px`
-  : (height: number) => contentRef.value!.style.height = `${height > 0 ? height : 0}px`;
+/** 设置宽度或高度 */
+const setStyleWidthOrHeight = props.positioned
+  ? (value: number, property: 'width' | 'height') => contentRef.value!.style[property] = `${Math.abs(value)}px`
+  : (value: number, property: 'width' | 'height') => contentRef.value!.style[property] = `${value > 0 ? value : 0}px`;
 
 /** 设置位移 */
 const setStyletTransform = props.positioned
@@ -94,56 +89,55 @@ function overResizeContent(overEvent: PointerEvent) {
   updateResizeStatus('idle');
 }
 
-/** 调整宽度 */
-function resizingWidth(beginEvent: PointerEvent, resizingWidthFn: ResizingFn) {
+/** 调整水平方向 */
+function resizeHorizontal(beginEvent: PointerEvent, resizingWidthFn: ResizingFn) {
   const { clientX: startX } = beginEvent;
   beginResizeContent(beginEvent, ({ clientX: endX }, { clientWidth }) => {
     const { value: width, offset: translateX } = resizingWidthFn(startX, endX, clientWidth, cacheTranslateX);
-    setStyleWidth(width);
+    setStyleWidthOrHeight(width, 'width');
     setStyletTransform(translateX, cacheTranslateY);
   });
 }
 
 /** 选择调整左侧 */
 function handleResizeLeft(beginEvent: PointerEvent) {
-  resizingWidth(beginEvent, resizingBackward);
+  resizeHorizontal(beginEvent, resizingBackward);
 }
 
 /** 选择调整右侧 */
 function handleResizeRight(beginEvent: PointerEvent) {
-  resizingWidth(beginEvent, resizingForward);
+  resizeHorizontal(beginEvent, resizingForward);
 }
 
-/** 调整高度 */
-function resizingHeight(beginEvent: PointerEvent, resizingHeightFn: ResizingFn) {
+/** 调整垂直方向 */
+function resizeVertical(beginEvent: PointerEvent, resizingHeightFn: ResizingFn) {
   const { clientY: startY } = beginEvent;
   beginResizeContent(beginEvent, ({ clientY: endY }, { clientHeight }) => {
     const { value: height, offset: translateY } = resizingHeightFn(startY, endY, clientHeight, cacheTranslateY);
-    setStyleHeight(height);
+    setStyleWidthOrHeight(height, 'height');
     setStyletTransform(cacheTranslateX, translateY);
   });
 }
 
 /** 选择调整上方 */
 function handleResizeTop(beginEvent: PointerEvent) {
-  resizingHeight(beginEvent, resizingBackward);
+  resizeVertical(beginEvent, resizingBackward);
 }
 
 /** 选择调整下方 */
 function handleResizeBottom(beginEvent: PointerEvent) {
-  resizingHeight(beginEvent, resizingForward);
+  resizeVertical(beginEvent, resizingForward);
 }
 
-/** 调整高度与宽度 */
-function resizingWidthAndHeight(beginEvent: PointerEvent, resizingWidthFn: ResizingFn, resizingHeightFn: ResizingFn) {
+/** 调整水平与垂直方向 */
+function resizeHorizontalAndVertical(beginEvent: PointerEvent, resizingWidthFn: ResizingFn, resizingHeightFn: ResizingFn) {
   const updateDom = (options: { startX: number, startY: number, endX: number, endY: number, clientWidth: number, clientHeight: number }) => {
     const { value: width, offset: translateX } = resizingWidthFn(options.startX, options.endX, options.clientWidth, cacheTranslateX);
     const { value: height, offset: translateY } = resizingHeightFn(options.startY, options.endY, options.clientHeight, cacheTranslateY);
-    setStyleWidth(width);
-    setStyleHeight(height);
+    setStyleWidthOrHeight(width, 'width');
+    setStyleWidthOrHeight(height, 'height');
     setStyletTransform(translateX, translateY);
   };
-
   if (props.lockAspectRatio) {
     // 固定比例时，宽度根据鼠标位置决定，高度的调整根据宽度的变化与元素宽高比例决定
     const { clientX: startX } = beginEvent;
@@ -165,22 +159,22 @@ function resizingWidthAndHeight(beginEvent: PointerEvent, resizingWidthFn: Resiz
 
 /** 选择调整左上方 */
 function handleResizeLeftTop(beginEvent: PointerEvent) {
-  resizingWidthAndHeight(beginEvent, resizingBackward, resizingBackward);
+  resizeHorizontalAndVertical(beginEvent, resizingBackward, resizingBackward);
 }
 
 /** 选择调整右上方 */
 function handleResizeRightTop(beginEvent: PointerEvent) {
-  resizingWidthAndHeight(beginEvent, resizingForward, resizingBackward);
+  resizeHorizontalAndVertical(beginEvent, resizingForward, resizingBackward);
 }
 
 /** 选择调整左下方 */
 function handleResizeLeftBottom(beginEvent: PointerEvent) {
-  resizingWidthAndHeight(beginEvent, resizingBackward, resizingForward);
+  resizeHorizontalAndVertical(beginEvent, resizingBackward, resizingForward);
 }
 
 /** 选择调整右下方 */
 function handleResizeRightBottom(beginEvent: PointerEvent) {
-  resizingWidthAndHeight(beginEvent, resizingForward, resizingForward);
+  resizeHorizontalAndVertical(beginEvent, resizingForward, resizingForward);
 }
 
 const isLeftDir = computed(() => props.directions.includes('left'));
