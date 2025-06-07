@@ -29,12 +29,15 @@ export function domResize(callback?: (status: ResizeStatus, direction: ResizeDir
   /** 设置位移 */
   let setStyletTransform = (_translateX: number, _translateY: number) => { };
 
+  const { domAttrs, getResizeDomAttrs } = useResizeDomAttrs();
+
   function initResize(options: DomResizeOptions) {
     resizeOptions = options;
     if (resizeOptions.translated) {
       setStyleWidthOrHeight = (value: number, property: 'width' | 'height') => resizeOptions.target!.style[property] = `${Math.abs(value)}px`;
       setStyletTransform = (translateX: number, translateY: number) => {
-        resizeOptions.target!.style.transform = `matrix(1, 0, 0, 1, ${translateX}, ${translateY})`;
+        const { name, beforeTranslateValueStr, afterTranslateValueStr } = domAttrs.matrix;
+        resizeOptions.target!.style.transform = `${name}(${beforeTranslateValueStr}${translateX},${translateY}${afterTranslateValueStr})`;
       };
     }
     else {
@@ -47,7 +50,6 @@ export function domResize(callback?: (status: ResizeStatus, direction: ResizeDir
     callback?.(status, resizeOptions.direction || '');
   }
 
-  const { domAttrs, getResizeDomAttrs } = useResizeDomAttrs();
   /** 开始调整容器 */
   function beginResizeContent(resizingContent: (moveEvent: PointerEvent) => void) {
     if (!resizeOptions.target) { return; }
@@ -123,7 +125,7 @@ export function domResize(callback?: (status: ResizeStatus, direction: ResizeDir
 
   /**
    * 调整容器
-   * @param resizeOptions 配置项
+   * @param resizeOptions 配置项 - {@link DomResizeOptions}
    */
   function onResize(resizeOptions: DomResizeOptions) {
     initResize(resizeOptions);

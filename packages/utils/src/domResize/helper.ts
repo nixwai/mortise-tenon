@@ -33,8 +33,8 @@ export function useResizeDomAttrs() {
       values: [1, 0, 0, 1, 0, 0],
       translateX: 0,
       translateY: 0,
-      xIndex: 4,
-      yIndex: 5,
+      beforeTranslateValueStr: '1,0,0,1',
+      afterTranslateValueStr: '',
     },
   };
 
@@ -44,15 +44,19 @@ export function useResizeDomAttrs() {
     domAttrs.matrix.name = matchValue?.[1] || 'matrix';
     domAttrs.matrix.values = matchValue?.[2]?.split(',').map(Number) || [1, 0, 0, 1, 0, 0];
     if (domAttrs.matrix.values.length > 6) {
-      domAttrs.matrix.xIndex = 12;
-      domAttrs.matrix.yIndex = 13;
+      // matrix3d(https://developer.mozilla.org/zh-CN/docs/Web/CSS/transform-function/matrix3d)
+      domAttrs.matrix.translateX = domAttrs.matrix.values[12];
+      domAttrs.matrix.translateY = domAttrs.matrix.values[13];
+      domAttrs.matrix.beforeTranslateValueStr = `${domAttrs.matrix.values.slice(0, 12).join(',')},`;
+      domAttrs.matrix.afterTranslateValueStr = `,${domAttrs.matrix.values.slice(14).join(',')}`;
     }
     else {
-      domAttrs.matrix.xIndex = 4;
-      domAttrs.matrix.yIndex = 5;
+      // matrix(https://developer.mozilla.org/zh-CN/docs/Web/CSS/transform-function/matrix)
+      domAttrs.matrix.translateX = domAttrs.matrix.values[4];
+      domAttrs.matrix.translateY = domAttrs.matrix.values[5];
+      domAttrs.matrix.beforeTranslateValueStr = `${domAttrs.matrix.values.slice(0, 4).join(',')},`;
+      domAttrs.matrix.afterTranslateValueStr = '';
     }
-    domAttrs.matrix.translateX = domAttrs.matrix.values[domAttrs.matrix.xIndex];
-    domAttrs.matrix.translateY = domAttrs.matrix.values[domAttrs.matrix.yIndex];
     domAttrs.width = Number(width.replace('px', ''));
     domAttrs.height = Number(height.replace('px', ''));
     domAttrs.aspectRatio = domAttrs.width / domAttrs.height;
