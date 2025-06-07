@@ -5,10 +5,10 @@ export interface ResizeProps {
    */
   disabled?: boolean
   /**
-   * 使用定位，适用于元素脱离文档流时使用，可设置偏移量
+   * 使用translate偏移，适用于元素脱离文档流时使用
    * @default false
    */
-  positioned?: boolean | { x?: number, y?: number }
+  translated?: boolean
   /**
    * 可调整的方向
    * @default ['right']
@@ -25,8 +25,3 @@ export interface ResizeProps {
  * 可调整的方向
  */
 export type Direction = 'left' | 'right' | 'top' | 'bottom';
-
-/**
- * 调整状态 'prepare'(准备) | 'moving'(移动) | 'idle'(静止)
- */
-export type ResizeStatus = 'prepare' | 'moving' | 'idle';

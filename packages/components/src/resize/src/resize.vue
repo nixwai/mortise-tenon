@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import type { ResizeProps, ResizeStatus } from './resize';
+import type { DomResizeOptions, ResizeDirection, ResizeStatus } from 'mortise-tenon-tool';
+import type { ResizeProps } from './resize';
+import { domResize } from 'mortise-tenon-tool';
 import { computed, ref } from 'vue';
 
 defineOptions({ name: 'MtResize' });
@@ -15,166 +17,64 @@ const props = withDefaults(
 );
 
 const emit = defineEmits<{
-  (e: 'resize', status: ResizeStatus): void
+  (e: 'resize', status: ResizeStatus, direction: ResizeDirection): void
 }>();
 
 /** 元素实例 */
 const contentRef = ref<HTMLDivElement>();
-/** 是否自定义位置 */
-const isCustomPosition = typeof props.positioned === 'object';
-/** X轴位移 */
-let cacheTranslateX = isCustomPosition ? props.positioned.x || 0 : 0;
-/** Y轴位移 */
-let cacheTranslateY = isCustomPosition ? props.positioned.y || 0 : 0;
-
-/** 调整状态 */
 const resizeStatus = ref<ResizeStatus>('idle');
+const resizeDirection = ref<ResizeDirection>('');
 
-function updateResizeStatus(status: ResizeStatus) {
+const resizeOptions = computed<DomResizeOptions>(() => ({
+  target: contentRef.value,
+  translated: props.translated,
+  lockAspectRatio: props.lockAspectRatio,
+}));
+
+const onResize = domResize((status: ResizeStatus, direction: ResizeDirection) => {
   resizeStatus.value = status;
-  emit('resize', status);
-}
-
-type ResizingFn = (start: number, end: number, clientValue: number, offsetValue: number) => { value: number, offset: number };
-/** 向前调整（往右或者往下） */
-const resizingForward: ResizingFn = (start, end, clientValue, offsetValue) => {
-  const move = start - end;
-  const value = clientValue - move;
-  return value > 0 ? { value, offset: offsetValue } : { value, offset: offsetValue + value };
-};
-
-/** 向后调整（往左或者往上） */
-const resizingBackward: ResizingFn = (start, end, clientValue, offsetValue) => {
-  const move = start - end;
-  const value = clientValue + move;
-  return value > 0 ? { value, offset: offsetValue - move } : { value, offset: offsetValue + clientValue };
-};
-
-/** 设置宽度或高度 */
-const setStyleWidthOrHeight = props.positioned
-  ? (value: number, property: 'width' | 'height') => contentRef.value!.style[property] = `${Math.abs(value)}px`
-  : (value: number, property: 'width' | 'height') => contentRef.value!.style[property] = `${value > 0 ? value : 0}px`;
-
-/** 设置位移 */
-const setStyletTransform = props.positioned
-  ? (translateX: number, translateY: number) => contentRef.value!.style.transform = `translate(${translateX}px, ${translateY}px)`
-  : () => {};
-
-/** 开始拖拽容器 */
-function beginResizeContent(
-  beginEvent: PointerEvent,
-  resizingContent: (moveEvent: PointerEvent, clientSize: { clientWidth: number, clientHeight: number, aspectRatio: number }) => void,
-) {
-  if (props.disabled) { return; }
-  if (!contentRef.value) { return; }
-  const { clientWidth, clientHeight } = contentRef.value;
-  const aspectRatio = clientWidth / clientHeight;
-  contentRef.value.setPointerCapture(beginEvent.pointerId);
-  contentRef.value.onpointermove = (moveEvent) => {
-    resizingContent(moveEvent, { clientWidth, clientHeight, aspectRatio });
-    updateResizeStatus('moving');
-  };
-  contentRef.value.onpointerup = overResizeContent;
-  updateResizeStatus('prepare');
-}
-
-const translateValueReg = /translate\((.+)px,(.+)px\)/;
-/** 结束拖拽容器 */
-function overResizeContent(overEvent: PointerEvent) {
-  if (!contentRef.value) { return; }
-  cacheTranslateX = Number(contentRef.value.style.transform?.match(translateValueReg)?.[1] || 0);
-  cacheTranslateY = Number(contentRef.value.style.transform?.match(translateValueReg)?.[2] || 0);
-  contentRef.value.onpointermove = null;
-  contentRef.value.releasePointerCapture(overEvent.pointerId);
-  updateResizeStatus('idle');
-}
-
-/** 调整水平方向 */
-function resizeHorizontal(beginEvent: PointerEvent, resizingWidthFn: ResizingFn) {
-  const { clientX: startX } = beginEvent;
-  beginResizeContent(beginEvent, ({ clientX: endX }, { clientWidth }) => {
-    const { value: width, offset: translateX } = resizingWidthFn(startX, endX, clientWidth, cacheTranslateX);
-    setStyleWidthOrHeight(width, 'width');
-    setStyletTransform(translateX, cacheTranslateY);
-  });
-}
+  resizeDirection.value = direction;
+  emit('resize', status, direction);
+});
 
 /** 选择调整左侧 */
-function handleResizeLeft(beginEvent: PointerEvent) {
-  resizeHorizontal(beginEvent, resizingBackward);
+function handleResizeLeft(event: PointerEvent) {
+  onResize({ ...resizeOptions.value, event, direction: 'left' });
 }
 
 /** 选择调整右侧 */
-function handleResizeRight(beginEvent: PointerEvent) {
-  resizeHorizontal(beginEvent, resizingForward);
-}
-
-/** 调整垂直方向 */
-function resizeVertical(beginEvent: PointerEvent, resizingHeightFn: ResizingFn) {
-  const { clientY: startY } = beginEvent;
-  beginResizeContent(beginEvent, ({ clientY: endY }, { clientHeight }) => {
-    const { value: height, offset: translateY } = resizingHeightFn(startY, endY, clientHeight, cacheTranslateY);
-    setStyleWidthOrHeight(height, 'height');
-    setStyletTransform(cacheTranslateX, translateY);
-  });
+function handleResizeRight(event: PointerEvent) {
+  onResize({ ...resizeOptions.value, event, direction: 'right' });
 }
 
 /** 选择调整上方 */
-function handleResizeTop(beginEvent: PointerEvent) {
-  resizeVertical(beginEvent, resizingBackward);
+function handleResizeTop(event: PointerEvent) {
+  onResize({ ...resizeOptions.value, event, direction: 'top' });
 }
 
 /** 选择调整下方 */
-function handleResizeBottom(beginEvent: PointerEvent) {
-  resizeVertical(beginEvent, resizingForward);
-}
-
-/** 调整水平与垂直方向 */
-function resizeHorizontalAndVertical(beginEvent: PointerEvent, resizingWidthFn: ResizingFn, resizingHeightFn: ResizingFn) {
-  const updateDom = (options: { startX: number, startY: number, endX: number, endY: number, clientWidth: number, clientHeight: number }) => {
-    const { value: width, offset: translateX } = resizingWidthFn(options.startX, options.endX, options.clientWidth, cacheTranslateX);
-    const { value: height, offset: translateY } = resizingHeightFn(options.startY, options.endY, options.clientHeight, cacheTranslateY);
-    setStyleWidthOrHeight(width, 'width');
-    setStyleWidthOrHeight(height, 'height');
-    setStyletTransform(translateX, translateY);
-  };
-  if (props.lockAspectRatio) {
-    // 固定比例时，宽度根据鼠标位置决定，高度的调整根据宽度的变化与元素宽高比例决定
-    const { clientX: startX } = beginEvent;
-    const dir = resizingWidthFn === resizingHeightFn ? 1 : -1; // 宽高调整的方向不是同向时，需要反向调整高度
-    beginResizeContent(beginEvent, ({ clientX: endX }, { clientWidth, clientHeight, aspectRatio }) => {
-      const startY = dir * startX / aspectRatio;
-      const endY = dir * endX / aspectRatio;
-      updateDom({ startX, startY, endX, endY, clientWidth, clientHeight });
-    });
-  }
-  else {
-    // 不固定比例时，宽高根据鼠标位置决定
-    const { clientX: startX, clientY: startY } = beginEvent;
-    beginResizeContent(beginEvent, ({ clientX: endX, clientY: endY }, { clientWidth, clientHeight }) => {
-      updateDom({ startX, startY, endX, endY, clientWidth, clientHeight });
-    });
-  }
+function handleResizeBottom(event: PointerEvent) {
+  onResize({ ...resizeOptions.value, event, direction: 'bottom' });
 }
 
 /** 选择调整左上方 */
-function handleResizeLeftTop(beginEvent: PointerEvent) {
-  resizeHorizontalAndVertical(beginEvent, resizingBackward, resizingBackward);
+function handleResizeLeftTop(event: PointerEvent) {
+  onResize({ ...resizeOptions.value, event, direction: 'left-top' });
 }
 
 /** 选择调整右上方 */
-function handleResizeRightTop(beginEvent: PointerEvent) {
-  resizeHorizontalAndVertical(beginEvent, resizingForward, resizingBackward);
+function handleResizeRightTop(event: PointerEvent) {
+  onResize({ ...resizeOptions.value, event, direction: 'right-top' });
 }
 
 /** 选择调整左下方 */
-function handleResizeLeftBottom(beginEvent: PointerEvent) {
-  resizeHorizontalAndVertical(beginEvent, resizingBackward, resizingForward);
+function handleResizeLeftBottom(event: PointerEvent) {
+  onResize({ ...resizeOptions.value, event, direction: 'left-bottom' });
 }
 
 /** 选择调整右下方 */
-function handleResizeRightBottom(beginEvent: PointerEvent) {
-  resizeHorizontalAndVertical(beginEvent, resizingForward, resizingForward);
+function handleResizeRightBottom(event: PointerEvent) {
+  onResize({ ...resizeOptions.value, event, direction: 'right-bottom' });
 }
 
 const isLeftDir = computed(() => props.directions.includes('left'));
@@ -187,7 +87,6 @@ const isBottomDir = computed(() => props.directions.includes('bottom'));
   <div
     ref="contentRef"
     class="mt-resize"
-    :style="isCustomPosition ? { transform: `translate(${cacheTranslateX}px,${cacheTranslateY}px)` } : {}"
   >
     <template v-if="!disabled">
       <div v-if="isLeftDir && !lockAspectRatio" class="left-box" @pointerdown.stop.prevent="handleResizeLeft" />
@@ -199,7 +98,7 @@ const isBottomDir = computed(() => props.directions.includes('bottom'));
       <div v-if="isLeftDir && isBottomDir" class="left-bottom-box" @pointerdown.stop.prevent="handleResizeLeftBottom" />
       <div v-if="isRightDir && isBottomDir" class="right-bottom-box" @pointerdown.stop.prevent="handleResizeRightBottom" />
     </template>
-    <slot :status="resizeStatus" />
+    <slot :status="resizeStatus" :direction="resizeDirection" />
   </div>
 </template>
 
