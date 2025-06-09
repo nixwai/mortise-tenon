@@ -1,33 +1,31 @@
 import type { ResizeData, ResizingFn } from './helper';
 import type { ResizeStatus } from './types';
 
-import { resizingBackward, resizingForward } from './helper';
-
 export function resizeByPointer(resizeData: ResizeData) {
   switch (resizeData.options.direction) {
     case 'left':
-      resizeHorizontal(resizeData, resizingBackward);
+      resizeHorizontal(resizeData, resizeData.resizingBackward);
       break;
     case 'right':
-      resizeHorizontal(resizeData, resizingForward);
+      resizeHorizontal(resizeData, resizeData.resizingForward);
       break;
     case 'top':
-      resizeVertical(resizeData, resizingBackward);
+      resizeVertical(resizeData, resizeData.resizingBackward);
       break;
     case 'bottom':
-      resizeVertical(resizeData, resizingForward);
+      resizeVertical(resizeData, resizeData.resizingForward);
       break;
     case 'left-top':
-      resizeHorizontalAndVertical(resizeData, resizingBackward, resizingBackward);
+      resizeHorizontalAndVertical(resizeData, resizeData.resizingBackward, resizeData.resizingBackward);
       break;
     case 'right-top':
-      resizeHorizontalAndVertical(resizeData, resizingForward, resizingBackward);
+      resizeHorizontalAndVertical(resizeData, resizeData.resizingForward, resizeData.resizingBackward);
       break;
     case 'left-bottom':
-      resizeHorizontalAndVertical(resizeData, resizingBackward, resizingForward);
+      resizeHorizontalAndVertical(resizeData, resizeData.resizingBackward, resizeData.resizingForward);
       break;
     case 'right-bottom':
-      resizeHorizontalAndVertical(resizeData, resizingForward, resizingForward);
+      resizeHorizontalAndVertical(resizeData, resizeData.resizingForward, resizeData.resizingForward);
   }
 }
 
@@ -100,6 +98,7 @@ function resizeHorizontalAndVertical(resizeData: ResizeData, resizingWidthFn: Re
   }
 }
 
+/** 触发调整事件 */
 function updateResize(status: ResizeStatus, resizeData: ResizeData) {
   resizeData.options.callback?.(status, resizeData.options.direction || '');
 }

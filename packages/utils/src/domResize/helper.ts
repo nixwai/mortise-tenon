@@ -1,31 +1,5 @@
 import type { DomResizeOptions } from './types';
 
-/**
- * 调节函数
- * @param startLocation 开始的坐标
- * @param endLocation 结束的坐标
- * @param originValue 原始长度值
- * @param originOffset 原始偏移量
- */
-export type ResizingFn =
-  (startLocation: number, endLocation: number, originValue: number, originOffset: number) => { value: number, offset: number };
-
-/** 向前调整（往右或者往下） */
-export const resizingForward: ResizingFn = (startLocation, endLocation, originValue, originOffset) => {
-  const move = startLocation - endLocation;
-  const value = originValue - move;
-  return value > 0 ? { value, offset: originOffset } : { value, offset: originOffset + value };
-};
-
-/** 向后调整（往左或者往上） */
-export const resizingBackward: ResizingFn = (startLocation, endLocation, originValue, originOffset) => {
-  const move = startLocation - endLocation;
-  const value = originValue + move;
-  return value > 0 ? { value, offset: originOffset - move } : { value, offset: originOffset + originValue };
-};
-
-const matrixValueReg = /(matrix3?d?)\((.+)\)/;
-
 export interface DomAttrs {
   width: number
   height: number
@@ -39,6 +13,8 @@ export interface DomAttrs {
     afterTranslateValueStr: string
   }
 }
+
+const matrixValueReg = /(matrix3?d?)\((.+)\)/;
 
 export function getResizeDomAttrs(dom: HTMLDivElement) {
   const domAttrs: DomAttrs = {
@@ -79,29 +55,68 @@ export function getResizeDomAttrs(dom: HTMLDivElement) {
   return domAttrs;
 }
 
+type SetStyleWidthOrHeightFn = (value: number, property: 'width' | 'height') => void;
+type SetStyletTransformFn = (translateX: number, translateY: number) => void;
+
+/**
+ * 调节函数
+ * @param startLocation 开始的坐标
+ * @param endLocation 结束的坐标
+ * @param originValue 原始长度值
+ * @param originOffset 原始偏移量
+ */
+export type ResizingFn =
+  (startLocation: number, endLocation: number, originValue: number, originOffset: number) => { value: number, offset: number };
+
 export interface ResizeData {
   options: DomResizeOptions
   domAttrs: DomAttrs
-  setStyleWidthOrHeight: (value: number, property: 'width' | 'height') => void
-  setStyletTransform: (translateX: number, translateY: number) => void
+  setStyleWidthOrHeight: SetStyleWidthOrHeightFn
+  setStyletTransform: SetStyletTransformFn
+  resizingForward: ResizingFn
+  resizingBackward: ResizingFn
 }
 
 export function initResize(options: DomResizeOptions): ResizeData {
   const domAttrs = getResizeDomAttrs(options.target!);
   /** 设置宽度或高度 */
-  let setStyleWidthOrHeight = (_value: number, _property: 'width' | 'height') => { };
+  let setStyleWidthOrHeight: SetStyleWidthOrHeightFn;
   /** 设置位移 */
-  let setStyletTransform = (_translateX: number, _translateY: number) => { };
+  let setStyletTransform: SetStyletTransformFn;
+  /** 向前调整（往右或者往下） */
+  let resizingForward: ResizingFn;
+  /** 向后调整（往左或者往上） */
+  let resizingBackward: ResizingFn;
   // 根据配置定义修改元素的方法
   if (options.translated) {
-    setStyleWidthOrHeight = (value: number, property: 'width' | 'height') => options.target!.style[property] = `${Math.abs(value)}px`;
-    setStyletTransform = (translateX: number, translateY: number) => {
+    resizingForward = (startLocation, endLocation, originValue, originOffset) => {
+      const move = startLocation - endLocation;
+      const value = originValue - move;
+      return value > 0 ? { value, offset: originOffset } : { value, offset: originOffset + value };
+    };
+    resizingBackward = (startLocation, endLocation, originValue, originOffset) => {
+      const move = startLocation - endLocation;
+      const value = originValue + move;
+      return value > 0 ? { value, offset: originOffset - move } : { value, offset: originOffset + originValue };
+    };
+    setStyleWidthOrHeight = (value, property) => options.target!.style[property] = `${Math.abs(value)}px`;
+    setStyletTransform = (translateX, translateY) => {
       const { name, beforeTranslateValueStr, afterTranslateValueStr } = domAttrs.matrix;
       options.target!.style.transform = `${name}(${beforeTranslateValueStr}${translateX},${translateY}${afterTranslateValueStr})`;
     };
   }
   else {
-    setStyleWidthOrHeight = (value: number, property: 'width' | 'height') => options.target!.style[property] = `${value > 0 ? value : 0}px`;
+    resizingForward = (startLocation, endLocation, originValue) => {
+      const move = startLocation - endLocation;
+      const value = originValue - move;
+      return { value, offset: 0 };
+    };
+    resizingBackward = (startLocation, endLocation, originValue) => {
+      const move = startLocation - endLocation;
+      const value = originValue + move;
+      return { value, offset: 0 };
+    };
+    setStyleWidthOrHeight = (value, property) => options.target!.style[property] = `${value > 0 ? value : 0}px`;
     setStyletTransform = () => { };
   }
 
@@ -110,5 +125,7 @@ export function initResize(options: DomResizeOptions): ResizeData {
     domAttrs,
     setStyleWidthOrHeight,
     setStyletTransform,
+    resizingForward,
+    resizingBackward,
   };
 }

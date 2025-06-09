@@ -3,6 +3,7 @@
  */
 export type ResizeStatus = 'prepare' | 'moving' | 'idle';
 
+/** 调整大小配置项 */
 export interface DomResizeOptions {
   /** 调整元素 */
   target?: HTMLDivElement
