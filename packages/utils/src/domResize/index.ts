@@ -1,5 +1,6 @@
 import type { DomResizeOptions } from './types';
-import { initResize } from './helper';
+import { initResize } from './core';
+import { resizeByManual } from './manual-resize';
 import { resizeByPointer } from './pointer-resize';
 
 /**
@@ -7,11 +8,10 @@ import { resizeByPointer } from './pointer-resize';
  * @param options 配置项 - {@link DomResizeOptions}
  */
 export function domResize(options: DomResizeOptions) {
-  if (!options.target) { return; }
+  if (!options.target || !options.direction) { return; }
   const resizeData = initResize(options);
-  if (options.event) {
-    resizeByPointer(resizeData);
-  }
+  resizeByManual(resizeData);
+  resizeByPointer(resizeData);
 }
 
 export * from './types';
