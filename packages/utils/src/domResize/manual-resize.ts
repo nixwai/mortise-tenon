@@ -57,7 +57,7 @@ function resizeVertical(resizeData: ResizeData, resizingHeightFn: ResizingFn) {
 
 /** 调整水平与垂直方向 */
 function resizeHorizontalAndVertical(resizeData: ResizeData, resizingWidthFn: ResizingFn, resizingHeightFn: ResizingFn) {
-  const { translated, distanceX = 0, distanceY = 0 } = resizeData.options;
+  const { lockAspectRatio, distanceX = 0, distanceY = 0 } = resizeData.options;
   const { width: domWidth, height: domHeight, aspectRatio } = resizeData.domAttrs;
 
   const updateDom = (options: { distanceX: number, distanceY: number }) => {
@@ -70,8 +70,8 @@ function resizeHorizontalAndVertical(resizeData: ResizeData, resizingWidthFn: Re
     resizeData.setStyletTransform(translateX, translateY);
   };
 
-  if (translated) {
-    updateDom({ distanceX, distanceY: distanceX * aspectRatio });
+  if (lockAspectRatio) {
+    updateDom({ distanceX, distanceY: distanceX / aspectRatio });
   }
   else {
     updateDom({ distanceX, distanceY });
