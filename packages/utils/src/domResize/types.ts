@@ -17,16 +17,17 @@ export interface DomResizeOptions {
   target?: HTMLDivElement
   /** 调整方向 */
   direction?: ResizeDirection
-  /** 控制的指针事件 */
+  /** 指针控制事件 */
   event?: PointerEvent
-  /** 水平移动距离 */
+  /** 手动控制水平移动距离 */
   distanceX?: number
-  /** 垂直移动距离 */
+  /** 手动控制垂直移动距离 */
   distanceY?: number
-  /** 使用translate偏移 */
-  translated?: boolean
+  /** 使用transform或position进行偏移 */
+  offset?: 'transform' | 'position'
   /** 锁定比例 */
   lockAspectRatio?: boolean
+  /** 网格对齐 */
   /** 调整回调 */
   callback?: (status: ResizeStatus, direction: ResizeDirection, distance: ResizeDistance) => void
 }
