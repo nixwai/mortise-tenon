@@ -32,7 +32,6 @@ export function resizeByManual(resizeData: ResizeData) {
       resizeHorizontalAndVertical(resizeData, resizingForward, resizingForward);
       break;
   }
-  updateResize('manual', resizeData, resizeData.moveDistance);
 }
 
 /** 调整水平方向 */
@@ -41,8 +40,10 @@ function resizeHorizontal(resizeData: ResizeData, resizingWidthFn: ResizingFn) {
   const { width: domWidth, offsetY } = resizeData.domAttrs;
   const dir = resizingWidthFn === resizeData.resizingForward ? 1 : -1;
   const { value: width, offset: offsetX } = resizingWidthFn(domWidth, domWidth + dir * distanceX, 'x');
+  if (!resizeData.moveDistance.x) { return; }
   resizeData.setStyleWidthOrHeight(width, 'width');
   resizeData.setStyleOffset(offsetX, offsetY);
+  updateResize('manual', resizeData, resizeData.moveDistance);
 }
 
 /** 调整垂直方向 */
@@ -51,8 +52,10 @@ function resizeVertical(resizeData: ResizeData, resizingHeightFn: ResizingFn) {
   const { height: domHeight, offsetX } = resizeData.domAttrs;
   const dir = resizingHeightFn === resizeData.resizingForward ? 1 : -1;
   const { value: height, offset: offsetY } = resizingHeightFn(domHeight, domHeight + dir * distanceY, 'y');
+  if (!resizeData.moveDistance.y) { return; }
   resizeData.setStyleWidthOrHeight(height, 'height');
   resizeData.setStyleOffset(offsetX, offsetY);
+  updateResize('manual', resizeData, resizeData.moveDistance);
 }
 
 /** 调整水平与垂直方向 */
@@ -65,9 +68,11 @@ function resizeHorizontalAndVertical(resizeData: ResizeData, resizingWidthFn: Re
     const dirY = resizingHeightFn === resizeData.resizingForward ? 1 : -1;
     const { value: width, offset: offsetX } = resizingWidthFn(domWidth, domWidth + dirX * options.distanceX, 'x');
     const { value: height, offset: offsetY } = resizingHeightFn(domHeight, domHeight + dirY * options.distanceY, 'y');
+    if (!resizeData.moveDistance.x && !resizeData.moveDistance.y) { return; }
     resizeData.setStyleWidthOrHeight(width, 'width');
     resizeData.setStyleWidthOrHeight(height, 'height');
     resizeData.setStyleOffset(offsetX, offsetY);
+    updateResize('manual', resizeData, resizeData.moveDistance);
   };
 
   if (lockAspectRatio) {

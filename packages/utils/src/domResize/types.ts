@@ -27,7 +27,8 @@ export interface DomResizeOptions {
   offset?: 'transform' | 'position'
   /** 锁定比例 */
   lockAspectRatio?: boolean
-  /** 网格对齐 */
+  /** 网格对齐，默认[1,1]，单位px，不推荐小数(以防精度缺失) */
+  grid?: [number, number]
   /** 调整回调 */
   callback?: (status: ResizeStatus, direction: ResizeDirection, distance: ResizeDistance) => void
 }

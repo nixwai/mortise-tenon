@@ -50,8 +50,8 @@ const matrixValueReg = /(matrix3?d?)\((.+)\)/;
 export function initResize(options: DomResizeOptions): ResizeData {
   const targetRef = new WeakRef(options.target!);
   const domAttrs = getResizeDomAttrs(options, targetRef.deref());
-  const { setStyleWidthOrHeight, setStyleOffset } = createStyleUpdaters(targetRef, options, domAttrs);
   const { moveDistance, resizingForward, resizingBackward } = createResizingFns(options, domAttrs);
+  const { setStyleWidthOrHeight, setStyleOffset } = createStyleUpdaters(targetRef, options, domAttrs);
 
   return {
     targetRef,
@@ -120,38 +120,6 @@ function getResizeDomAttrs(options: DomResizeOptions, dom?: HTMLDivElement): Rea
   return domAttrs;
 }
 
-function createStyleUpdaters(targetRef: WeakRef<HTMLDivElement>, options: DomResizeOptions, domAttrs: DomAttrs) {
-  const { name, beforeTranslateValueStr, afterTranslateValueStr } = domAttrs.matrix;
-
-  const changeTargetStyle = (fn: (dom: HTMLDivElement) => void) => {
-    const target = targetRef.deref();
-    if (!target) { return; }
-    fn(target);
-  };
-  /** 设置宽度或高度 */
-  const setStyleWidthOrHeight: SetStyleWidthOrHeightFn = (value, property) => changeTargetStyle((dom) => {
-    dom.style[property] = `${value}px`;
-  });
-  /** 设置位移 */
-  let setStyleOffset: SetStyleOffset = () => { };
-  if (options.offset === 'transform') {
-    setStyleOffset = (translateX, translateY) => changeTargetStyle((dom) => {
-      dom.style.transform = `${name}(${beforeTranslateValueStr}${translateX},${translateY}${afterTranslateValueStr})`;
-    });
-  }
-  else if (options.offset === 'position') {
-    setStyleOffset = (left, top) => changeTargetStyle((dom) => {
-      dom.style.left = `${left}px`;
-      dom.style.top = `${top}px`;
-    });
-  }
-
-  return {
-    setStyleWidthOrHeight,
-    setStyleOffset,
-  };
-}
-
 function createResizingFns(options: DomResizeOptions, domAttrs: DomAttrs) {
   /** 向前调整（往右或者往下）后长度值与位移值 */
   let resizingForward: ResizingFn;
@@ -160,7 +128,9 @@ function createResizingFns(options: DomResizeOptions, domAttrs: DomAttrs) {
   /** 记录每次的位移距离 */
   const moveDistance: ResizeDistance = { x: 0, y: 0 };
   /** 上一次的位移距离 */
-  let lastDistance = 0;
+  const lastDistance: ResizeDistance = { x: 0, y: 0 };
+  const { grid = [1, 1] } = options;
+  const gridDistance = { x: grid[0], y: grid[1] };
 
   const originData = {
     x: [domAttrs.width, domAttrs.offsetX],
@@ -168,9 +138,9 @@ function createResizingFns(options: DomResizeOptions, domAttrs: DomAttrs) {
   };
   const getMoveDistance = (startLocation: number, endLocation: number, axis: 'x' | 'y') => {
     const [originValue, originOffset] = originData[axis];
-    const distance = Math.round(endLocation - startLocation);
-    moveDistance[axis] = distance - lastDistance; // 记录每次移动距离
-    lastDistance = distance;
+    const distance = Math.round((endLocation - startLocation) / gridDistance[axis]) * gridDistance[axis];
+    moveDistance[axis] = distance - lastDistance[axis]; // 记录每次移动距离
+    lastDistance[axis] = distance;
     return { originValue, originOffset, distance };
   };
   // 根据配置定义修改元素的方法
@@ -200,4 +170,40 @@ function createResizingFns(options: DomResizeOptions, domAttrs: DomAttrs) {
   }
 
   return { moveDistance, resizingForward, resizingBackward };
+}
+
+function createStyleUpdaters(
+  targetRef: WeakRef<HTMLDivElement>,
+  options: DomResizeOptions,
+  domAttrs: DomAttrs,
+) {
+  const { name, beforeTranslateValueStr, afterTranslateValueStr } = domAttrs.matrix;
+
+  const changeTargetStyle = (fn: (dom: HTMLDivElement) => void) => {
+    const target = targetRef.deref();
+    if (!target) { return; }
+    fn(target);
+  };
+  /** 设置宽度或高度 */
+  const setStyleWidthOrHeight: SetStyleWidthOrHeightFn = (value, property) => changeTargetStyle((dom) => {
+    dom.style[property] = `${value}px`;
+  });
+  /** 设置位移 */
+  let setStyleOffset: SetStyleOffset = () => { };
+  if (options.offset === 'transform') {
+    setStyleOffset = (translateX, translateY) => changeTargetStyle((dom) => {
+      dom.style.transform = `${name}(${beforeTranslateValueStr}${translateX},${translateY}${afterTranslateValueStr})`;
+    });
+  }
+  else if (options.offset === 'position') {
+    setStyleOffset = (left, top) => changeTargetStyle((dom) => {
+      dom.style.left = `${left}px`;
+      dom.style.top = `${top}px`;
+    });
+  }
+
+  return {
+    setStyleWidthOrHeight,
+    setStyleOffset,
+  };
 }
