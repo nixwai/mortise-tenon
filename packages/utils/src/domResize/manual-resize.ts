@@ -1,44 +1,18 @@
 import type { ResizeData, ResizingFn } from './core';
-import { updateResize } from './core';
+import { resizeByDirection, updateResize } from './core';
 
 export function resizeByManual(resizeData: ResizeData) {
   if (!resizeData.options.distanceX && !resizeData.options.distanceY) {
     return;
   }
-  const { options, resizingBackward, resizingForward } = resizeData;
-  switch (options.direction) {
-    case 'left':
-      resizeHorizontal(resizeData, resizingBackward);
-      break;
-    case 'right':
-      resizeHorizontal(resizeData, resizingForward);
-      break;
-    case 'top':
-      resizeVertical(resizeData, resizingBackward);
-      break;
-    case 'bottom':
-      resizeVertical(resizeData, resizingForward);
-      break;
-    case 'left-top':
-      resizeHorizontalAndVertical(resizeData, resizingBackward, resizingBackward);
-      break;
-    case 'right-top':
-      resizeHorizontalAndVertical(resizeData, resizingForward, resizingBackward);
-      break;
-    case 'left-bottom':
-      resizeHorizontalAndVertical(resizeData, resizingBackward, resizingForward);
-      break;
-    case 'right-bottom':
-      resizeHorizontalAndVertical(resizeData, resizingForward, resizingForward);
-      break;
-  }
+  resizeByDirection(resizeData, resizeHorizontal, resizeVertical, resizeHorizontalAndVertical);
 }
 
 /** 调整水平方向 */
 function resizeHorizontal(resizeData: ResizeData, resizingWidthFn: ResizingFn) {
   const { distanceX = 0 } = resizeData.options;
   const { width: domWidth, offsetY } = resizeData.domAttrs;
-  const dir = resizingWidthFn === resizeData.resizingForward ? 1 : -1;
+  const dir = resizingWidthFn === resizeData.resizingBackward ? -1 : 1;
   const { value: width, offset: offsetX } = resizingWidthFn(domWidth, domWidth + dir * distanceX, 'x');
   if (!resizeData.moveDistance.x) { return; }
   resizeData.setStyleWidthOrHeight(width, 'width');
@@ -50,7 +24,7 @@ function resizeHorizontal(resizeData: ResizeData, resizingWidthFn: ResizingFn) {
 function resizeVertical(resizeData: ResizeData, resizingHeightFn: ResizingFn) {
   const { distanceY = 0 } = resizeData.options;
   const { height: domHeight, offsetX } = resizeData.domAttrs;
-  const dir = resizingHeightFn === resizeData.resizingForward ? 1 : -1;
+  const dir = resizingHeightFn === resizeData.resizingBackward ? -1 : 1;
   const { value: height, offset: offsetY } = resizingHeightFn(domHeight, domHeight + dir * distanceY, 'y');
   if (!resizeData.moveDistance.y) { return; }
   resizeData.setStyleWidthOrHeight(height, 'height');
@@ -64,8 +38,8 @@ function resizeHorizontalAndVertical(resizeData: ResizeData, resizingWidthFn: Re
   const { width: domWidth, height: domHeight, aspectRatio } = resizeData.domAttrs;
 
   const updateDom = (options: { distanceX: number, distanceY: number }) => {
-    const dirX = resizingWidthFn === resizeData.resizingForward ? 1 : -1;
-    const dirY = resizingHeightFn === resizeData.resizingForward ? 1 : -1;
+    const dirX = resizingWidthFn === resizeData.resizingBackward ? -1 : 1;
+    const dirY = resizingHeightFn === resizeData.resizingBackward ? -1 : 1;
     const { value: width, offset: offsetX } = resizingWidthFn(domWidth, domWidth + dirX * options.distanceX, 'x');
     const { value: height, offset: offsetY } = resizingHeightFn(domHeight, domHeight + dirY * options.distanceY, 'y');
     if (!resizeData.moveDistance.x && !resizeData.moveDistance.y) { return; }
