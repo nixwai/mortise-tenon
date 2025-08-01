@@ -24,37 +24,32 @@ const directionList: ResizeDirection[] = [
 ];
 
 const direction = ref(directionList[0]);
-
 const lockAspectRatio = ref(false);
-
+const offset = ref<'position' | 'transform'>('position');
 const grid = ref([0.5, 0.5]);
+const crossAxis = ref(false);
 
 function handleTargetResize(event: PointerEvent) {
   domResize({
     target: resizeTarget1.value,
     event,
-    offset: 'position',
+    offset: offset.value,
     lockAspectRatio: lockAspectRatio.value,
     direction: direction.value,
     grid: grid.value,
-    callback(status, distance) {
-      console.warn(status, distance);
-    },
+    crossAxis: crossAxis.value,
   });
 }
 
 function changeTargetResize(dis: { x: number, y: number }) {
   domResize({
     target: resizeTarget1.value,
-    offset: 'position',
+    offset: offset.value,
     lockAspectRatio: lockAspectRatio.value,
     direction: direction.value,
     distanceX: dis.x,
     distanceY: dis.y,
     grid: grid.value,
-    callback(status, distance) {
-      console.warn(status, distance);
-    },
   });
 }
 </script>
@@ -100,18 +95,69 @@ function changeTargetResize(dis: { x: number, y: number }) {
   </div>
 
   <div class="flex gap-1 mt-4">
+    <div>
+      <input
+        id="lock"
+        v-model="offset"
+        type="radio"
+        name="offset"
+        value="position"
+        class="mb-[3px]"
+      >
+      <label for="lock">position</label>
+    </div>
+    <div>
+      <input
+        id="unlock"
+        v-model="offset"
+        type="radio"
+        name="offset"
+        value="transform"
+        class="mb-[3px]"
+      >
+      <label for="unlock">transform</label>
+    </div>
+  </div>
+
+  <div class="flex gap-1 mt-4">
+    <div>
+      <input
+        id="cross"
+        v-model="crossAxis"
+        type="radio"
+        name="crossAxis"
+        :value="true"
+        class="mb-[3px]"
+      >
+      <label for="cross">cross</label>
+    </div>
+    <div>
+      <input
+        id="uncross"
+        v-model="crossAxis"
+        type="radio"
+        name="crossAxis"
+        :value="false"
+        class="mb-[3px]"
+      >
+      <label for="uncross">uncross</label>
+    </div>
+  </div>
+
+  <div class="flex gap-1 mt-4">
     gridX: <input v-model="grid[0]" class="b-1 b-gray b-solid b-rounded px-1">
     gridY: <input v-model="grid[1]" class="b-1 b-gray b-solid b-rounded px-1">
   </div>
 
-  <div class="flex mt-4 flex-col justify-center ctxs-btn_b-1,b-gray,b-solid,px-2,b-rounded,w-8,mt-1 items-center w-30">
+  <div class="flex mt-4 justify-center items-center flex-col ctxs-btn_b-1,b-gray,b-solid,px-2,b-rounded,w-8,mt-1 w-30">
     <button class="ctxs-btn" @click="changeTargetResize({ x: 0, y: -5 })">
       -5
     </button>
-    <div class="flex gap-1">
+    <div class="flex gap-1 items-center justify-center">
       <button class="ctxs-btn" @click="changeTargetResize({ x: -5, y: 0 })">
         -5
       </button>
+      调整
       <button class="ctxs-btn" @click="changeTargetResize({ x: 5, y: 0 })">
         +5
       </button>

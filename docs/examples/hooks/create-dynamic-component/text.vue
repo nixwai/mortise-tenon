@@ -9,6 +9,6 @@ defineExpose({ value });
 <template>
   <div>
     <slot name="text" :value="value" />
-    <input v-model="value" type="text" class="b-solid b-1 b-gray rounded-md mr-1 px-1">
+    <input v-model="value" type="text" class="b-solid b-1 b-gray px-1 rounded-md mr-1">
   </div>
 </template>
