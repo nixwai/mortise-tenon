@@ -34,6 +34,7 @@ function resizeVertical(resizeData: ResizeData, resizingHeightFn: ResizingFn) {
 
 /** 调整水平与垂直方向 */
 function resizeHorizontalAndVertical(resizeData: ResizeData, resizingWidthFn: ResizingFn, resizingHeightFn: ResizingFn) {
+  const { setStyleWidthOrHeight, setStyleOffset, moveDistance } = resizeData;
   const { lockAspectRatio, distanceX = 0, distanceY = 0 } = resizeData.options;
   const { width: domWidth, height: domHeight, aspectRatio } = resizeData.domAttrs;
 
@@ -42,19 +43,26 @@ function resizeHorizontalAndVertical(resizeData: ResizeData, resizingWidthFn: Re
     const dirY = resizingHeightFn === resizeData.resizingBackward ? -1 : 1;
     const { value: width, offset: offsetX } = resizingWidthFn(domWidth, domWidth + dirX * options.distanceX, 'x');
     const { value: height, offset: offsetY } = resizingHeightFn(domHeight, domHeight + dirY * options.distanceY, 'y');
-    if (!resizeData.moveDistance.x && !resizeData.moveDistance.y) { return; }
-    resizeData.setStyleWidthOrHeight(width, 'width');
-    resizeData.setStyleWidthOrHeight(height, 'height');
-    resizeData.setStyleOffset(offsetX, offsetY);
-    updateResize('manual', resizeData, resizeData.moveDistance);
+    if ((!moveDistance.x && !moveDistance.y) // 移动距离为0时，不更新dom
+      || (lockAspectRatio && (!moveDistance.x || !moveDistance.y))) { // 锁定比例时，任意一个方向的移动距离为0时，不更新dom
+      return;
+    }
+    setStyleWidthOrHeight(width, 'width');
+    setStyleWidthOrHeight(height, 'height');
+    setStyleOffset(offsetX, offsetY);
+    updateResize('manual', resizeData, moveDistance);
   };
 
   if (lockAspectRatio) {
     if (distanceX) {
-      updateDom({ distanceX, distanceY: distanceX / aspectRatio });
+      let multiple = !moveDistance.dirX && moveDistance.dirY ? 2 : 1;
+      multiple = moveDistance.dirX && !moveDistance.dirY ? 0.5 : multiple;
+      updateDom({ distanceX, distanceY: distanceX / aspectRatio * multiple });
     }
     else {
-      updateDom({ distanceX: distanceY * aspectRatio, distanceY });
+      let multiple = !moveDistance.dirX && moveDistance.dirY ? 0.5 : 1;
+      multiple = moveDistance.dirX && !moveDistance.dirY ? 2 : multiple;
+      updateDom({ distanceX: distanceY * aspectRatio * multiple, distanceY });
     }
   }
   else {

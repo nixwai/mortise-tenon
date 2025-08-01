@@ -9,6 +9,14 @@ export interface DomAttrs {
   height: number
   /** 宽高比 */
   aspectRatio: number
+  /** 最大宽度 */
+  maxWidth: number
+  /** 最大高度 */
+  maxHeight: number
+  /** 最小宽度 */
+  minWidth: number
+  /** 最小高度 */
+  minHeight: number
   /** 水平偏移值 */
   offsetX: number
   /** 垂直偏移值 */
@@ -33,7 +41,10 @@ export type SetStyleWidthOrHeightFn = (value: number, property: 'width' | 'heigh
 export type SetStyleOffset = (offsetX: number, offsetY: number) => void;
 
 const matrixValueReg = /(matrix3?d?)\((.+)\)/;
-function pxToNumber(value: string) {
+function pxToNum(value: string) {
+  if (value === 'none' || value === 'auto') {
+    return Infinity;
+  }
   return Number(value.replace('px', ''));
 }
 
@@ -43,6 +54,10 @@ export function getResizeDomAttrs(options: DomResizeOptions, dom?: HTMLDivElemen
     width: 0,
     height: 0,
     aspectRatio: 0,
+    maxWidth: Infinity,
+    maxHeight: Infinity,
+    minWidth: 0,
+    minHeight: 0,
     offsetX: 0,
     offsetY: 0,
     matrix: {
@@ -57,10 +72,11 @@ export function getResizeDomAttrs(options: DomResizeOptions, dom?: HTMLDivElemen
     },
   };
   if (!dom) { return domAttrs; }
+  const domStyles = window.getComputedStyle(dom, null);
 
-  const { width, height, transform, top, left } = window.getComputedStyle(dom);
+  // 设置偏移
   if (options.offset === 'transform') {
-    const matchValue = transform.match(matrixValueReg);
+    const matchValue = domStyles.transform.match(matrixValueReg);
     domAttrs.matrix.name = matchValue?.[1] || 'matrix';
     domAttrs.matrix.values = matchValue?.[2]?.split(',').map(Number) || [1, 0, 0, 1, 0, 0];
     if (domAttrs.matrix.values.length > 6) {
@@ -79,16 +95,36 @@ export function getResizeDomAttrs(options: DomResizeOptions, dom?: HTMLDivElemen
     }
   }
   else if (options.offset === 'position') {
-    domAttrs.offsetX = pxToNumber(left);
-    domAttrs.offsetY = pxToNumber(top);
+    domAttrs.offsetX = pxToNum(domStyles.left);
+    domAttrs.offsetY = pxToNum(domStyles.top);
   }
 
-  domAttrs.width = pxToNumber(width);
-  domAttrs.height = pxToNumber(height);
+  // 设置宽高
+  domAttrs.width = pxToNum(domStyles.width);
+  domAttrs.height = pxToNum(domStyles.height);
   domAttrs.aspectRatio = domAttrs.height !== 0 ? domAttrs.width / domAttrs.height : 1;
 
-  const directions = options.direction?.split('-') || [];
-  if (options.event && directions.length > 1) {
+  // 设置宽高限制
+  const limitKeys = ['maxWidth', 'maxHeight', 'minWidth', 'minHeight'] as const;
+  const limitList = limitKeys.map(key => domStyles[key]);
+  if (limitList.some(item => item.includes('%'))) {
+    // 宽高限制包含百分比，需要获取父级宽度和高度
+    const parentStyles = window.getComputedStyle(dom.parentNode as HTMLDivElement, null);
+    const parentWidthAndHeight = [parentStyles.width, parentStyles.height].map(pxToNum);
+    if (parentStyles.boxSizing === 'border-box') {
+      parentWidthAndHeight[0] = parentWidthAndHeight[0] - pxToNum(parentStyles.paddingLeft) - pxToNum(parentStyles.paddingRight);
+      parentWidthAndHeight[1] = parentWidthAndHeight[1] - pxToNum(parentStyles.paddingTop) - pxToNum(parentStyles.paddingBottom);
+    }
+    limitList.map((item, i) => {
+      return item.includes('%') ? parentWidthAndHeight[i % 2] * Number(item.replace('%', '')) / 100 : pxToNum(item);
+    }).forEach((item, i) => domAttrs[limitKeys[i]] = item);
+  }
+  else {
+    limitList.map(pxToNum).forEach((item, i) => domAttrs[limitKeys[i]] = item);
+  }
+
+  // 获取点击在元素的哪个方向
+  if (options.event) {
     const { x, y } = dom.getBoundingClientRect();
     domAttrs.pointerDir.x = (options.event.clientX - (x + domAttrs.width / 2)) > 0 ? 1 : -1;
     domAttrs.pointerDir.y = (options.event.clientY - (y + domAttrs.height / 2)) > 0 ? 1 : -1;

@@ -12,6 +12,8 @@ export type ResizeDirection =
 export interface ResizeDistance {
   x: number
   y: number
+  dirX: 1 | -1 | 0
+  dirY: 1 | -1 | 0
 }
 
 /** 调整大小配置项 */
@@ -28,9 +30,11 @@ export interface DomResizeOptions {
   distanceY?: number
   /** 使用transform或position进行偏移 */
   offset?: 'transform' | 'position'
-  /** 网格对齐，固定每次调整的最小距离，默认[1,1]，单位px，使用小数注意精度问题 */
-  grid?: [number, number]
-  /** 锁定比例， 未设置 */
+  /** 是否可跨轴调整，需要配置offset才生效 */
+  crossAxis?: boolean
+  /** 网格对齐，固定每次调整的最小距离，默认[0.5,0.5]，单位px，使用小数注意精度问题 */
+  grid?: number[]
+  /** 锁定宽高比例 */
   lockAspectRatio?: boolean
   /** 调整回调 */
   callback?: (status: ResizeStatus, distance: ResizeDistance) => void

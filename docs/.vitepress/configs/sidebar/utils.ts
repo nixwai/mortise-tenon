@@ -38,6 +38,15 @@ export const utilsSidebar: DefaultTheme.SidebarItem[] = [
     ],
   },
   {
+    text: 'DOM',
+    items: [
+      {
+        text: 'domResize',
+        link: '/zh/utils/dom-resize.md',
+      },
+    ],
+  },
+  {
     text: '变更日志',
     link: '/zh/utils/changelog.md',
   },
