@@ -72,17 +72,6 @@ function changeTargetResize(dis: { x: number, y: number }) {
   <div class="flex gap-1 mt-4">
     <div>
       <input
-        id="lock"
-        v-model="lockAspectRatio"
-        type="radio"
-        name="lockAspectRatio"
-        :value="true"
-        class="mb-[3px]"
-      >
-      <label for="lock">lock</label>
-    </div>
-    <div>
-      <input
         id="unlock"
         v-model="lockAspectRatio"
         type="radio"
@@ -92,45 +81,56 @@ function changeTargetResize(dis: { x: number, y: number }) {
       >
       <label for="unlock">unlock</label>
     </div>
+    <div>
+      <input
+        id="lock"
+        v-model="lockAspectRatio"
+        type="radio"
+        name="lockAspectRatio"
+        :value="true"
+        class="mb-[3px]"
+      >
+      <label for="lock">lock</label>
+    </div>
   </div>
 
   <div class="flex gap-1 mt-4">
     <div>
       <input
-        id="lock"
+        id="position"
         v-model="offset"
         type="radio"
         name="offset"
         value="position"
         class="mb-[3px]"
       >
-      <label for="lock">position</label>
+      <label for="position">position</label>
     </div>
     <div>
       <input
-        id="unlock"
+        id="transform"
         v-model="offset"
         type="radio"
         name="offset"
         value="transform"
         class="mb-[3px]"
       >
-      <label for="unlock">transform</label>
+      <label for="transform">transform</label>
+    </div>
+    <div>
+      <input
+        id="none"
+        v-model="offset"
+        type="radio"
+        name="offset"
+        :value="undefined"
+        class="mb-[3px]"
+      >
+      <label for="none">none</label>
     </div>
   </div>
 
   <div class="flex gap-1 mt-4">
-    <div>
-      <input
-        id="cross"
-        v-model="crossAxis"
-        type="radio"
-        name="crossAxis"
-        :value="true"
-        class="mb-[3px]"
-      >
-      <label for="cross">cross</label>
-    </div>
     <div>
       <input
         id="uncross"
@@ -141,6 +141,17 @@ function changeTargetResize(dis: { x: number, y: number }) {
         class="mb-[3px]"
       >
       <label for="uncross">uncross</label>
+    </div>
+    <div>
+      <input
+        id="cross"
+        v-model="crossAxis"
+        type="radio"
+        name="crossAxis"
+        :value="true"
+        class="mb-[3px]"
+      >
+      <label for="cross">cross</label>
     </div>
   </div>
 

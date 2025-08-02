@@ -32,9 +32,9 @@ export interface DomResizeOptions {
   offset?: 'transform' | 'position'
   /** 是否可跨轴调整，需要配置offset才生效 */
   crossAxis?: boolean
-  /** 网格对齐，固定每次调整的最小距离，默认[0.5,0.5]，单位px，使用小数注意精度问题 */
+  /** 网格对齐，固定每次调整的最小距离，默认[0.5,0.5]，单位px，使用小数注意精度问题，使用0.5的倍数 */
   grid?: number[]
-  /** 锁定宽高比例 */
+  /** 锁定宽高比例，锁定后grid的配置也会根据当前元素比例发生改变 */
   lockAspectRatio?: boolean
   /** 调整回调 */
   callback?: (status: ResizeStatus, distance: ResizeDistance) => void

@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import { domResize } from 'mortise-tenon-tool';
 import { ref } from 'vue';
-import { domResize } from '../../../../packages/utils/src';
 
 const resizeTarget1 = ref<HTMLDivElement>();
 const resizeTarget2 = ref<HTMLDivElement>();

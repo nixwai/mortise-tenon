@@ -125,7 +125,7 @@ interface DirectionParams {
   originValue: number
   /** 原始位置 */
   originOffset: number
-  maxValue: number
+  /** 最小值 */
   minValue: number
   /** 最大调整距离 */
   maxDistance: number
@@ -134,6 +134,8 @@ interface DirectionParams {
   /** 网格的移动距离 */
   gridDistance: number
 }
+
+const DEFAULT_GRID = 0.5;
 
 function createResizingFns(options: DomResizeOptions, domAttrs: DomAttrs) {
   const direction = options.direction || 'all';
@@ -152,19 +154,29 @@ function createResizingFns(options: DomResizeOptions, domAttrs: DomAttrs) {
   const lastDistance: Pick<ResizeDistance, 'x' | 'y'> = { x: domAttrs.width, y: domAttrs.height };
   // 记录移动距离
   const logDistance = (value: number, axis: Axis) => {
-    moveDistance[axis] = (value - lastDistance[axis]);
+    moveDistance[axis] = value - lastDistance[axis];
     lastDistance[axis] = value;
   };
 
-  const gridX = options.grid?.[0] || 0.5;
-  const gridY = options.grid?.[1] || 0.5;
+  // 固定的移动距离，两边都移动时需要*2
+  let gridX = (options.grid?.[0] || DEFAULT_GRID) * (moveDistance.dirX ? 1 : 2);
+  let gridY = (options.grid?.[1] || DEFAULT_GRID) * (moveDistance.dirY ? 1 : 2);
+  if (options.lockAspectRatio) {
+    // 锁定宽高比时，固定的移动距离也会变化
+    if (options.event || options.distanceX) {
+      gridY = gridX / domAttrs.aspectRatio;
+    }
+    else {
+      gridX = gridY * domAttrs.aspectRatio;
+    }
+  }
+
   /** 元素的纵横轴参数 */
   const domAxisParams: { x: DirectionParams, y: DirectionParams } = {
     x: {
       originValue: domAttrs.width,
       originOffset: domAttrs.offsetX,
-      maxValue: domAttrs.maxWidth,
-      minValue: domAttrs.minWidth,
+      minValue: domAttrs.width - Math.floor((domAttrs.width - domAttrs.minWidth) / gridX) * gridX,
       maxDistance: Math.floor((domAttrs.maxWidth - domAttrs.width) / gridX) * gridX,
       minDistance: Math.ceil((domAttrs.minWidth - domAttrs.width) / gridX) * gridX,
       gridDistance: gridX,
@@ -172,8 +184,7 @@ function createResizingFns(options: DomResizeOptions, domAttrs: DomAttrs) {
     y: {
       originValue: domAttrs.height,
       originOffset: domAttrs.offsetY,
-      maxValue: domAttrs.maxHeight,
-      minValue: domAttrs.minHeight,
+      minValue: domAttrs.height - Math.floor((domAttrs.height - domAttrs.minHeight) / gridY) * gridY,
       maxDistance: Math.floor((domAttrs.maxHeight - domAttrs.height) / gridY) * gridY,
       minDistance: Math.ceil((domAttrs.minHeight - domAttrs.height) / gridY) * gridY,
       gridDistance: gridY,
@@ -182,15 +193,14 @@ function createResizingFns(options: DomResizeOptions, domAttrs: DomAttrs) {
 
   /** 限制位移 */
   let limitMoveDistance: (distance: number, dir: Dir, axis: Axis) => number;
-
   if (options.crossAxis) {
     const minCrossDis = {
-      x: 2 * (domAxisParams.x.minDistance + domAxisParams.x.originValue),
-      y: 2 * (domAxisParams.y.minDistance + domAxisParams.y.originValue),
+      x: 2 * domAxisParams.x.minValue,
+      y: 2 * domAxisParams.y.minValue,
     };
     const maxCrossDis = {
-      x: domAxisParams.x.maxValue + domAxisParams.x.originValue,
-      y: domAxisParams.y.maxValue + domAxisParams.y.originValue,
+      x: Math.floor((domAttrs.maxWidth + domAttrs.width) / gridX) * gridX,
+      y: Math.floor((domAttrs.maxWidth + domAttrs.height) / gridY) * gridY,
     };
     limitMoveDistance = (distance: number, dir: Dir, axis: Axis) => {
       const { maxDistance, minDistance } = domAxisParams[axis];
@@ -225,17 +235,17 @@ function createResizingFns(options: DomResizeOptions, domAttrs: DomAttrs) {
   };
 
   const getValueAndOffset = options.offset
-    ? (value: number, originOffset: number, offsetForward: number, offsetBackward: number) => {
-        return value > 0 ? { value, offset: originOffset + offsetForward } : { value: -value, offset: originOffset + offsetBackward };
+    ? (value: number, _minValue: number, offsetForward: number, offsetBackward: number) => {
+        return value > 0 ? { value, offset: offsetForward } : { value: -value, offset: offsetBackward };
       }
-    : (value: number) => ({ value: value > 0 ? value : 0, offset: 0 });
+    : (value: number, minValue: number) => ({ value: value > minValue ? value : minValue, offset: 0 });
 
   /** 向前调整（往右或者往下）长度与位移 */
   const resizingForward: ResizingFn = (startLocation, endLocation, axis) => {
     const { originValue, originOffset, minValue } = domAxisParams[axis];
     const distance = getMoveDistance(startLocation, endLocation, axis, 1);
     const value = originValue + distance;
-    const data = getValueAndOffset(value, originOffset, 0, value + minValue);
+    const data = getValueAndOffset(value, minValue, originOffset, originOffset + value + minValue);
     logDistance(data.value, axis);
     return data;
   };
@@ -244,17 +254,18 @@ function createResizingFns(options: DomResizeOptions, domAttrs: DomAttrs) {
     const { originValue, originOffset, minValue } = domAxisParams[axis];
     const distance = getMoveDistance(startLocation, endLocation, axis, -1);
     const value = originValue - distance;
-    const data = getValueAndOffset(value, originOffset, distance, originValue - minValue);
+    const data = getValueAndOffset(value, minValue, originOffset + distance, originOffset + originValue - minValue);
     logDistance(data.value, axis);
     return data;
   };
   /** 前后一起调整(上下或者左右)长度与位移 */
   const resizingBoth: ResizingFn = (startLocation, endLocation, axis, pointerDir = 1) => {
-    const { originValue, originOffset } = domAxisParams[axis];
+    const { originValue, originOffset, minValue } = domAxisParams[axis];
     // 两边一起调整时需要对数据翻倍
     const distance = getMoveDistance(2 * startLocation, 2 * endLocation, axis, pointerDir);
     const value = originValue + pointerDir * distance;
-    const data = getValueAndOffset(value, originOffset, -pointerDir * distance / 2, originValue + pointerDir * distance / 2);
+    const distanceHalf = pointerDir * distance / 2;
+    const data = getValueAndOffset(value, minValue, originOffset - distanceHalf, originOffset + originValue + distanceHalf);
     logDistance(data.value, axis);
     return data;
   };

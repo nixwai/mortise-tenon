@@ -77,7 +77,7 @@ export function getResizeDomAttrs(options: DomResizeOptions, dom?: HTMLDivElemen
   // 设置偏移
   if (options.offset === 'transform') {
     const matchValue = domStyles.transform.match(matrixValueReg);
-    domAttrs.matrix.name = matchValue?.[1] || 'matrix';
+    domAttrs.matrix.name = matchValue?.[1] || 'matrix'; // matrix3d || matrix
     domAttrs.matrix.values = matchValue?.[2]?.split(',').map(Number) || [1, 0, 0, 1, 0, 0];
     if (domAttrs.matrix.values.length > 6) {
       // matrix3d(https://developer.mozilla.org/zh-CN/docs/Web/CSS/transform-function/matrix3d)
@@ -121,6 +121,16 @@ export function getResizeDomAttrs(options: DomResizeOptions, dom?: HTMLDivElemen
   }
   else {
     limitList.map(pxToNum).forEach((item, i) => domAttrs[limitKeys[i]] = item);
+  }
+  // 锁定纵横比时，最小宽高也会受限改变
+  if (options.lockAspectRatio) {
+    const lockMinHeight = domAttrs.minHeight * domAttrs.aspectRatio;
+    if (lockMinHeight > domAttrs.minWidth) {
+      domAttrs.minWidth = lockMinHeight;
+    }
+    else {
+      domAttrs.minHeight = domAttrs.minWidth / domAttrs.aspectRatio;
+    }
   }
 
   // 获取点击在元素的哪个方向
