@@ -1,18 +1,23 @@
-/**
- * 调整状态 'prepare'(准备) | 'moving'(移动) | 'idle'(静止) | 'manual'(手动调整)
- */
-export type ResizeStatus = 'prepare' | 'moving' | 'idle' | 'manual';
-
 /** 调整方向 */
 export type ResizeDirection =
   'left' | 'right' | 'top' | 'bottom' | 'all' |
   'left-top' | 'left-bottom' | 'right-top' | 'right-bottom' | 'left-right' | 'top-bottom' |
   'left-top-right' | 'left-bottom-right' | 'top-left-bottom' | 'top-right-bottom';
 
+/**
+ * 调整状态 'prepare'(准备) | 'moving'(移动) | 'idle'(静止) | 'manual'(手动调整)
+ */
+export type ResizeStatus = 'prepare' | 'moving' | 'idle' | 'manual';
+
+/** 调整距离 */
 export interface ResizeDistance {
+  /** 横轴距离 */
   x: number
+  /** 纵轴距离 */
   y: number
+  /** 横轴方向 */
   dirX: 1 | -1 | 0
+  /** 纵轴方向 */
   dirY: 1 | -1 | 0
 }
 

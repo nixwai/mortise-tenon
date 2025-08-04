@@ -11,9 +11,8 @@ export function resizeByPointer(resizeData: ResizeData) {
 /** 调整水平方向 */
 function resizeHorizontal(resizeData: ResizeData, resizingWidthFn: ResizingFn) {
   const { setStyleWidthOrHeight, setStyleOffset, moveDistance } = resizeData;
-  const { clientX: startX } = resizeData.options.event!;
   const { offsetY, pointerDir } = resizeData.domAttrs;
-  beginResizeContent(resizeData, ({ clientX: endX }) => {
+  beginResizeContent(resizeData, ({ startX, endX }) => {
     const { value: width, offset: offsetX } = resizingWidthFn(startX, endX, 'x', pointerDir.x);
     if (!moveDistance.x) { return; }
     setStyleWidthOrHeight(width, 'width');
@@ -25,9 +24,8 @@ function resizeHorizontal(resizeData: ResizeData, resizingWidthFn: ResizingFn) {
 /** 调整垂直方向 */
 function resizeVertical(resizeData: ResizeData, resizingHeightFn: ResizingFn) {
   const { setStyleWidthOrHeight, setStyleOffset, moveDistance } = resizeData;
-  const { clientY: startY } = resizeData.options.event!;
   const { offsetX, pointerDir } = resizeData.domAttrs;
-  beginResizeContent(resizeData, ({ clientY: endY }) => {
+  beginResizeContent(resizeData, ({ startY, endY }) => {
     const { value: height, offset: offsetY } = resizingHeightFn(startY, endY, 'y', pointerDir.y);
     if (!moveDistance.y) { return; }
     setStyleWidthOrHeight(height, 'height');
@@ -40,9 +38,9 @@ function resizeVertical(resizeData: ResizeData, resizingHeightFn: ResizingFn) {
 function resizeHorizontalAndVertical(resizeData: ResizeData, resizingWidthFn: ResizingFn, resizingHeightFn: ResizingFn) {
   const { setStyleWidthOrHeight, setStyleOffset, moveDistance, options: { lockAspectRatio } } = resizeData;
   const { aspectRatio, pointerDir } = resizeData.domAttrs;
-  const updateDom = (options: { startX: number, startY: number, endX: number, endY: number }) => {
-    const { value: width, offset: offsetX } = resizingWidthFn(options.startX, options.endX, 'x', pointerDir.x);
-    const { value: height, offset: offsetY } = resizingHeightFn(options.startY, options.endY, 'y', pointerDir.y);
+  const updateDom = (coord: { startX: number, startY: number, endX: number, endY: number }) => {
+    const { value: width, offset: offsetX } = resizingWidthFn(coord.startX, coord.endX, 'x', pointerDir.x);
+    const { value: height, offset: offsetY } = resizingHeightFn(coord.startY, coord.endY, 'y', pointerDir.y);
     if ((!moveDistance.x && !moveDistance.y) // 移动距离为0时，不更新dom
       || (lockAspectRatio && (!moveDistance.x || !moveDistance.y))) { // 锁定比例时，任意一个方向的移动距离为0时，不更新dom
       return;
@@ -55,7 +53,6 @@ function resizeHorizontalAndVertical(resizeData: ResizeData, resizingWidthFn: Re
 
   if (lockAspectRatio) {
     // 固定比例时，宽度根据鼠标位置决定，高度的调整根据宽度的变化与元素宽高比例决定
-    const { clientX: startX } = resizeData.options.event!;
     // 根据宽高调整的方向处理
     let dir = resizingWidthFn === resizingHeightFn ? 1 : -1;
     const isBothX = !moveDistance.dirX;
@@ -75,7 +72,7 @@ function resizeHorizontalAndVertical(resizeData: ResizeData, resizingWidthFn: Re
       }
     }
 
-    beginResizeContent(resizeData, ({ clientX: endX }) => {
+    beginResizeContent(resizeData, ({ startX, endX }) => {
       const startY = (dir * startX) / aspectRatio;
       const endY = (dir * endX) / aspectRatio;
       updateDom({ startX, startY, endX, endY });
@@ -83,8 +80,7 @@ function resizeHorizontalAndVertical(resizeData: ResizeData, resizingWidthFn: Re
   }
   else {
     // 不固定比例时，宽高根据鼠标位置决定
-    const { clientX: startX, clientY: startY } = resizeData.options.event!;
-    beginResizeContent(resizeData, ({ clientX: endX, clientY: endY }) => {
+    beginResizeContent(resizeData, ({ startX, endX, startY, endY }) => {
       updateDom({ startX, startY, endX, endY });
     });
   }
@@ -94,7 +90,10 @@ function resizeHorizontalAndVertical(resizeData: ResizeData, resizingWidthFn: Re
 const resizePointerIdSet = new Set<number>();
 
 /** 使用指针调整大小 */
-function beginResizeContent(resizeData: ResizeData, moveHandler: (moveEvent: PointerEvent) => void) {
+function beginResizeContent(
+  resizeData: ResizeData,
+  moveFn: (coord: { startX: number, endX: number, startY: number, endY: number }) => void,
+) {
   const target = resizeData.targetRef.deref();
   if (!target) { return; }
   if (!resizeData.options.event) { return; }
@@ -105,6 +104,7 @@ function beginResizeContent(resizeData: ResizeData, moveHandler: (moveEvent: Poi
     target.setPointerCapture(resizeData.options.event.pointerId);
   }
   // 移动
+  const moveHandler = getMoveHandler(resizeData, moveFn);
   target.addEventListener('pointermove', moveHandler);
   // 结束
   const upHandler = (overEvent: PointerEvent) => {
@@ -119,4 +119,45 @@ function beginResizeContent(resizeData: ResizeData, moveHandler: (moveEvent: Poi
   target.addEventListener('pointerup', upHandler);
   target.addEventListener('pointercancel', upHandler);
   updateResize('prepare', resizeData, { x: 0, y: 0, dirX: resizeData.moveDistance.dirX, dirY: resizeData.moveDistance.dirY });
+}
+
+/** 获取移动计算函数 */
+function getMoveHandler(
+  resizeData: ResizeData,
+  moveFn: (coord: { startX: number, endX: number, startY: number, endY: number }) => void,
+) {
+  const { scaleX, scaleY, rotate } = resizeData.domAttrs.matrix;
+  // 计算起始点坐标
+  const clientX = resizeData.options.event!.clientX;
+  const clientY = resizeData.options.event!.clientY;
+  if (rotate) {
+    // 计算旋转角度（转换为弧度）
+    const angleRad = -rotate * Math.PI / 180;
+    // 应用逆时针旋转矩阵，然后应用缩放
+    const rotatedStartX = clientX * Math.cos(angleRad) - clientY * Math.sin(angleRad);
+    const rotatedStartY = clientX * Math.sin(angleRad) + clientY * Math.cos(angleRad);
+    const startX = rotatedStartX / scaleX;
+    const startY = rotatedStartY / scaleY;
+    return (moveEvent: PointerEvent) => {
+      // 计算结束点坐标
+      const moveX = moveEvent.clientX;
+      const moveY = moveEvent.clientY;
+      // 应用逆时针旋转矩阵，然后应用缩放
+      const rotatedEndX = moveX * Math.cos(angleRad) - moveY * Math.sin(angleRad);
+      const rotatedEndY = moveX * Math.sin(angleRad) + moveY * Math.cos(angleRad);
+      const endX = rotatedEndX / scaleX;
+      const endY = rotatedEndY / scaleY;
+      moveFn({ startX, endX, startY, endY });
+    };
+  }
+  else {
+    ;
+    const startX = clientX / scaleX;
+    const startY = clientY / scaleY;
+    return (moveEvent: PointerEvent) => {
+      const endX = moveEvent.clientX / scaleX;
+      const endY = moveEvent.clientY / scaleY;
+      moveFn({ startX, endX, startY, endY });
+    };
+  }
 }

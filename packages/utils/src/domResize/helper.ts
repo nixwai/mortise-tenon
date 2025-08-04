@@ -27,6 +27,9 @@ export interface DomAttrs {
     values: number[]
     beforeTranslateValueStr: string
     afterTranslateValueStr: string
+    scaleX: number
+    scaleY: number
+    rotate: number
   }
   /** 鼠标位置 */
   pointerDir: {
@@ -65,6 +68,9 @@ export function getResizeDomAttrs(options: DomResizeOptions, dom?: HTMLDivElemen
       values: [1, 0, 0, 1, 0, 0],
       beforeTranslateValueStr: '1,0,0,1',
       afterTranslateValueStr: '',
+      scaleX: 1,
+      scaleY: 1,
+      rotate: 0,
     },
     pointerDir: {
       x: 1,
@@ -74,29 +80,61 @@ export function getResizeDomAttrs(options: DomResizeOptions, dom?: HTMLDivElemen
   if (!dom) { return domAttrs; }
   const domStyles = window.getComputedStyle(dom, null);
 
+  // 获取transform相关matrix信息
+  const matchValue = domStyles.transform.match(matrixValueReg);
+  domAttrs.matrix.name = matchValue?.[1] || 'matrix'; // matrix3d || matrix
+  domAttrs.matrix.values = matchValue?.[2]?.split(',').map(Number) || [1, 0, 0, 1, 0, 0];
+  if (domAttrs.matrix.values.length > 6) {
+    // matrix3d(https://developer.mozilla.org/zh-CN/docs/Web/CSS/transform-function/matrix3d)
+    domAttrs.matrix.beforeTranslateValueStr = `${domAttrs.matrix.values.slice(0, 12).join(',')},`;
+    domAttrs.matrix.afterTranslateValueStr = `,${domAttrs.matrix.values.slice(15).join(',')}`;
+    domAttrs.offsetX = domAttrs.matrix.values[12];
+    domAttrs.offsetY = domAttrs.matrix.values[13];
+    // scale与rotate的配置信息
+    const a = domAttrs.matrix.values[0];
+    const b = domAttrs.matrix.values[1];
+    const c = domAttrs.matrix.values[4];
+    const d = domAttrs.matrix.values[5];
+    // x轴和y轴的缩放倍数
+    domAttrs.matrix.scaleX = transformValuePrecision(Math.sqrt(a * a + b * b));
+    domAttrs.matrix.scaleY = transformValuePrecision(Math.sqrt(c * c + d * d));
+    // 计算旋转角度
+    domAttrs.matrix.rotate = transformValuePrecision((Math.atan2(b, a) * 180 / Math.PI + 360) % 360);
+  }
+  else {
+    // matrix(https://developer.mozilla.org/zh-CN/docs/Web/CSS/transform-function/matrix)
+    domAttrs.matrix.beforeTranslateValueStr = `${domAttrs.matrix.values.slice(0, 4).join(',')},`;
+    domAttrs.matrix.afterTranslateValueStr = '';
+    domAttrs.offsetX = domAttrs.matrix.values[4];
+    domAttrs.offsetY = domAttrs.matrix.values[5];
+    // scale与rotate的配置信息
+    const a = domAttrs.matrix.values[0];
+    const b = domAttrs.matrix.values[1];
+    const c = domAttrs.matrix.values[2];
+    const d = domAttrs.matrix.values[3];
+    // x轴和y轴的缩放倍数
+    domAttrs.matrix.scaleX = transformValuePrecision(Math.sqrt(a * a + b * b));
+    domAttrs.matrix.scaleY = transformValuePrecision(Math.sqrt(c * c + d * d));
+    // 计算旋转角度
+    domAttrs.matrix.rotate = transformValuePrecision((Math.atan2(b, a) * 180 / Math.PI + 360) % 360);
+  }
+
   // 设置偏移
-  if (options.offset === 'transform') {
-    const matchValue = domStyles.transform.match(matrixValueReg);
-    domAttrs.matrix.name = matchValue?.[1] || 'matrix'; // matrix3d || matrix
-    domAttrs.matrix.values = matchValue?.[2]?.split(',').map(Number) || [1, 0, 0, 1, 0, 0];
+  if (options.offset === 'position') {
+    // 使用position
+    domAttrs.offsetX = pxToNum(domStyles.left);
+    domAttrs.offsetY = pxToNum(domStyles.top);
+  }
+  else {
+    // 使用transform
     if (domAttrs.matrix.values.length > 6) {
-      // matrix3d(https://developer.mozilla.org/zh-CN/docs/Web/CSS/transform-function/matrix3d)
-      domAttrs.matrix.beforeTranslateValueStr = `${domAttrs.matrix.values.slice(0, 12).join(',')},`;
-      domAttrs.matrix.afterTranslateValueStr = `,${domAttrs.matrix.values.slice(15).join(',')}`;
       domAttrs.offsetX = domAttrs.matrix.values[12];
       domAttrs.offsetY = domAttrs.matrix.values[13];
     }
     else {
-      // matrix(https://developer.mozilla.org/zh-CN/docs/Web/CSS/transform-function/matrix)
-      domAttrs.matrix.beforeTranslateValueStr = `${domAttrs.matrix.values.slice(0, 4).join(',')},`;
-      domAttrs.matrix.afterTranslateValueStr = '';
       domAttrs.offsetX = domAttrs.matrix.values[4];
       domAttrs.offsetY = domAttrs.matrix.values[5];
     }
-  }
-  else if (options.offset === 'position') {
-    domAttrs.offsetX = pxToNum(domStyles.left);
-    domAttrs.offsetY = pxToNum(domStyles.top);
   }
 
   // 设置宽高
@@ -135,12 +173,27 @@ export function getResizeDomAttrs(options: DomResizeOptions, dom?: HTMLDivElemen
 
   // 获取点击在元素的哪个方向
   if (options.event) {
-    const { x, y } = dom.getBoundingClientRect();
-    domAttrs.pointerDir.x = (options.event.clientX - (x + domAttrs.width / 2)) > 0 ? 1 : -1;
-    domAttrs.pointerDir.y = (options.event.clientY - (y + domAttrs.height / 2)) > 0 ? 1 : -1;
+    const rect = dom.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    // 鼠标相对于元素中心的坐标
+    const pointerX = options.event.clientX - centerX;
+    const pointerY = options.event.clientY - centerY;
+    // 旋转角度（转换为弧度）
+    const angleRad = -domAttrs.matrix.rotate * Math.PI / 180;
+    // 应用逆时针旋转矩阵
+    const rotatedX = pointerX * Math.cos(angleRad) - pointerY * Math.sin(angleRad);
+    const rotatedY = pointerX * Math.sin(angleRad) + pointerY * Math.cos(angleRad);
+    // 根据旋转后的坐标判断方向
+    domAttrs.pointerDir.x = rotatedX > 0 ? 1 : -1;
+    domAttrs.pointerDir.y = rotatedY > 0 ? 1 : -1;
   }
-
   return domAttrs;
+}
+
+/** 精度处理函数 */
+function transformValuePrecision(value: number): number {
+  return Math.round(value * 100) / 100;
 }
 
 /** 创建样式更新函数 */
@@ -162,15 +215,16 @@ export function createStyleUpdaters(
   });
   /** 设置位移 */
   let setStyleOffset: SetStyleOffset = () => { };
-  if (options.offset === 'transform') {
-    setStyleOffset = (translateX, translateY) => changeTargetStyle((dom) => {
-      dom.style.transform = `${name}(${beforeTranslateValueStr}${translateX},${translateY}${afterTranslateValueStr})`;
-    });
-  }
-  else if (options.offset === 'position') {
+  if (options.offset === 'position') {
     setStyleOffset = (left, top) => changeTargetStyle((dom) => {
       dom.style.left = `${left}px`;
       dom.style.top = `${top}px`;
+    });
+  }
+  else if (options.offset === 'transform') {
+    // 如果配置了transform或者缩放，则使用transform进行位移
+    setStyleOffset = (translateX, translateY) => changeTargetStyle((dom) => {
+      dom.style.transform = `${name}(${beforeTranslateValueStr}${translateX},${translateY}${afterTranslateValueStr})`;
     });
   }
 

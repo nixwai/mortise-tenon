@@ -133,6 +133,8 @@ interface DirectionParams {
   minDistance: number
   /** 网格的移动距离 */
   gridDistance: number
+  /** 放大倍数 */
+  scale: number
 }
 
 const DEFAULT_GRID = 0.5;
@@ -180,6 +182,7 @@ function createResizingFns(options: DomResizeOptions, domAttrs: DomAttrs) {
       maxDistance: Math.floor((domAttrs.maxWidth - domAttrs.width) / gridX) * gridX,
       minDistance: Math.ceil((domAttrs.minWidth - domAttrs.width) / gridX) * gridX,
       gridDistance: gridX,
+      scale: domAttrs.matrix.scaleX,
     },
     y: {
       originValue: domAttrs.height,
@@ -188,6 +191,7 @@ function createResizingFns(options: DomResizeOptions, domAttrs: DomAttrs) {
       maxDistance: Math.floor((domAttrs.maxHeight - domAttrs.height) / gridY) * gridY,
       minDistance: Math.ceil((domAttrs.minHeight - domAttrs.height) / gridY) * gridY,
       gridDistance: gridY,
+      scale: domAttrs.matrix.scaleY,
     },
   };
 
@@ -242,19 +246,21 @@ function createResizingFns(options: DomResizeOptions, domAttrs: DomAttrs) {
 
   /** 向前调整（往右或者往下）长度与位移 */
   const resizingForward: ResizingFn = (startLocation, endLocation, axis) => {
-    const { originValue, originOffset, minValue } = domAxisParams[axis];
+    const { originValue, originOffset, minValue, scale } = domAxisParams[axis];
     const distance = getMoveDistance(startLocation, endLocation, axis, 1);
     const value = originValue + distance;
-    const data = getValueAndOffset(value, minValue, originOffset, originOffset + value + minValue);
+    const scaleOffset = distance * (scale - 1) / 2; // 因为缩放比例产生的位移
+    const data = getValueAndOffset(value, minValue, originOffset + scaleOffset, originOffset + value + scaleOffset + minValue * scale);
     logDistance(data.value, axis);
     return data;
   };
   /** 向后调整（往左或者往上）长度与位移 */
   const resizingBackward: ResizingFn = (startLocation, endLocation, axis) => {
-    const { originValue, originOffset, minValue } = domAxisParams[axis];
+    const { originValue, originOffset, minValue, scale } = domAxisParams[axis];
     const distance = getMoveDistance(startLocation, endLocation, axis, -1);
     const value = originValue - distance;
-    const data = getValueAndOffset(value, minValue, originOffset + distance, originOffset + originValue - minValue);
+    const scaleOffset = distance * (scale - 1) / 2; // 因为缩放比例产生的位移
+    const data = getValueAndOffset(value, minValue, originOffset + distance + scaleOffset, originOffset + originValue + scaleOffset - minValue * scale);
     logDistance(data.value, axis);
     return data;
   };

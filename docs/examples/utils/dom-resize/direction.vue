@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { ResizeDirection } from '../../../../packages/utils/src';
+import type { ResizeDirection } from 'mortise-tenon-tool';
+import { domResize } from 'mortise-tenon-tool';
 import { ref } from 'vue';
-import { domResize } from '../../../../packages/utils/src';
 
 const resizeTarget1 = ref<HTMLDivElement>();
 
@@ -28,6 +28,9 @@ const lockAspectRatio = ref(false);
 const offset = ref<'position' | 'transform'>('position');
 const grid = ref([0.5, 0.5]);
 const crossAxis = ref(false);
+const rotate = ref(0);
+const scaleX = ref(1);
+const scaleY = ref(1);
 
 function handleTargetResize(event: PointerEvent) {
   domResize({
@@ -156,11 +159,17 @@ function changeTargetResize(dis: { x: number, y: number }) {
   </div>
 
   <div class="flex gap-1 mt-4">
-    gridX: <input v-model="grid[0]" class="b-1 b-gray b-solid b-rounded px-1">
+    gridX: <input v-model="grid[0]" class="b-1 b-gray b-solid px-1 b-rounded">
     gridY: <input v-model="grid[1]" class="b-1 b-gray b-solid b-rounded px-1">
   </div>
 
-  <div class="flex mt-4 justify-center items-center flex-col ctxs-btn_b-1,b-gray,b-solid,px-2,b-rounded,w-8,mt-1 w-30">
+  <div class="flex gap-1 mt-4">
+    scaleX: <input v-model="scaleX" class="b-1 b-gray b-solid b-rounded px-1">
+    scaleY: <input v-model="scaleY" class="b-1 b-gray b-solid b-rounded px-1">
+    rotate: <input v-model="rotate" class="b-1 b-gray b-solid b-rounded px-1">
+  </div>
+
+  <div class="flex mt-4 items-center justify-center flex-col ctxs-btn_b-1,b-gray,b-solid,px-2,b-rounded,w-8,mt-1 w-30">
     <button class="ctxs-btn" @click="changeTargetResize({ x: 0, y: -5 })">
       -5
     </button>
@@ -182,6 +191,7 @@ function changeTargetResize(dis: { x: number, y: number }) {
     <div
       ref="resizeTarget1"
       class="w-30 h-30 position-absolute bg-blue min-w-10 min-h-10 max-w-100 left-[30%] max-h-100 top-[30%]"
+      :style="{ transform: `rotate(${rotate}deg) scale(${scaleX}, ${scaleY})` }"
       @pointerdown.stop.prevent="handleTargetResize"
     />
   </div>
