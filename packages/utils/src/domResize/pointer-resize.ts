@@ -151,7 +151,6 @@ function getMoveHandler(
     };
   }
   else {
-    ;
     const startX = clientX / scaleX;
     const startY = clientY / scaleY;
     return (moveEvent: PointerEvent) => {

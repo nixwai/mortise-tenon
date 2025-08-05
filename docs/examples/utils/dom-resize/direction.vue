@@ -191,7 +191,7 @@ function changeTargetResize(dis: { x: number, y: number }) {
     <div
       ref="resizeTarget1"
       class="w-30 h-30 position-absolute bg-blue min-w-10 min-h-10 max-w-100 left-[30%] max-h-100 top-[30%]"
-      :style="{ transform: `rotate(${rotate}deg) scale(${scaleX}, ${scaleY})`, transformOrigin: 'top left' }"
+      :style="{ transform: `rotate(${rotate}deg) scale(${scaleX}, ${scaleY})` }"
       @pointerdown.stop.prevent="handleTargetResize"
     />
   </div>
