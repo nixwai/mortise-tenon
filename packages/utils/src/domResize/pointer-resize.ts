@@ -126,7 +126,7 @@ function getMoveHandler(
   resizeData: ResizeData,
   moveFn: (coord: { startX: number, endX: number, startY: number, endY: number }) => void,
 ) {
-  const { scaleX, scaleY, rotate } = resizeData.domAttrs.matrix;
+  const { scaleX, scaleY, rotate } = resizeData.domAttrs.transform;
   // 计算起始点坐标
   const clientX = resizeData.options.event!.clientX;
   const clientY = resizeData.options.event!.clientY;

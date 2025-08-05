@@ -1,4 +1,4 @@
-import type { DomResizeOptions } from './types';
+import type { DomResizeOptions } from '../types';
 
 export type Dir = 1 | -1;
 
@@ -22,14 +22,25 @@ export interface DomAttrs {
   /** 垂直偏移值 */
   offsetY: number
   /** transform信息 */
-  matrix: {
+  transform: {
+    /** matrix3d || matrix */
     name: string
+    /** matrix值 */
     values: number[]
+    /** 调整偏移值前的字符串 */
     beforeTranslateValueStr: string
+    /** 调整偏移值后的字符串 */
     afterTranslateValueStr: string
+    /** 横轴缩放值 */
     scaleX: number
+    /** 纵轴缩放值 */
     scaleY: number
+    /** 旋转值 */
     rotate: number
+    /** 变形横轴原点 */
+    originX: number
+    /** 变形纵轴原点 */
+    originY: number
   }
   /** 鼠标位置 */
   pointerDir: {
@@ -39,9 +50,6 @@ export interface DomAttrs {
     y: Dir
   }
 }
-
-export type SetStyleWidthOrHeightFn = (value: number, property: 'width' | 'height') => void;
-export type SetStyleOffset = (offsetX: number, offsetY: number) => void;
 
 const matrixValueReg = /(matrix3?d?)\((.+)\)/;
 function pxToNum(value: string) {
@@ -63,7 +71,7 @@ export function getResizeDomAttrs(options: DomResizeOptions, dom?: HTMLDivElemen
     minHeight: 0,
     offsetX: 0,
     offsetY: 0,
-    matrix: {
+    transform: {
       name: 'matrix',
       values: [1, 0, 0, 1, 0, 0],
       beforeTranslateValueStr: '1,0,0,1',
@@ -71,6 +79,8 @@ export function getResizeDomAttrs(options: DomResizeOptions, dom?: HTMLDivElemen
       scaleX: 1,
       scaleY: 1,
       rotate: 0,
+      originX: 0,
+      originY: 0,
     },
     pointerDir: {
       x: 1,
@@ -80,43 +90,47 @@ export function getResizeDomAttrs(options: DomResizeOptions, dom?: HTMLDivElemen
   if (!dom) { return domAttrs; }
   const domStyles = window.getComputedStyle(dom, null);
 
+  // 获取transform变形原点
+  const transformOrigin = domStyles.transformOrigin.split(' ');
+  domAttrs.transform.originX = pxToNum(transformOrigin[0]);
+  domAttrs.transform.originY = pxToNum(transformOrigin[1]);
   // 获取transform相关matrix信息
   const matchValue = domStyles.transform.match(matrixValueReg);
-  domAttrs.matrix.name = matchValue?.[1] || 'matrix'; // matrix3d || matrix
-  domAttrs.matrix.values = matchValue?.[2]?.split(',').map(Number) || [1, 0, 0, 1, 0, 0];
-  if (domAttrs.matrix.values.length > 6) {
+  domAttrs.transform.name = matchValue?.[1] || 'matrix'; // matrix3d || matrix
+  domAttrs.transform.values = matchValue?.[2]?.split(',').map(Number) || [1, 0, 0, 1, 0, 0];
+  if (domAttrs.transform.values.length > 6) {
     // matrix3d(https://developer.mozilla.org/zh-CN/docs/Web/CSS/transform-function/matrix3d)
-    domAttrs.matrix.beforeTranslateValueStr = `${domAttrs.matrix.values.slice(0, 12).join(',')},`;
-    domAttrs.matrix.afterTranslateValueStr = `,${domAttrs.matrix.values.slice(15).join(',')}`;
-    domAttrs.offsetX = domAttrs.matrix.values[12];
-    domAttrs.offsetY = domAttrs.matrix.values[13];
+    domAttrs.transform.beforeTranslateValueStr = `${domAttrs.transform.values.slice(0, 12).join(',')},`;
+    domAttrs.transform.afterTranslateValueStr = `,${domAttrs.transform.values.slice(15).join(',')}`;
+    domAttrs.offsetX = domAttrs.transform.values[12];
+    domAttrs.offsetY = domAttrs.transform.values[13];
     // scale与rotate的配置信息
-    const a = domAttrs.matrix.values[0];
-    const b = domAttrs.matrix.values[1];
-    const c = domAttrs.matrix.values[4];
-    const d = domAttrs.matrix.values[5];
+    const a = domAttrs.transform.values[0];
+    const b = domAttrs.transform.values[1];
+    const c = domAttrs.transform.values[4];
+    const d = domAttrs.transform.values[5];
     // x轴和y轴的缩放倍数
-    domAttrs.matrix.scaleX = transformValuePrecision(Math.sqrt(a * a + b * b));
-    domAttrs.matrix.scaleY = transformValuePrecision(Math.sqrt(c * c + d * d));
+    domAttrs.transform.scaleX = transformValuePrecision(Math.sqrt(a * a + b * b));
+    domAttrs.transform.scaleY = transformValuePrecision(Math.sqrt(c * c + d * d));
     // 计算旋转角度
-    domAttrs.matrix.rotate = transformValuePrecision((Math.atan2(b, a) * 180 / Math.PI + 360) % 360);
+    domAttrs.transform.rotate = transformValuePrecision((Math.atan2(b, a) * 180 / Math.PI + 360) % 360);
   }
   else {
     // matrix(https://developer.mozilla.org/zh-CN/docs/Web/CSS/transform-function/matrix)
-    domAttrs.matrix.beforeTranslateValueStr = `${domAttrs.matrix.values.slice(0, 4).join(',')},`;
-    domAttrs.matrix.afterTranslateValueStr = '';
-    domAttrs.offsetX = domAttrs.matrix.values[4];
-    domAttrs.offsetY = domAttrs.matrix.values[5];
+    domAttrs.transform.beforeTranslateValueStr = `${domAttrs.transform.values.slice(0, 4).join(',')},`;
+    domAttrs.transform.afterTranslateValueStr = '';
+    domAttrs.offsetX = domAttrs.transform.values[4];
+    domAttrs.offsetY = domAttrs.transform.values[5];
     // scale与rotate的配置信息
-    const a = domAttrs.matrix.values[0];
-    const b = domAttrs.matrix.values[1];
-    const c = domAttrs.matrix.values[2];
-    const d = domAttrs.matrix.values[3];
+    const a = domAttrs.transform.values[0];
+    const b = domAttrs.transform.values[1];
+    const c = domAttrs.transform.values[2];
+    const d = domAttrs.transform.values[3];
     // x轴和y轴的缩放倍数
-    domAttrs.matrix.scaleX = transformValuePrecision(Math.sqrt(a * a + b * b));
-    domAttrs.matrix.scaleY = transformValuePrecision(Math.sqrt(c * c + d * d));
+    domAttrs.transform.scaleX = transformValuePrecision(Math.sqrt(a * a + b * b));
+    domAttrs.transform.scaleY = transformValuePrecision(Math.sqrt(c * c + d * d));
     // 计算旋转角度
-    domAttrs.matrix.rotate = transformValuePrecision((Math.atan2(b, a) * 180 / Math.PI + 360) % 360);
+    domAttrs.transform.rotate = transformValuePrecision((Math.atan2(b, a) * 180 / Math.PI + 360) % 360);
   }
 
   // 设置偏移
@@ -127,13 +141,13 @@ export function getResizeDomAttrs(options: DomResizeOptions, dom?: HTMLDivElemen
   }
   else {
     // 使用transform
-    if (domAttrs.matrix.values.length > 6) {
-      domAttrs.offsetX = domAttrs.matrix.values[12];
-      domAttrs.offsetY = domAttrs.matrix.values[13];
+    if (domAttrs.transform.values.length > 6) {
+      domAttrs.offsetX = domAttrs.transform.values[12];
+      domAttrs.offsetY = domAttrs.transform.values[13];
     }
     else {
-      domAttrs.offsetX = domAttrs.matrix.values[4];
-      domAttrs.offsetY = domAttrs.matrix.values[5];
+      domAttrs.offsetX = domAttrs.transform.values[4];
+      domAttrs.offsetY = domAttrs.transform.values[5];
     }
   }
 
@@ -180,7 +194,7 @@ export function getResizeDomAttrs(options: DomResizeOptions, dom?: HTMLDivElemen
     const pointerX = options.event.clientX - centerX;
     const pointerY = options.event.clientY - centerY;
     // 旋转角度（转换为弧度）
-    const angleRad = -domAttrs.matrix.rotate * Math.PI / 180;
+    const angleRad = -domAttrs.transform.rotate * Math.PI / 180;
     // 应用逆时针旋转矩阵
     const rotatedX = pointerX * Math.cos(angleRad) - pointerY * Math.sin(angleRad);
     const rotatedY = pointerX * Math.sin(angleRad) + pointerY * Math.cos(angleRad);
@@ -194,42 +208,4 @@ export function getResizeDomAttrs(options: DomResizeOptions, dom?: HTMLDivElemen
 /** 精度处理函数 */
 function transformValuePrecision(value: number): number {
   return Math.round(value * 100) / 100;
-}
-
-/** 创建样式更新函数 */
-export function createStyleUpdaters(
-  targetRef: WeakRef<HTMLDivElement>,
-  options: DomResizeOptions,
-  domAttrs: DomAttrs,
-) {
-  const { name, beforeTranslateValueStr, afterTranslateValueStr } = domAttrs.matrix;
-
-  const changeTargetStyle = (fn: (dom: HTMLDivElement) => void) => {
-    const target = targetRef.deref();
-    if (!target) { return; }
-    fn(target);
-  };
-  /** 设置宽度或高度 */
-  const setStyleWidthOrHeight: SetStyleWidthOrHeightFn = (value, property) => changeTargetStyle((dom) => {
-    dom.style[property] = `${value}px`;
-  });
-  /** 设置位移 */
-  let setStyleOffset: SetStyleOffset = () => { };
-  if (options.offset === 'position') {
-    setStyleOffset = (left, top) => changeTargetStyle((dom) => {
-      dom.style.left = `${left}px`;
-      dom.style.top = `${top}px`;
-    });
-  }
-  else if (options.offset === 'transform') {
-    // 如果配置了transform或者缩放，则使用transform进行位移
-    setStyleOffset = (translateX, translateY) => changeTargetStyle((dom) => {
-      dom.style.transform = `${name}(${beforeTranslateValueStr}${translateX},${translateY}${afterTranslateValueStr})`;
-    });
-  }
-
-  return {
-    setStyleWidthOrHeight,
-    setStyleOffset,
-  };
 }
