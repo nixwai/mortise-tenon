@@ -199,18 +199,13 @@ export function createResizingFns(options: DomResizeOptions, domAttrs: DomAttrs)
       x: (domAttrs.transform.scaleX - 1) * (domAttrs.transform.originX - domAttrs.width / 2) / domAttrs.width,
       y: (domAttrs.transform.scaleY - 1) * (domAttrs.transform.originY - domAttrs.height / 2) / domAttrs.height,
     };
-    // const scaleNegativeMultiple = {
-    //   x: (domAttrs.transform.scaleX - 1) * (domAttrs.width / 2 - domAttrs.transform.originX) / domAttrs.width,
-    //   y: (domAttrs.transform.scaleY - 1) * (domAttrs.height / 2 - domAttrs.transform.originY) / domAttrs.height,
-    // };
     return (distance, axis, dir) => {
       const { originValue, originOffset } = domAxisParams[axis];
       const distanceHalf = dir * distance / 2;
       const scalePositiveOffset = dir * distance * scalePositiveMultiple[axis]; // 因为缩放比例产生的位移
-      // const scaleNegativeOffset = dir * distance * scaleNegativeMultiple[axis];
       return {
         offsetPositive: originOffset - distanceHalf + scalePositiveOffset,
-        offsetNegative: originOffset + originValue + distanceHalf,
+        offsetNegative: originOffset + originValue + distanceHalf - scalePositiveMultiple[axis] * (dir * distance + 2 * originValue),
       };
     };
   });
