@@ -170,19 +170,19 @@ function changeTargetResize(dis: { x: number, y: number }) {
   </div>
 
   <div class="flex mt-4 items-center justify-center flex-col ctxs-btn_b-1,b-gray,b-solid,px-2,b-rounded,w-8,mt-1 w-30">
-    <button class="ctxs-btn" @click="changeTargetResize({ x: 0, y: -4 })">
+    <button class="ctxs-btn" @click="changeTargetResize({ x: 0, y: -5 })">
       -5
     </button>
     <div class="flex gap-1 items-center justify-center">
-      <button class="ctxs-btn" @click="changeTargetResize({ x: -4, y: 0 })">
+      <button class="ctxs-btn" @click="changeTargetResize({ x: -5, y: 0 })">
         -5
       </button>
       调整
-      <button class="ctxs-btn" @click="changeTargetResize({ x: 4, y: 0 })">
+      <button class="ctxs-btn" @click="changeTargetResize({ x: 5, y: 0 })">
         +5
       </button>
     </div>
-    <button class="ctxs-btn" @click="changeTargetResize({ x: 0, y: 4 })">
+    <button class="ctxs-btn" @click="changeTargetResize({ x: 0, y: 5 })">
       +5
     </button>
   </div>
@@ -190,7 +190,7 @@ function changeTargetResize(dis: { x: number, y: number }) {
   <div class="position-relative h-100">
     <div
       ref="resizeTarget1"
-      class="w-30 h-30 position-absolute bg-blue min-w-10 min-h-10 max-w-100 left-[30%] max-h-100 top-[30%]"
+      class="w-30 h-30 position-absolute bg-blue min-w-10 min-h-10 max-w-100 left-[200px] max-h-100 top-[200px]"
       :style="{ transform: `rotate(${rotate}deg) scale(${scaleX}, ${scaleY})` }"
       @pointerdown.stop.prevent="handleTargetResize"
     />

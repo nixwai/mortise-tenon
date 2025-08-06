@@ -130,7 +130,7 @@ export function createResizingFns(options: DomResizeOptions, domAttrs: DomAttrs)
     };
   }
 
-  const getValueAndOffset = needOffset
+  const setValueAndOffset = needOffset
     ? (value: number, _minValue: number, offsetPositive: number, offsetNegative: number) => {
         return value > 0 ? { value, offset: offsetPositive } : { value: -value, offset: offsetNegative };
       }
@@ -138,16 +138,25 @@ export function createResizingFns(options: DomResizeOptions, domAttrs: DomAttrs)
 
   /** 获取向前调整的位移 */
   const getForwardMoveOffset = createResizingOffset(needOffset, () => {
-    const scaleOffsetMultiple = {
+    const scalePositiveMultiple = {
       x: (domAttrs.transform.scaleX - 1) * (domAttrs.transform.originX) / domAttrs.width,
       y: (domAttrs.transform.scaleY - 1) * (domAttrs.transform.originY) / domAttrs.height,
     };
+    const scaleNegativeMultiple = {
+      x: (domAttrs.transform.scaleX - 1) * (domAttrs.width - domAttrs.transform.originX) / domAttrs.width,
+      y: (domAttrs.transform.scaleY - 1) * (domAttrs.height - domAttrs.transform.originY) / domAttrs.height,
+    };
+    const scaleNegativeValue = {
+      x: (domAttrs.transform.scaleX - 1) * (domAttrs.width - 2 * domAttrs.transform.originX),
+      y: (domAttrs.transform.scaleY - 1) * (domAttrs.height - 2 * domAttrs.transform.originY),
+    };
     return (distance, axis) => {
       const { originValue, originOffset, minValue, scale } = domAxisParams[axis];
-      const scaleOffset = distance * scaleOffsetMultiple[axis]; // 因为缩放比例产生的位移
+      const scalePositiveOffset = distance * scalePositiveMultiple[axis]; // 因为缩放比例产生的位移
+      const scaleNegativeOffset = distance * scaleNegativeMultiple[axis] + scaleNegativeValue[axis];
       return {
-        offsetPositive: originOffset + scaleOffset,
-        offsetNegative: originOffset + originValue + distance + scaleOffset + minValue * scale,
+        offsetPositive: originOffset + scalePositiveOffset,
+        offsetNegative: originOffset + originValue + distance + minValue * scale + scaleNegativeOffset,
       };
     };
   });
@@ -157,7 +166,7 @@ export function createResizingFns(options: DomResizeOptions, domAttrs: DomAttrs)
     const distance = getMoveDistance(startLocation, endLocation, axis, 1);
     const value = originValue + distance;
     const { offsetPositive, offsetNegative } = getForwardMoveOffset(distance, axis, 1);
-    const data = getValueAndOffset(value, minValue, offsetPositive, offsetNegative);
+    const data = setValueAndOffset(value, minValue, offsetPositive, offsetNegative);
     logDistance(data.value, axis);
     return data;
   };
@@ -172,13 +181,17 @@ export function createResizingFns(options: DomResizeOptions, domAttrs: DomAttrs)
       x: (domAttrs.transform.scaleX - 1) * (domAttrs.transform.originX) / domAttrs.width,
       y: (domAttrs.transform.scaleY - 1) * (domAttrs.transform.originY) / domAttrs.height,
     };
+    const scaleNegativeValue = {
+      x: (domAttrs.transform.scaleX - 1) * (domAttrs.width - 2 * domAttrs.transform.originX),
+      y: (domAttrs.transform.scaleY - 1) * (domAttrs.height - 2 * domAttrs.transform.originY),
+    };
     return (distance, axis) => {
       const { originValue, originOffset, minValue, scale } = domAxisParams[axis];
       const scalePositiveOffset = distance * scalePositiveMultiple[axis]; // 因为缩放比例产生的位移
-      const scaleNegativeOffset = distance * scaleNegativeMultiple[axis];
+      const scaleNegativeOffset = distance * scaleNegativeMultiple[axis] + scaleNegativeValue[axis];
       return {
         offsetPositive: originOffset + distance + scalePositiveOffset,
-        offsetNegative: originOffset + originValue + scaleNegativeOffset - minValue * scale,
+        offsetNegative: originOffset + originValue - minValue * scale + scaleNegativeOffset,
       };
     };
   });
@@ -188,7 +201,7 @@ export function createResizingFns(options: DomResizeOptions, domAttrs: DomAttrs)
     const distance = getMoveDistance(startLocation, endLocation, axis, -1);
     const value = originValue - distance;
     const { offsetPositive, offsetNegative } = getBackwardMoveOffset(distance, axis, -1);
-    const data = getValueAndOffset(value, minValue, offsetPositive, offsetNegative);
+    const data = setValueAndOffset(value, minValue, offsetPositive, offsetNegative);
     logDistance(data.value, axis);
     return data;
   };
@@ -203,9 +216,10 @@ export function createResizingFns(options: DomResizeOptions, domAttrs: DomAttrs)
       const { originValue, originOffset } = domAxisParams[axis];
       const distanceHalf = dir * distance / 2;
       const scalePositiveOffset = dir * distance * scalePositiveMultiple[axis]; // 因为缩放比例产生的位移
+      const scaleNegativeOffset = (dir * distance + 2 * originValue) * scalePositiveMultiple[axis];
       return {
         offsetPositive: originOffset - distanceHalf + scalePositiveOffset,
-        offsetNegative: originOffset + originValue + distanceHalf - scalePositiveMultiple[axis] * (dir * distance + 2 * originValue),
+        offsetNegative: originOffset + originValue + distanceHalf - scaleNegativeOffset,
       };
     };
   });
@@ -216,7 +230,7 @@ export function createResizingFns(options: DomResizeOptions, domAttrs: DomAttrs)
     const distance = getMoveDistance(2 * startLocation, 2 * endLocation, axis, pointerDir);
     const value = originValue + pointerDir * distance;
     const { offsetPositive, offsetNegative } = getBothMoveOffset(distance, axis, pointerDir);
-    const data = getValueAndOffset(value, minValue, offsetPositive, offsetNegative);
+    const data = setValueAndOffset(value, minValue, offsetPositive, offsetNegative);
     logDistance(data.value, axis);
     return data;
   };
