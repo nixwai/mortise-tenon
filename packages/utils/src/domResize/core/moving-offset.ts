@@ -31,44 +31,41 @@ export function movingOffset(options: DomResizeOptions, domAttrs: DomAttrs) {
     return { getForwardMoveOffset: zeroOffset, getBackwardMoveOffset: zeroOffset, getBothMoveOffset: zeroOffset };
   }
   const { width, height, offsetX, offsetY, transform, minWidth, minHeight } = domAttrs;
-  const rad = transform.rotate * Math.PI / 180;
+  const { rotate, originRelativeX, originRelativeY, scaleX, scaleY } = transform;
+  const rad = rotate * Math.PI / 180;
   const cosRad = Math.cos(rad);
-  /** 横轴变化点的位置 */
-  const originXP = transform.originX / width;
-  /** 纵轴变化点位置 */
-  const originYP = transform.originY / height;
   /** 缩放增值 */
   const scaleAxisMultiple = {
     x: {
-      v1: (transform.scaleX - 1) * originXP,
-      v2: (transform.scaleX - 1) * (1 - originXP),
+      v1: (scaleX - 1) * originRelativeX,
+      v2: (scaleX - 1) * (1 - originRelativeX),
     },
     y: {
-      v1: (transform.scaleY - 1) * originYP,
-      v2: (transform.scaleY - 1) * (1 - originYP),
+      v1: (scaleY - 1) * originRelativeY,
+      v2: (scaleY - 1) * (1 - originRelativeY),
     },
   };
   /** 旋转增值 */
   const rotateAxisMultiple = {
     x: {
-      v1: transform.scaleX * (cosRad - 1) * originXP,
-      v2: transform.scaleX * (cosRad - 1) * (1 - originXP),
+      v1: scaleX * (cosRad - 1) * originRelativeX,
+      v2: scaleX * (cosRad - 1) * (1 - originRelativeX),
     },
     y: {
-      v1: transform.scaleY * (cosRad - 1) * originYP,
-      v2: transform.scaleY * (cosRad - 1) * (1 - originYP),
+      v1: scaleY * (cosRad - 1) * originRelativeY,
+      v2: scaleY * (cosRad - 1) * (1 - originRelativeY),
     },
   };
   /** 越轴改变时，需要调整的偏移值 */
   const negativeAxiosOffset = options.crossAxis
     ? {
         x: {
-          origin: offsetX + width + width * (transform.scaleX * cosRad - 1) * (1 - 2 * originXP),
-          min: minWidth * transform.scaleX * cosRad,
+          origin: offsetX + width + width * (scaleX * cosRad - 1) * (1 - 2 * originRelativeX),
+          min: minWidth * scaleX * cosRad,
         },
         y: {
-          origin: offsetY + height + height * (transform.scaleY * cosRad - 1) * (1 - 2 * originYP),
-          min: minHeight * transform.scaleY * cosRad,
+          origin: offsetY + height + height * (scaleY * cosRad - 1) * (1 - 2 * originRelativeY),
+          min: minHeight * scaleY * cosRad,
         },
       }
     : { x: { origin: 0, min: 0 }, y: { origin: 0, min: 0 } };
@@ -133,20 +130,20 @@ export function movingOffset(options: DomResizeOptions, domAttrs: DomAttrs) {
   /** 获取前后调整的位移 */
   const getBothMoveOffset = createResizingOffset(options, (createOffsetPositive, createOffsetNegative) => {
     const scaleMultiple = {
-      x: (transform.scaleX - 1) * (originXP - 0.5),
-      y: (transform.scaleY - 1) * (originYP - 0.5),
+      x: (scaleX - 1) * (originRelativeX - 0.5),
+      y: (scaleY - 1) * (originRelativeY - 0.5),
     };
     const rotateMultiple = {
-      x: transform.scaleX * (cosRad - 1) * (originXP - 0.5),
-      y: transform.scaleY * (cosRad - 1) * (originYP - 0.5),
+      x: scaleX * (cosRad - 1) * (originRelativeX - 0.5),
+      y: scaleY * (cosRad - 1) * (originRelativeY - 0.5),
     };
     const getOffsetPositive = createOffsetPositive(() => {
       return (distanceOffset, axis) => originAxiosOffset[axis] + distanceOffset;
     });
     const getOffsetNegative = createOffsetNegative(() => {
       const otherNegativeValue = {
-        x: offsetX + width - 2 * width * (transform.scaleX * cosRad - 1) * (originXP - 0.5),
-        y: offsetY + height - 2 * height * (transform.scaleY * cosRad - 1) * (originYP - 0.5),
+        x: offsetX + width - 2 * width * (scaleX * cosRad - 1) * (originRelativeX - 0.5),
+        y: offsetY + height - 2 * height * (scaleY * cosRad - 1) * (originRelativeY - 0.5),
       };
       return (distanceOffset, axis) => otherNegativeValue[axis] - distanceOffset;
     });

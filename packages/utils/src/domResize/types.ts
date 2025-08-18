@@ -35,6 +35,12 @@ export interface DomResizeOptions {
   distanceY?: number
   /** 使用transform或position进行偏移 */
   offset?: 'transform' | 'position'
+  /**
+   * transform-origin的是否为绝对定位（非百分比或offset-keyword），使用数组可以分别指定横轴和纵轴，默认根据内联样式决定
+   * @see https://developer.mozilla.org/zh-CN/docs/Web/CSS/transform-origin
+   * 由于函数仅会识别内联样式设置的transform-origin类型，其他情况需要通过主要设置判断是否为绝对定位，确保不会有异常的偏移
+   */
+  originIsAbsolute?: boolean | (boolean | undefined)[]
   /** 是否可跨轴调整，需要配置offset才生效 */
   crossAxis?: boolean
   /** 网格对齐，固定每次调整的最小距离，默认[0.5,0.5]，单位px，使用小数注意精度问题，使用0.5的倍数 */

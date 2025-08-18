@@ -37,10 +37,10 @@ export interface DomAttrs {
     scaleY: number
     /** 旋转值 */
     rotate: number
-    /** 变形横轴原点 */
-    originX: number
-    /** 变形纵轴原点 */
-    originY: number
+    /** 横轴变形原点相对位置 */
+    originRelativeX: number
+    /** 纵轴变形原点相对位置 */
+    originRelativeY: number
   }
   /** 鼠标位置 */
   pointerDir: {
@@ -79,8 +79,8 @@ export function getResizeDomAttrs(options: DomResizeOptions, dom?: HTMLDivElemen
       scaleX: 1,
       scaleY: 1,
       rotate: 0,
-      originX: 0,
-      originY: 0,
+      originRelativeX: 0.5,
+      originRelativeY: 0.5,
     },
     pointerDir: {
       x: 1,
@@ -89,11 +89,6 @@ export function getResizeDomAttrs(options: DomResizeOptions, dom?: HTMLDivElemen
   };
   if (!dom) { return domAttrs; }
   const domStyles = window.getComputedStyle(dom, null);
-
-  // 获取transform变形原点
-  const transformOrigin = domStyles.transformOrigin.split(' ');
-  domAttrs.transform.originX = pxToNum(transformOrigin[0]);
-  domAttrs.transform.originY = pxToNum(transformOrigin[1]);
   // 获取transform相关matrix信息
   const matchValue = domStyles.transform.match(matrixValueReg);
   domAttrs.transform.name = matchValue?.[1] || 'matrix'; // matrix3d || matrix
@@ -185,6 +180,26 @@ export function getResizeDomAttrs(options: DomResizeOptions, dom?: HTMLDivElemen
     }
   }
 
+  // 获取transform变形原点相对定位的位置
+  const domTransformOriginList = domStyles.transformOrigin.split(' ');
+  const styleTransformOriginStr = dom.style.transformOrigin;
+  const styleTransformOriginList = styleTransformOriginStr.split(' ');
+  const originIsAbsolute = Array.isArray(options.originIsAbsolute) ? options.originIsAbsolute : [options.originIsAbsolute, options.originIsAbsolute];
+  const originX = parseTransformOriginValue(
+    originIsAbsolute[0],
+    domTransformOriginList[0],
+    styleTransformOriginList[0],
+    styleTransformOriginStr.includes('left') || styleTransformOriginStr.includes('right'),
+  );
+  const originY = parseTransformOriginValue(
+    originIsAbsolute[1],
+    domTransformOriginList[1],
+    styleTransformOriginList[1],
+    styleTransformOriginStr.includes('top') || styleTransformOriginStr.includes('bottom'),
+  );
+  domAttrs.transform.originRelativeX = originX / domAttrs.width;
+  domAttrs.transform.originRelativeY = originY / domAttrs.height;
+
   // 获取点击在元素的哪个方向
   if (options.event) {
     const rect = dom.getBoundingClientRect();
@@ -203,6 +218,20 @@ export function getResizeDomAttrs(options: DomResizeOptions, dom?: HTMLDivElemen
     domAttrs.pointerDir.y = rotatedY > 0 ? 1 : -1;
   }
   return domAttrs;
+}
+
+/** 解析 transform-origin相对定位的位置，绝对位置固定为0 */
+function parseTransformOriginValue(isAbsolute: boolean | undefined, domValue: string, styleValue: string | undefined, hasKeyword: boolean): number {
+  if (isAbsolute === true) {
+    return 0;
+  }
+  if (isAbsolute === false) {
+    return pxToNum(domValue);
+  }
+  if (!styleValue || styleValue.includes('%') || styleValue.includes('center') || hasKeyword) {
+    return pxToNum(domValue);
+  }
+  return 0;
 }
 
 /** 精度处理函数 */
