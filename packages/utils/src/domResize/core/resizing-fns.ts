@@ -1,6 +1,7 @@
 import type { DomResizeOptions, ResizeDistance } from '../types';
 import type { Dir, DomAttrs } from './dom-attrs';
 import type { Axis, ResizingFn } from './index';
+import { movingOffset } from './moving-offset';
 
 interface DirectionParams {
   /** 原始值 */
@@ -17,19 +18,10 @@ interface DirectionParams {
   gridDistance: number
 }
 
-type GetOffsetFn = (distance: number, axis: Axis, dir: 1 | -1) => { offsetPositive: number, offsetNegative: number };
-
 const DEFAULT_GRID = 0.5;
 
-function createResizingOffset(
-  hasOffset: boolean,
-  createFn: () => GetOffsetFn,
-) {
-  return hasOffset ? createFn() : () => ({ offsetPositive: 0, offsetNegative: 0 });
-}
-
 export function createResizingFns(options: DomResizeOptions, domAttrs: DomAttrs) {
-  const { width, height, aspectRatio, offsetX, offsetY, transform, maxWidth, minWidth, maxHeight, minHeight } = domAttrs;
+  const { width, height, aspectRatio, offsetX, offsetY, maxWidth, minWidth, maxHeight, minHeight } = domAttrs;
   /** 是否需要调整偏移值 */
   const needOffset = Boolean(options.offset);
 
@@ -123,114 +115,13 @@ export function createResizingFns(options: DomResizeOptions, domAttrs: DomAttrs)
     };
   }
 
+  const { getForwardMoveOffset, getBackwardMoveOffset, getBothMoveOffset } = movingOffset(options, domAttrs);
+
   const setValueAndOffset = needOffset
     ? (value: number, _minValue: number, offsetPositive: number, offsetNegative: number) => {
         return value > 0 ? { value, offset: offsetPositive } : { value: -value, offset: offsetNegative };
       }
     : (value: number, minValue: number) => ({ value: value > minValue ? value : minValue, offset: 0 });
-
-  const rad = transform.rotate * Math.PI / 180;
-  const cosRad = Math.cos(rad);
-  /** 横轴变化点的位置 */
-  const originXP = transform.originX / width;
-  /** 纵轴变化点位置 */
-  const originYP = transform.originY / height;
-  /** 缩放增值 */
-  const scaleAxisMultiple = {
-    x: {
-      v1: (transform.scaleX - 1) * originXP,
-      v2: (transform.scaleX - 1) * (1 - originXP),
-    },
-    y: {
-      v1: (transform.scaleY - 1) * originYP,
-      v2: (transform.scaleY - 1) * (1 - originYP),
-    },
-  };
-  /** 旋转增值 */
-  const rotateAxisMultiple = {
-    x: {
-      v1: transform.scaleX * (cosRad - 1) * originXP,
-      v2: transform.scaleX * (cosRad - 1) * (1 - originXP),
-    },
-    y: {
-      v1: transform.scaleY * (cosRad - 1) * originYP,
-      v2: transform.scaleY * (cosRad - 1) * (1 - originYP),
-    },
-  };
-  const negativeAxiosOffset = {
-    x: {
-      origin: offsetX + width + width * (transform.scaleX * cosRad - 1) * (1 - 2 * originXP),
-      min: minWidth * transform.scaleX * cosRad,
-    },
-    y: {
-      origin: offsetY + height + height * (transform.scaleY * cosRad - 1) * (1 - 2 * originYP),
-      min: minHeight * transform.scaleY * cosRad,
-    },
-  };
-
-  /** 获取向前调整的位移 */
-  const getForwardMoveOffset = createResizingOffset(needOffset, () => {
-    const otherNegativeValue = {
-      x: negativeAxiosOffset.x.origin + negativeAxiosOffset.x.min,
-      y: negativeAxiosOffset.y.origin + negativeAxiosOffset.y.min,
-    };
-    return (distance, axis) => {
-      const { originOffset } = domAxisParams[axis];
-      const scalePositiveOffset = distance * scaleAxisMultiple[axis].v1;
-      const scaleNegativeOffset = distance * scaleAxisMultiple[axis].v2;
-      const rotatePositiveOffset = distance * rotateAxisMultiple[axis].v1;
-      const rotateNegativeOffset = distance * rotateAxisMultiple[axis].v2;
-      return {
-        offsetPositive: originOffset + scalePositiveOffset + rotatePositiveOffset,
-        offsetNegative: otherNegativeValue[axis] + distance + scaleNegativeOffset + rotateNegativeOffset,
-      };
-    };
-  });
-
-  /** 获取向后调整的位移 */
-  const getBackwardMoveOffset = createResizingOffset(needOffset, () => {
-    const otherNegativeValue = {
-      x: negativeAxiosOffset.x.origin - negativeAxiosOffset.x.min,
-      y: negativeAxiosOffset.y.origin - negativeAxiosOffset.y.min,
-    };
-    return (distance, axis) => {
-      const { originOffset } = domAxisParams[axis];
-      const scalePositiveOffset = distance * scaleAxisMultiple[axis].v2;
-      const scaleNegativeOffset = distance * scaleAxisMultiple[axis].v1;
-      const rotatePositiveOffset = distance * rotateAxisMultiple[axis].v2;
-      const rotateNegativeOffset = distance * rotateAxisMultiple[axis].v1;
-      return {
-        offsetPositive: originOffset + distance + scalePositiveOffset + rotatePositiveOffset,
-        offsetNegative: otherNegativeValue[axis] + scaleNegativeOffset + rotateNegativeOffset,
-      };
-    };
-  });
-
-  /** 获取前后调整的位移 */
-  const getBothMoveOffset = createResizingOffset(needOffset, () => {
-    const scaleMultiple = {
-      x: (transform.scaleX - 1) * (originXP - 0.5),
-      y: (transform.scaleY - 1) * (originYP - 0.5),
-    };
-    const rotateMultiple = {
-      x: transform.scaleX * (cosRad - 1) * (originXP - 0.5),
-      y: transform.scaleY * (cosRad - 1) * (originYP - 0.5),
-    };
-    const otherNegativeValue = {
-      x: offsetX + width - 2 * width * (transform.scaleX * cosRad - 1) * (originXP - 0.5),
-      y: offsetY + height - 2 * height * (transform.scaleY * cosRad - 1) * (originYP - 0.5),
-    };
-    return (distance, axis, dir) => {
-      const { originOffset } = domAxisParams[axis];
-      const distanceHalf = dir * distance / 2;
-      const scaleOffset = dir * distance * scaleMultiple[axis];
-      const rotateOffset = dir * distance * rotateMultiple[axis];
-      return {
-        offsetPositive: originOffset - distanceHalf + scaleOffset + rotateOffset,
-        offsetNegative: otherNegativeValue[axis] + distanceHalf - scaleOffset - rotateOffset,
-      };
-    };
-  });
 
   /** 向前调整（往右或者往下）长度与位移 */
   const resizingForward: ResizingFn = (startLocation, endLocation, axis) => {
