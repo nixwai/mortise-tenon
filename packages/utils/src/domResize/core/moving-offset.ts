@@ -59,17 +59,20 @@ export function movingOffset(options: DomResizeOptions, domAttrs: DomAttrs) {
       v2: transform.scaleY * (cosRad - 1) * (1 - originYP),
     },
   };
-  /**  */
-  const negativeAxiosOffset = {
-    x: {
-      origin: offsetX + width + width * (transform.scaleX * cosRad - 1) * (1 - 2 * originXP),
-      min: minWidth * transform.scaleX * cosRad,
-    },
-    y: {
-      origin: offsetY + height + height * (transform.scaleY * cosRad - 1) * (1 - 2 * originYP),
-      min: minHeight * transform.scaleY * cosRad,
-    },
-  };
+  /** 越轴改变时，需要调整的偏移值 */
+  const negativeAxiosOffset = options.crossAxis
+    ? {
+        x: {
+          origin: offsetX + width + width * (transform.scaleX * cosRad - 1) * (1 - 2 * originXP),
+          min: minWidth * transform.scaleX * cosRad,
+        },
+        y: {
+          origin: offsetY + height + height * (transform.scaleY * cosRad - 1) * (1 - 2 * originYP),
+          min: minHeight * transform.scaleY * cosRad,
+        },
+      }
+    : { x: { origin: 0, min: 0 }, y: { origin: 0, min: 0 } };
+  /** 原始位移 */
   const originAxiosOffset = {
     x: offsetX,
     y: offsetY,
