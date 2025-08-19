@@ -22,8 +22,6 @@ const DEFAULT_GRID = 0.5;
 
 export function createResizingFns(options: DomResizeOptions, domAttrs: DomAttrs) {
   const { width, height, aspectRatio, offsetX, offsetY, maxWidth, minWidth, maxHeight, minHeight } = domAttrs;
-  /** 是否需要调整偏移值 */
-  const needOffset = Boolean(options.offset);
 
   const direction = options.direction || 'all';
   const hasLeft = direction.includes('left');
@@ -117,31 +115,35 @@ export function createResizingFns(options: DomResizeOptions, domAttrs: DomAttrs)
 
   const { getForwardMoveOffset, getBackwardMoveOffset, getBothMoveOffset } = movingOffset(options, domAttrs);
 
-  const setValueAndOffset = needOffset
-    ? (value: number, _minValue: number, offsetPositive: number, offsetNegative: number) => {
-        return value > 0 ? { value, offset: offsetPositive } : { value: -value, offset: offsetNegative };
-      }
-    : (value: number, minValue: number) => ({ value: value > minValue ? value : minValue, offset: 0 });
+  const getMoveValue = options.offset
+    ? (value: number) => Math.abs(value)
+    : (value: number, minValue: number) => value > minValue ? value : minValue;
 
   /** 向前调整（往右或者往下）长度与位移 */
   const resizingForward: ResizingFn = (startLocation, endLocation, axis) => {
     const { originValue, minValue } = domAxisParams[axis];
     const distance = getMoveDistance(startLocation, endLocation, axis, 1);
     const value = originValue + distance;
-    const { offsetPositive, offsetNegative } = getForwardMoveOffset(distance, axis, 1);
-    const data = setValueAndOffset(value, minValue, offsetPositive, offsetNegative);
-    logDistance(data.value, axis);
-    return data;
+    const { offsetCurrentAxis } = getForwardMoveOffset(distance, axis, 1, value);
+    const resizeValue = getMoveValue(value, minValue);
+    logDistance(resizeValue, axis);
+    return {
+      value: resizeValue,
+      offset: offsetCurrentAxis,
+    };
   };
   /** 向后调整（往左或者往上）长度与位移 */
   const resizingBackward: ResizingFn = (startLocation, endLocation, axis) => {
     const { originValue, minValue } = domAxisParams[axis];
     const distance = getMoveDistance(startLocation, endLocation, axis, -1);
     const value = originValue - distance;
-    const { offsetPositive, offsetNegative } = getBackwardMoveOffset(distance, axis, -1);
-    const data = setValueAndOffset(value, minValue, offsetPositive, offsetNegative);
-    logDistance(data.value, axis);
-    return data;
+    const { offsetCurrentAxis } = getBackwardMoveOffset(distance, axis, -1, value);
+    const resizeValue = getMoveValue(value, minValue);
+    logDistance(resizeValue, axis);
+    return {
+      value: resizeValue,
+      offset: offsetCurrentAxis,
+    };
   };
   /** 前后一起调整(上下或者左右)长度与位移 */
   const resizingBoth: ResizingFn = (startLocation, endLocation, axis, pointerDir = 1) => {
@@ -149,10 +151,13 @@ export function createResizingFns(options: DomResizeOptions, domAttrs: DomAttrs)
     // 两边一起调整时需要对数据翻倍
     const distance = getMoveDistance(2 * startLocation, 2 * endLocation, axis, pointerDir);
     const value = originValue + pointerDir * distance;
-    const { offsetPositive, offsetNegative } = getBothMoveOffset(distance, axis, pointerDir);
-    const data = setValueAndOffset(value, minValue, offsetPositive, offsetNegative);
-    logDistance(data.value, axis);
-    return data;
+    const { offsetCurrentAxis } = getBothMoveOffset(distance, axis, pointerDir, value);
+    const resizeValue = getMoveValue(value, minValue);
+    logDistance(resizeValue, axis);
+    return {
+      value: resizeValue,
+      offset: offsetCurrentAxis,
+    };
   };
 
   return { moveDistance, resizingForward, resizingBackward, resizingBoth };

@@ -2,27 +2,28 @@ import type { DomResizeOptions } from '../types';
 import type { DomAttrs } from './dom-attrs';
 import type { Axis } from './index';
 
-type GetOffsetFn = (distance: number, axis: Axis, dir: 1 | -1) => { offsetPositive: number, offsetNegative: number };
+type GetOffsetFn = (distance: number, axis: Axis, dir: 1 | -1, value: number) => { offsetCurrentAxis: number, offsetAnotherAxis: number };
 
 type OffsetFn = (dis: number, axis: Axis, dir: 1 | -1) => number;
 
 /** 创建获取偏移值函数 */
 function createResizingOffset(
-  options: DomResizeOptions,
-  createFn: (
-    createOffsetPositive: (fn: () => OffsetFn) => OffsetFn,
-    createOffsetNegative: (fn: () => OffsetFn) => OffsetFn
-  ) => GetOffsetFn,
-) {
-  const createOffsetPositive = (fn: () => OffsetFn) => fn();
-  // 不可跨轴调整时返回0函数，减少不必要的计算
-  const createOffsetNegative = options.crossAxis ? (fn: () => OffsetFn) => fn() : () => () => 0;
-  return createFn(createOffsetPositive, createOffsetNegative);
+  createFn: () => (dis: number, axis: Axis, dir: 1 | -1) => { getOffsetPositive: OffsetFn, getOffsetNegative: OffsetFn },
+): GetOffsetFn {
+  const offsetFns = createFn();
+  return (dis, axis, dir, value) => {
+    const { getOffsetNegative, getOffsetPositive } = offsetFns(dis, axis, dir);
+    return {
+      // value大于0时使用正向偏移值，小于0时使用负向偏移值
+      offsetCurrentAxis: value > 0 ? getOffsetPositive(dis, axis, dir) : getOffsetNegative(dis, axis, dir),
+      offsetAnotherAxis: 0,
+    };
+  };
 }
 
 /** 零偏移 */
 function zeroOffset() {
-  return { offsetPositive: 0, offsetNegative: 0 };
+  return { offsetCurrentAxis: 0, offsetAnotherAxis: 0 };
 }
 
 export function movingOffset(options: DomResizeOptions, domAttrs: DomAttrs) {
@@ -76,59 +77,57 @@ export function movingOffset(options: DomResizeOptions, domAttrs: DomAttrs) {
   };
 
   /** 获取向前调整的位移 */
-  const getForwardMoveOffset = createResizingOffset(options, (createOffsetPositive, createOffsetNegative) => {
-    const getOffsetPositive = createOffsetPositive(() => {
-      return (distance, axis) => {
-        const scalePositiveOffset = distance * scaleAxisMultiple[axis].v1;
-        const rotatePositiveOffset = distance * rotateAxisMultiple[axis].v1;
-        return originAxiosOffset[axis] + scalePositiveOffset + rotatePositiveOffset;
-      };
-    });
-    const getOffsetNegative = createOffsetNegative(() => {
+  const getForwardMoveOffset = createResizingOffset(() => {
+    const getOffsetPositive: OffsetFn = (distance, axis) => {
+      const scalePositiveOffset = distance * scaleAxisMultiple[axis].v1;
+      const rotatePositiveOffset = distance * rotateAxisMultiple[axis].v1;
+      return originAxiosOffset[axis] + scalePositiveOffset + rotatePositiveOffset;
+    };
+    let getOffsetNegative: OffsetFn = () => 0;
+    if (options.crossAxis) {
       const otherNegativeValue = {
         x: negativeAxiosOffset.x.origin + negativeAxiosOffset.x.min,
         y: negativeAxiosOffset.y.origin + negativeAxiosOffset.y.min,
       };
-      return (distance, axis) => {
+      getOffsetNegative = (distance, axis) => {
         const scaleNegativeOffset = distance * scaleAxisMultiple[axis].v2;
         const rotateNegativeOffset = distance * rotateAxisMultiple[axis].v2;
         return otherNegativeValue[axis] + distance + scaleNegativeOffset + rotateNegativeOffset;
       };
-    });
-    return (distance, axis, dir) => ({
-      offsetPositive: getOffsetPositive(distance, axis, dir),
-      offsetNegative: getOffsetNegative(distance, axis, dir),
+    }
+    return () => ({
+      getOffsetPositive,
+      getOffsetNegative,
     });
   });
 
   /** 获取向后调整的位移 */
-  const getBackwardMoveOffset = createResizingOffset(options, (createOffsetPositive, createOffsetNegative) => {
-    const getOffsetPositive = createOffsetPositive(() => {
-      return (distance, axis) => {
-        const scalePositiveOffset = distance * scaleAxisMultiple[axis].v2;
-        const rotatePositiveOffset = distance * rotateAxisMultiple[axis].v2;
-        return originAxiosOffset[axis] + distance + scalePositiveOffset + rotatePositiveOffset;
-      };
-    });
-    const getOffsetNegative = createOffsetNegative(() => {
+  const getBackwardMoveOffset = createResizingOffset(() => {
+    const getOffsetPositive: OffsetFn = (distance, axis) => {
+      const scalePositiveOffset = distance * scaleAxisMultiple[axis].v2;
+      const rotatePositiveOffset = distance * rotateAxisMultiple[axis].v2;
+      return originAxiosOffset[axis] + distance + scalePositiveOffset + rotatePositiveOffset;
+    };
+    let getOffsetNegative: OffsetFn = () => 0;
+    if (options.crossAxis) {
       const otherNegativeValue = {
         x: negativeAxiosOffset.x.origin - negativeAxiosOffset.x.min,
         y: negativeAxiosOffset.y.origin - negativeAxiosOffset.y.min,
       };
-      return (distance, axis) => {
+      getOffsetNegative = (distance, axis) => {
         const scaleNegativeOffset = distance * scaleAxisMultiple[axis].v1;
         const rotateNegativeOffset = distance * rotateAxisMultiple[axis].v1;
         return otherNegativeValue[axis] + scaleNegativeOffset + rotateNegativeOffset;
       };
-    });
-    return (distance, axis, dir) => ({
-      offsetPositive: getOffsetPositive(distance, axis, dir),
-      offsetNegative: getOffsetNegative(distance, axis, dir),
+    }
+    return () => ({
+      getOffsetPositive,
+      getOffsetNegative,
     });
   });
 
   /** 获取前后调整的位移 */
-  const getBothMoveOffset = createResizingOffset(options, (createOffsetPositive, createOffsetNegative) => {
+  const getBothMoveOffset = createResizingOffset(() => {
     const scaleMultiple = {
       x: (scaleX - 1) * (originRelativeX - 0.5),
       y: (scaleY - 1) * (originRelativeY - 0.5),
@@ -137,26 +136,23 @@ export function movingOffset(options: DomResizeOptions, domAttrs: DomAttrs) {
       x: scaleX * (cosRad - 1) * (originRelativeX - 0.5),
       y: scaleY * (cosRad - 1) * (originRelativeY - 0.5),
     };
-    const getOffsetPositive = createOffsetPositive(() => {
-      return (distanceOffset, axis) => originAxiosOffset[axis] + distanceOffset;
-    });
-    const getOffsetNegative = createOffsetNegative(() => {
+    const getOffsetPositive: OffsetFn = (distanceOffset, axis) => originAxiosOffset[axis] + distanceOffset;
+    let getOffsetNegative: OffsetFn = () => 0;
+    if (options.crossAxis) {
       const otherNegativeValue = {
         x: offsetX + width - 2 * width * (scaleX * cosRad - 1) * (originRelativeX - 0.5),
         y: offsetY + height - 2 * height * (scaleY * cosRad - 1) * (originRelativeY - 0.5),
       };
-      return (distanceOffset, axis) => otherNegativeValue[axis] - distanceOffset;
-    });
+      getOffsetNegative = (distanceOffset, axis) => otherNegativeValue[axis] - distanceOffset;
+    }
     return (distance, axis, dir) => {
       const distanceHalf = dir * distance / 2;
       const scaleOffset = dir * distance * scaleMultiple[axis];
       const rotateOffset = dir * distance * rotateMultiple[axis];
       const distanceOffset = scaleOffset + rotateOffset - distanceHalf;
-      const offsetPositive = getOffsetPositive(distanceOffset, axis, dir);
-      const offsetNegative = getOffsetNegative(distanceOffset, axis, dir);
       return {
-        offsetPositive,
-        offsetNegative,
+        getOffsetPositive: () => getOffsetPositive(distanceOffset, axis, dir),
+        getOffsetNegative: () => getOffsetNegative(distanceOffset, axis, dir),
       };
     };
   });
