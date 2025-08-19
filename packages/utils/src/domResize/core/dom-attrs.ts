@@ -52,7 +52,10 @@ export interface DomAttrs {
 }
 
 const matrixValueReg = /(matrix3?d?)\((.+)\)/;
-function pxToNum(value: string) {
+function pxToNum(value?: string) {
+  if (!value) {
+    return 0;
+  }
   if (value === 'none' || value === 'auto') {
     return Infinity;
   }
@@ -133,6 +136,18 @@ export function getResizeDomAttrs(options: DomResizeOptions, dom?: HTMLDivElemen
     // 使用position
     domAttrs.offsetX = pxToNum(domStyles.left);
     domAttrs.offsetY = pxToNum(domStyles.top);
+  }
+  else if (options.offset === 'translate') {
+    // 使用translate
+    if (!domStyles.translate || domStyles.translate === 'none') {
+      domAttrs.offsetX = 0;
+      domAttrs.offsetY = 0;
+    }
+    else {
+      const translate = domStyles.translate.split(' ');
+      domAttrs.offsetX = pxToNum(translate[0]);
+      domAttrs.offsetY = pxToNum(translate[1]);
+    }
   }
   else {
     // 使用transform

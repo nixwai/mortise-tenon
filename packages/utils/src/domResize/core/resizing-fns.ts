@@ -1,4 +1,4 @@
-import type { DomResizeOptions, ResizeDistance } from '../types';
+import type { DomResizeOptions } from '../types';
 import type { Dir, DomAttrs } from './dom-attrs';
 import type { Axis, ResizingFn } from './index';
 import { movingOffset } from './moving-offset';
@@ -19,6 +19,18 @@ interface DirectionParams {
 }
 
 const DEFAULT_GRID = 0.5;
+
+/** 调整距离 */
+export interface ResizeDistance {
+  /** 横轴距离 */
+  x: number
+  /** 纵轴距离 */
+  y: number
+  /** 横轴方向 */
+  dirX: 1 | -1 | 0
+  /** 纵轴方向 */
+  dirY: 1 | -1 | 0
+}
 
 export function createResizingFns(options: DomResizeOptions, domAttrs: DomAttrs) {
   const { width, height, aspectRatio, offsetX, offsetY, maxWidth, minWidth, maxHeight, minHeight } = domAttrs;

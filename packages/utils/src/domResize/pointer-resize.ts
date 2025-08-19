@@ -11,26 +11,28 @@ export function resizeByPointer(resizeData: ResizeData) {
 /** 调整水平方向 */
 function resizeHorizontal(resizeData: ResizeData, resizingWidthFn: ResizingFn) {
   const { setStyleWidthOrHeight, setStyleOffset, moveDistance } = resizeData;
-  const { offsetY, pointerDir } = resizeData.domAttrs;
+  const { offsetY: domOffsetY, pointerDir } = resizeData.domAttrs;
   beginResizeContent(resizeData, ({ startX, endX }) => {
     const { value: width, offset: offsetX, otherOffset: otherOffsetY } = resizingWidthFn(startX, endX, 'x', pointerDir.x);
     if (!moveDistance.x) { return; }
-    setStyleWidthOrHeight(width, 'width');
-    setStyleOffset(offsetX, offsetY + otherOffsetY);
-    updateResize('moving', resizeData, moveDistance);
+    const offsetY = domOffsetY + otherOffsetY;
+    const widthStyle = setStyleWidthOrHeight(width, 'width');
+    const offsetStyle = setStyleOffset(offsetX, offsetY);
+    updateResize(resizeData, { width, offsetX, offsetY }, { ...widthStyle, ...offsetStyle });
   });
 }
 
 /** 调整垂直方向 */
 function resizeVertical(resizeData: ResizeData, resizingHeightFn: ResizingFn) {
   const { setStyleWidthOrHeight, setStyleOffset, moveDistance } = resizeData;
-  const { offsetX, pointerDir } = resizeData.domAttrs;
+  const { offsetX: domOffsetX, pointerDir } = resizeData.domAttrs;
   beginResizeContent(resizeData, ({ startY, endY }) => {
     const { value: height, offset: offsetY, otherOffset: otherOffsetX } = resizingHeightFn(startY, endY, 'y', pointerDir.y);
     if (!moveDistance.y) { return; }
-    setStyleWidthOrHeight(height, 'height');
-    setStyleOffset(offsetX - otherOffsetX, offsetY);
-    updateResize('moving', resizeData, moveDistance);
+    const offsetX = domOffsetX - otherOffsetX;
+    const heightStyle = setStyleWidthOrHeight(height, 'height');
+    const offsetStyle = setStyleOffset(offsetX, offsetY);
+    updateResize(resizeData, { height, offsetX, offsetY }, { ...heightStyle, ...offsetStyle });
   });
 }
 
@@ -39,16 +41,18 @@ function resizeHorizontalAndVertical(resizeData: ResizeData, resizingWidthFn: Re
   const { setStyleWidthOrHeight, setStyleOffset, moveDistance, options: { lockAspectRatio } } = resizeData;
   const { aspectRatio, pointerDir } = resizeData.domAttrs;
   const updateDom = (coord: { startX: number, startY: number, endX: number, endY: number }) => {
-    const { value: width, offset: offsetX, otherOffset: otherOffsetY } = resizingWidthFn(coord.startX, coord.endX, 'x', pointerDir.x);
-    const { value: height, offset: offsetY, otherOffset: otherOffsetX } = resizingHeightFn(coord.startY, coord.endY, 'y', pointerDir.y);
+    const { value: width, offset: resizeOffsetX, otherOffset: otherOffsetY } = resizingWidthFn(coord.startX, coord.endX, 'x', pointerDir.x);
+    const { value: height, offset: resizeOffsetY, otherOffset: otherOffsetX } = resizingHeightFn(coord.startY, coord.endY, 'y', pointerDir.y);
     if ((!moveDistance.x && !moveDistance.y) // 移动距离为0时，不更新dom
       || (lockAspectRatio && (!moveDistance.x || !moveDistance.y))) { // 锁定比例时，任意一个方向的移动距离为0时，不更新dom
       return;
     }
-    setStyleWidthOrHeight(width, 'width');
-    setStyleWidthOrHeight(height, 'height');
-    setStyleOffset(offsetX - otherOffsetX, offsetY + otherOffsetY);
-    updateResize('moving', resizeData, moveDistance);
+    const offsetX = resizeOffsetX - otherOffsetX;
+    const offsetY = resizeOffsetY + otherOffsetY;
+    const widthStyle = setStyleWidthOrHeight(width, 'width');
+    const heightStyle = setStyleWidthOrHeight(height, 'height');
+    const offsetStyle = setStyleOffset(offsetX, offsetY);
+    updateResize(resizeData, { width, height, offsetX, offsetY }, { ...widthStyle, ...heightStyle, ...offsetStyle });
   };
 
   if (lockAspectRatio) {
@@ -114,11 +118,9 @@ function beginResizeContent(
     targetDeref?.removeEventListener('pointermove', moveHandler);
     targetDeref?.removeEventListener('pointerup', upHandler);
     targetDeref?.removeEventListener('pointercancel', upHandler);
-    updateResize('idle', resizeData, { x: 0, y: 0, dirX: resizeData.moveDistance.dirX, dirY: resizeData.moveDistance.dirY });
   };
   target.addEventListener('pointerup', upHandler);
   target.addEventListener('pointercancel', upHandler);
-  updateResize('prepare', resizeData, { x: 0, y: 0, dirX: resizeData.moveDistance.dirX, dirY: resizeData.moveDistance.dirY });
 }
 
 /** 获取移动计算函数 */

@@ -25,12 +25,9 @@ const directionList: ResizeDirection[] = [
 
 const direction = ref(directionList[0]);
 const lockAspectRatio = ref(false);
-const offset = ref<'position' | 'transform'>('position');
+const offset = ref<'position' | 'transform' | 'translate'>('position');
 const grid = ref([0.5, 0.5]);
 const crossAxis = ref(false);
-const rotate = ref(0);
-const scaleX = ref(1);
-const scaleY = ref(1);
 
 function handleTargetResize(event: PointerEvent) {
   domResize({
@@ -122,6 +119,17 @@ function changeTargetResize(dis: { x: number, y: number }) {
     </div>
     <div>
       <input
+        id="translate"
+        v-model="offset"
+        type="radio"
+        name="offset"
+        value="translate"
+        class="mb-[3px]"
+      >
+      <label for="translate">translate</label>
+    </div>
+    <div>
+      <input
         id="none"
         v-model="offset"
         type="radio"
@@ -163,12 +171,6 @@ function changeTargetResize(dis: { x: number, y: number }) {
     gridY: <input v-model="grid[1]" class="b-1 b-gray b-solid b-rounded px-1">
   </div>
 
-  <div class="flex gap-1 mt-4">
-    scaleX: <input v-model="scaleX" class="b-1 b-gray b-solid b-rounded px-1">
-    scaleY: <input v-model="scaleY" class="b-1 b-gray b-solid b-rounded px-1">
-    rotate: <input v-model="rotate" class="b-1 b-gray b-solid b-rounded px-1">
-  </div>
-
   <div class="flex mt-4 items-center justify-center flex-col ctxs-btn_b-1,b-gray,b-solid,px-2,b-rounded,w-8,mt-1 w-30">
     <button class="ctxs-btn" @click="changeTargetResize({ x: 0, y: -5 })">
       -5
@@ -191,7 +193,6 @@ function changeTargetResize(dis: { x: number, y: number }) {
     <div
       ref="resizeTarget1"
       class="w-30 h-30 position-absolute bg-blue min-w-10 min-h-10 max-w-100 left-[200px] max-h-100 top-[200px]"
-      :style="{ transform: `rotate(${rotate}deg) scale(${scaleX}, ${scaleY})` }"
       @pointerdown.stop.prevent="handleTargetResize"
     />
   </div>

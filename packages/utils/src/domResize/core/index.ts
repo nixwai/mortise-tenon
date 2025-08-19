@@ -1,6 +1,7 @@
-import type { DomResizeOptions, ResizeDistance, ResizeStatus } from '../types';
+import type { DomResizeContent, DomResizeOptions, DomResizeStyle } from '../types';
 import type { Dir, DomAttrs } from './dom-attrs';
 import type { SetStyleOffset, SetStyleWidthOrHeightFn } from './dom-style-updaters';
+import type { ResizeDistance } from './resizing-fns';
 import { getResizeDomAttrs } from './dom-attrs';
 import { createStyleUpdaters } from './dom-style-updaters';
 import { createResizingFns } from './resizing-fns';
@@ -59,8 +60,8 @@ export function initResize(options: DomResizeOptions): ResizeData {
 }
 
 /** 触发调整事件 */
-export function updateResize(status: ResizeStatus, resizeData: ResizeData, distance: ResizeDistance) {
-  resizeData.options.callback?.(status, distance);
+export function updateResize(resizeData: ResizeData, content: DomResizeContent, styles: DomResizeStyle) {
+  resizeData.options.callback?.(content, styles);
 }
 
 type ResizeDirectionFn = (resizeData: ResizeData, ...resizingFns: ResizingFn[]) => void;

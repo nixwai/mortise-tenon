@@ -1,8 +1,8 @@
-import type { DomResizeOptions } from '../types';
+import type { DomResizeOptions, DomResizeStyle } from '../types';
 import type { DomAttrs } from './dom-attrs';
 
-export type SetStyleWidthOrHeightFn = (value: number, property: 'width' | 'height') => void;
-export type SetStyleOffset = (offsetX: number, offsetY: number) => void;
+export type SetStyleWidthOrHeightFn = (value: number, property: 'width' | 'height') => DomResizeStyle;
+export type SetStyleOffset = (offsetX: number, offsetY: number) => DomResizeStyle;
 
 /** 创建样式更新函数 */
 export function createStyleUpdaters(
@@ -11,28 +11,44 @@ export function createStyleUpdaters(
   domAttrs: DomAttrs,
 ) {
   const { name, beforeTranslateValueStr, afterTranslateValueStr } = domAttrs.transform;
+  const target = targetRef.deref();
 
-  const changeTargetStyle = (fn: (dom: HTMLDivElement) => void) => {
-    const target = targetRef.deref();
-    if (!target) { return; }
-    fn(target);
+  const changeTargetStyle = <T extends (...params: any[]) => DomResizeStyle>(fn: T): T => {
+    if (!target || options.customControl) {
+      // 获取不到实例或者自定义控制模式下，不进行样式设置
+      return fn;
+    }
+    // 非自定义控制模式下，自动设置元素样式
+    return ((...params) => {
+      const styles = fn(...params);
+      for (const key in styles) {
+        (target.style as any)[key] = styles[key as keyof DomResizeStyle];
+      }
+      return styles;
+    }) as T;
   };
   /** 设置宽度或高度 */
-  const setStyleWidthOrHeight: SetStyleWidthOrHeightFn = (value, property) => changeTargetStyle((dom) => {
-    dom.style[property] = `${value}px`;
+  const setStyleWidthOrHeight = changeTargetStyle<SetStyleWidthOrHeightFn>((value, property) => {
+    return { [property]: `${value}px` };
   });
   /** 设置位移 */
-  let setStyleOffset: SetStyleOffset = () => { };
+  let setStyleOffset: SetStyleOffset = () => ({});
   if (options.offset === 'position') {
-    setStyleOffset = (left, top) => changeTargetStyle((dom) => {
-      dom.style.left = `${left}px`;
-      dom.style.top = `${top}px`;
+    setStyleOffset = changeTargetStyle((left, top) => {
+      return {
+        left: `${left}px`,
+        top: `${top}px`,
+      };
     });
   }
   else if (options.offset === 'transform') {
-    // 如果配置了transform或者缩放，则使用transform进行位移
-    setStyleOffset = (translateX, translateY) => changeTargetStyle((dom) => {
-      dom.style.transform = `${name}(${beforeTranslateValueStr}${translateX},${translateY}${afterTranslateValueStr})`;
+    setStyleOffset = changeTargetStyle((translateX, translateY) => {
+      return { transform: `${name}(${beforeTranslateValueStr}${translateX},${translateY}${afterTranslateValueStr})` };
+    });
+  }
+  else if (options.offset === 'translate') {
+    setStyleOffset = changeTargetStyle((translateX, translateY) => {
+      return { translate: `${translateX}px ${translateY}px` };
     });
   }
 
