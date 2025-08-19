@@ -124,12 +124,13 @@ export function createResizingFns(options: DomResizeOptions, domAttrs: DomAttrs)
     const { originValue, minValue } = domAxisParams[axis];
     const distance = getMoveDistance(startLocation, endLocation, axis, 1);
     const value = originValue + distance;
-    const { offsetCurrentAxis } = getForwardMoveOffset(distance, axis, 1, value);
+    const { offsetCurrentAxis, offsetAnotherAxis } = getForwardMoveOffset(distance, axis, 1, value);
     const resizeValue = getMoveValue(value, minValue);
     logDistance(resizeValue, axis);
     return {
       value: resizeValue,
       offset: offsetCurrentAxis,
+      otherOffset: offsetAnotherAxis,
     };
   };
   /** 向后调整（往左或者往上）长度与位移 */
@@ -137,12 +138,13 @@ export function createResizingFns(options: DomResizeOptions, domAttrs: DomAttrs)
     const { originValue, minValue } = domAxisParams[axis];
     const distance = getMoveDistance(startLocation, endLocation, axis, -1);
     const value = originValue - distance;
-    const { offsetCurrentAxis } = getBackwardMoveOffset(distance, axis, -1, value);
+    const { offsetCurrentAxis, offsetAnotherAxis } = getBackwardMoveOffset(distance, axis, -1, value);
     const resizeValue = getMoveValue(value, minValue);
     logDistance(resizeValue, axis);
     return {
       value: resizeValue,
       offset: offsetCurrentAxis,
+      otherOffset: offsetAnotherAxis,
     };
   };
   /** 前后一起调整(上下或者左右)长度与位移 */
@@ -151,12 +153,13 @@ export function createResizingFns(options: DomResizeOptions, domAttrs: DomAttrs)
     // 两边一起调整时需要对数据翻倍
     const distance = getMoveDistance(2 * startLocation, 2 * endLocation, axis, pointerDir);
     const value = originValue + pointerDir * distance;
-    const { offsetCurrentAxis } = getBothMoveOffset(distance, axis, pointerDir, value);
+    const { offsetCurrentAxis, offsetAnotherAxis } = getBothMoveOffset(distance, axis, pointerDir, value);
     const resizeValue = getMoveValue(value, minValue);
     logDistance(resizeValue, axis);
     return {
       value: resizeValue,
       offset: offsetCurrentAxis,
+      otherOffset: offsetAnotherAxis,
     };
   };
 

@@ -13,10 +13,10 @@ function resizeHorizontal(resizeData: ResizeData, resizingWidthFn: ResizingFn) {
   const { setStyleWidthOrHeight, setStyleOffset, moveDistance } = resizeData;
   const { offsetY, pointerDir } = resizeData.domAttrs;
   beginResizeContent(resizeData, ({ startX, endX }) => {
-    const { value: width, offset: offsetX } = resizingWidthFn(startX, endX, 'x', pointerDir.x);
+    const { value: width, offset: offsetX, otherOffset: otherOffsetY } = resizingWidthFn(startX, endX, 'x', pointerDir.x);
     if (!moveDistance.x) { return; }
     setStyleWidthOrHeight(width, 'width');
-    setStyleOffset(offsetX, offsetY);
+    setStyleOffset(offsetX, offsetY + otherOffsetY);
     updateResize('moving', resizeData, moveDistance);
   });
 }
@@ -26,10 +26,10 @@ function resizeVertical(resizeData: ResizeData, resizingHeightFn: ResizingFn) {
   const { setStyleWidthOrHeight, setStyleOffset, moveDistance } = resizeData;
   const { offsetX, pointerDir } = resizeData.domAttrs;
   beginResizeContent(resizeData, ({ startY, endY }) => {
-    const { value: height, offset: offsetY } = resizingHeightFn(startY, endY, 'y', pointerDir.y);
+    const { value: height, offset: offsetY, otherOffset: otherOffsetX } = resizingHeightFn(startY, endY, 'y', pointerDir.y);
     if (!moveDistance.y) { return; }
     setStyleWidthOrHeight(height, 'height');
-    setStyleOffset(offsetX, offsetY);
+    setStyleOffset(offsetX - otherOffsetX, offsetY);
     updateResize('moving', resizeData, moveDistance);
   });
 }
@@ -39,15 +39,15 @@ function resizeHorizontalAndVertical(resizeData: ResizeData, resizingWidthFn: Re
   const { setStyleWidthOrHeight, setStyleOffset, moveDistance, options: { lockAspectRatio } } = resizeData;
   const { aspectRatio, pointerDir } = resizeData.domAttrs;
   const updateDom = (coord: { startX: number, startY: number, endX: number, endY: number }) => {
-    const { value: width, offset: offsetX } = resizingWidthFn(coord.startX, coord.endX, 'x', pointerDir.x);
-    const { value: height, offset: offsetY } = resizingHeightFn(coord.startY, coord.endY, 'y', pointerDir.y);
+    const { value: width, offset: offsetX, otherOffset: otherOffsetY } = resizingWidthFn(coord.startX, coord.endX, 'x', pointerDir.x);
+    const { value: height, offset: offsetY, otherOffset: otherOffsetX } = resizingHeightFn(coord.startY, coord.endY, 'y', pointerDir.y);
     if ((!moveDistance.x && !moveDistance.y) // 移动距离为0时，不更新dom
       || (lockAspectRatio && (!moveDistance.x || !moveDistance.y))) { // 锁定比例时，任意一个方向的移动距离为0时，不更新dom
       return;
     }
     setStyleWidthOrHeight(width, 'width');
     setStyleWidthOrHeight(height, 'height');
-    setStyleOffset(offsetX, offsetY);
+    setStyleOffset(offsetX - otherOffsetX, offsetY + otherOffsetY);
     updateResize('moving', resizeData, moveDistance);
   };
 

@@ -15,7 +15,7 @@ export type Axis = 'x' | 'y';
  * @param pointerDir 鼠标点击的方向
  */
 export type ResizingFn =
-  (startLocation: number, endLocation: number, axis: Axis, pointerDir?: Dir) => { value: number, offset: number };
+  (startLocation: number, endLocation: number, axis: Axis, pointerDir?: Dir) => { value: number, offset: number, otherOffset: number };
 
 export type ResizeData = Readonly<{
   /** 元素弱引用类型 */
