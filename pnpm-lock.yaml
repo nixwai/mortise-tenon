@@ -151,6 +151,9 @@ importers:
       '@vueuse/core':
         specifier: ^13.2.0
         version: 13.2.0(vue@3.5.14(typescript@5.8.3))
+      dom-transform-tool:
+        specifier: ^0.1.0
+        version: 0.1.0
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
@@ -2307,6 +2310,9 @@ packages:
 
   dom-serializer@2.0.0:
     resolution: {integrity: sha512-wIkAryiqt/nV5EQKqQpo3SToSOV9J0DnbJqwK7Wv/Trc92zIAYZ4FlMu+JPFW1DfGFt81ZTCGgDEabffXeLyJg==}
+
+  dom-transform-tool@0.1.0:
+    resolution: {integrity: sha512-ZUNyhqk5+f5k9brwVpQtOVvpwzTT8qF7l/Qeq0Qh4TCT4vtBLaIDvB2uuHHv8j9UHWb47DVtGTebbTUp8pn6Xw==}
 
   domelementtype@2.3.0:
     resolution: {integrity: sha512-OLETBj6w0OsagBwdXnPdN0cnMfF9opN69co+7ZrbfPGrdpPVNBUj02spi6B1N7wChLQiPn4CSH/zJvXw56gmHw==}
@@ -7032,6 +7038,8 @@ snapshots:
       domelementtype: 2.3.0
       domhandler: 5.0.3
       entities: 4.5.0
+
+  dom-transform-tool@0.1.0: {}
 
   domelementtype@2.3.0: {}
 

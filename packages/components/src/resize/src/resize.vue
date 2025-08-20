@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DomResizeOptions, ResizeDirection, ResizeStatus } from 'mortise-tenon-tool';
+import type { DomResizeContent, DomResizeDirection, DomResizeStyle } from 'mortise-tenon-tool';
 import type { ResizeProps } from './resize';
 import { domResize } from 'mortise-tenon-tool';
 import { computed, ref } from 'vue';
@@ -10,72 +10,35 @@ const props = withDefaults(
   defineProps<ResizeProps>(),
   {
     disabled: false,
-    positioned: false,
     directions: () => ['right'],
     lockAspectRatio: false,
+    grid: () => [0.5, 0.5],
   },
 );
 
 const emit = defineEmits<{
-  (e: 'resize', status: ResizeStatus, direction: ResizeDirection): void
+  (e: 'resize', content: DomResizeContent, style: DomResizeStyle): void
 }>();
 
 /** 元素实例 */
 const contentRef = ref<HTMLDivElement>();
-const resizeStatus = ref<ResizeStatus>('idle');
-const resizeDirection = ref<ResizeDirection>('');
-
-const resizeOptions = computed<DomResizeOptions>(() => ({
-  target: contentRef.value,
-  translated: props.translated,
-  lockAspectRatio: props.lockAspectRatio,
-}));
-
-const onResize = domResize((status: ResizeStatus, direction: ResizeDirection) => {
-  resizeStatus.value = status;
+/** 调整的方向 */
+const resizeDirection = ref('');
+/** 调整函数 */
+function handleResize(event: PointerEvent, direction: DomResizeDirection) {
   resizeDirection.value = direction;
-  emit('resize', status, direction);
-});
-
-/** 选择调整左侧 */
-function handleResizeLeft(event: PointerEvent) {
-  onResize({ ...resizeOptions.value, event, direction: 'left' });
-}
-
-/** 选择调整右侧 */
-function handleResizeRight(event: PointerEvent) {
-  onResize({ ...resizeOptions.value, event, direction: 'right' });
-}
-
-/** 选择调整上方 */
-function handleResizeTop(event: PointerEvent) {
-  onResize({ ...resizeOptions.value, event, direction: 'top' });
-}
-
-/** 选择调整下方 */
-function handleResizeBottom(event: PointerEvent) {
-  onResize({ ...resizeOptions.value, event, direction: 'bottom' });
-}
-
-/** 选择调整左上方 */
-function handleResizeLeftTop(event: PointerEvent) {
-  onResize({ ...resizeOptions.value, event, direction: 'left-top' });
-}
-
-/** 选择调整右上方 */
-function handleResizeRightTop(event: PointerEvent) {
-  onResize({ ...resizeOptions.value, event, direction: 'right-top' });
-}
-
-/** 选择调整左下方 */
-function handleResizeLeftBottom(event: PointerEvent) {
-  onResize({ ...resizeOptions.value, event, direction: 'left-bottom' });
-}
-
-/** 选择调整右下方 */
-function handleResizeRightBottom(event: PointerEvent) {
-  onResize({ ...resizeOptions.value, event, direction: 'right-bottom' });
-}
+  domResize({
+    event,
+    direction,
+    target: contentRef.value,
+    offset: props.offset,
+    lockAspectRatio: props.lockAspectRatio,
+    grid: props.grid,
+    callback: (content, style) => {
+      emit('resize', content, style);
+    },
+  });
+};
 
 const isLeftDir = computed(() => props.directions.includes('left'));
 const isRightDir = computed(() => props.directions.includes('right'));
@@ -89,16 +52,16 @@ const isBottomDir = computed(() => props.directions.includes('bottom'));
     class="mt-resize"
   >
     <template v-if="!disabled">
-      <div v-if="isLeftDir && !lockAspectRatio" class="left-box" @pointerdown.stop.prevent="handleResizeLeft" />
-      <div v-if="isRightDir && !lockAspectRatio" class="right-box" @pointerdown.stop.prevent="handleResizeRight" />
-      <div v-if="isTopDir && !lockAspectRatio" class="top-box" @pointerdown.stop.prevent="handleResizeTop" />
-      <div v-if="isBottomDir && !lockAspectRatio" class="bottom-box" @pointerdown.stop.prevent="handleResizeBottom" />
-      <div v-if="isLeftDir && isTopDir" class="left-top-box" @pointerdown.stop.prevent="handleResizeLeftTop" />
-      <div v-if="isRightDir && isTopDir" class="right-top-box" @pointerdown.stop.prevent="handleResizeRightTop" />
-      <div v-if="isLeftDir && isBottomDir" class="left-bottom-box" @pointerdown.stop.prevent="handleResizeLeftBottom" />
-      <div v-if="isRightDir && isBottomDir" class="right-bottom-box" @pointerdown.stop.prevent="handleResizeRightBottom" />
+      <div v-if="isLeftDir && !lockAspectRatio" class="left-box" @pointerdown.stop.prevent="(e) => handleResize(e, 'left')" />
+      <div v-if="isRightDir && !lockAspectRatio" class="right-box" @pointerdown.stop.prevent="(e) => handleResize(e, 'right')" />
+      <div v-if="isTopDir && !lockAspectRatio" class="top-box" @pointerdown.stop.prevent="(e) => handleResize(e, 'top')" />
+      <div v-if="isBottomDir && !lockAspectRatio" class="bottom-box" @pointerdown.stop.prevent="(e) => handleResize(e, 'bottom')" />
+      <div v-if="isLeftDir && isTopDir" class="left-top-box" @pointerdown.stop.prevent="(e) => handleResize(e, 'left-top')" />
+      <div v-if="isRightDir && isTopDir" class="right-top-box" @pointerdown.stop.prevent="(e) => handleResize(e, 'right-top')" />
+      <div v-if="isLeftDir && isBottomDir" class="left-bottom-box" @pointerdown.stop.prevent="(e) => handleResize(e, 'left-bottom')" />
+      <div v-if="isRightDir && isBottomDir" class="right-bottom-box" @pointerdown.stop.prevent="(e) => handleResize(e, 'right-bottom')" />
     </template>
-    <slot :status="resizeStatus" :direction="resizeDirection" />
+    <slot :direction="resizeDirection" />
   </div>
 </template>
 
