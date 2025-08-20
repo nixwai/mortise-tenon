@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { DomResizeContent, DomResizeDirection, DomResizeStyle } from 'mortise-tenon-tool';
+import type { DomResizeContent, DomResizeDirection, DomResizeStyle } from 'dom-transform-tool';
 import type { ResizeProps } from './resize';
-import { domResize } from 'mortise-tenon-tool';
+import { domResize } from 'dom-transform-tool';
 import { computed, ref } from 'vue';
 
 defineOptions({ name: 'MtResize' });
