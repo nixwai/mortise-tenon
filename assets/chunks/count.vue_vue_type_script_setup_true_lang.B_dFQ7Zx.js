@@ -1,0 +1,1 @@
+import{d as n,p as s,c as r,o as l,r as p,a as u,t as c}from"./framework.D6Nbw8HZ.js";const _=n({name:"ExampleCount",__name:"count",setup(i,{expose:t}){const e=s(0);return t({value:e}),(a,o)=>(l(),r("div",{class:"cursor-pointer",onClick:o[0]||(o[0]=m=>e.value++)},[p(a.$slots,"count",{value:e.value},()=>[u(" 点击："+c(e.value),1)])]))}});export{_};

@@ -1,0 +1,1 @@
+import{_ as e,c as n,o as a,j as s,F as o}from"./framework.D6Nbw8HZ.js";const t={};function c(l,r){return a(),n(o,null,[r[0]||(r[0]=s("div",{class:"c-primary"}," 默认主题 ",-1)),r[1]||(r[1]=s("div",{class:"c-warning"}," 警告 ",-1)),r[2]||(r[2]=s("div",{class:"c-danger"}," 危险 ",-1))],64)}const i=e(t,[["render",c]]);export{i as default};

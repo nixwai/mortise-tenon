@@ -1,0 +1,1 @@
+import{_ as n,ag as s}from"./framework.D6Nbw8HZ.js";const b={};function o(e,t){return t[0]||(t[0]=s('<button class="btn"> ghost </button><button class="btn btn-pale"> pale </button><button class="btn btn-soft"> soft </button><button class="btn btn-bright"> bright </button><button class="btn btn-deep"> deep </button>',5))}const r=n(b,[["render",o]]);export{r as default};
