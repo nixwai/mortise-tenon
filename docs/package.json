@@ -12,11 +12,11 @@
     "docs:preview": "vitepress preview"
   },
   "dependencies": {
-    "@vueuse/core": "^13.2.0"
+    "@vueuse/core": "^13.7.0"
   },
   "devDependencies": {
-    "postcss": "^8.5.3",
-    "vitepress": "^1.6.3",
-    "vitepress-demo-plugin": "^1.4.1"
+    "postcss": "^8.5.6",
+    "vitepress": "^1.6.4",
+    "vitepress-demo-plugin": "^1.4.7"
   }
 }

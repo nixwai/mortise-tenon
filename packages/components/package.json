@@ -20,7 +20,7 @@
     "vue": "^3.4.0"
   },
   "dependencies": {
-    "@vueuse/core": "^13.2.0",
+    "@vueuse/core": "^13.7.0",
     "dom-transform-tool": "^0.1.0",
     "lodash-es": "^4.17.21"
   }
