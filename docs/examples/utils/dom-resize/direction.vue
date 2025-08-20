@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { ResizeDirection } from 'mortise-tenon-tool';
+import type { DomResizeDirection } from 'mortise-tenon-tool';
 import { ref } from 'vue';
 import { domResize } from '../../../../packages/utils/src/domResize';
 
 const resizeTarget1 = ref<HTMLDivElement>();
 
-const directionList: ResizeDirection[] = [
+const directionList: DomResizeDirection[] = [
   'all',
   'left',
   'right',
