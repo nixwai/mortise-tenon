@@ -27,6 +27,10 @@ export const componentsSidebar: DefaultTheme.SidebarItem[] = [
         link: '/zh/components/expand.md',
       },
       {
+        text: 'Resize 调整大小',
+        link: '/zh/components/resize.md',
+      },
+      {
         text: 'Sort 排序',
         link: '/zh/components/sort.md',
       },

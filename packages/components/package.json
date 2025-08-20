@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@vueuse/core": "^13.2.0",
+    "dom-transform-tool": "^0.1.0",
     "lodash-es": "^4.17.21"
   }
 }

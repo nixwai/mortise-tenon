@@ -26,7 +26,7 @@ handleClick();
 
 <template>
   <div>
-    <button class="btn mb-2 flex flex-col-reverse" @click="handleClick">
+    <button class="flex btn mb-2 flex-col-reverse" @click="handleClick">
       切换组件
     </button>
     <DynamicComponent v-slot="{ Component }" @rendered="handleRendered">

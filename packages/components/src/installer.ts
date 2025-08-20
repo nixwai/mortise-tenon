@@ -1,6 +1,7 @@
 import type { App, Component, Plugin } from 'vue';
 import { version } from '../package.json';
 import { MtExpand } from './expand';
+import { MtResize } from './resize';
 import { MtSort } from './sort';
 import { MtTable } from './table';
 
@@ -22,6 +23,7 @@ function makeInstaller(components: Component[] = []) {
 
 const installer = makeInstaller([
   MtExpand,
+  MtResize,
   MtSort,
   MtTable,
 ]);

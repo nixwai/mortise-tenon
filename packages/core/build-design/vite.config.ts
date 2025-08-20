@@ -13,7 +13,7 @@ export default defineConfig({
     cssCodeSplit: true,
     lib: { entry: { index: resolve(designRoot, 'src/index.ts') } },
     rollupOptions: {
-      external: ['vue', 'lodash-es', '@vueuse/core'],
+      external: ['vue', 'lodash-es', '@vueuse/core', 'dom-transform-tool'],
       output: [
         {
           format: 'es',
